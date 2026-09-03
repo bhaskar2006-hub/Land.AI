@@ -314,13 +314,126 @@
     <div class="ambient-orb-3"></div>
   </div>
 
+  <!-- ========================================================= -->
+  <!-- AUTHENTICATION SESSION RESTORATION LOADING SCREEN         -->
+  <!-- ========================================================= -->
+  <div id="authLoadingScreen" class="fixed inset-0 z-50 bg-[#001720]/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center select-none transition-opacity duration-300">
+    <div class="max-w-md w-full space-y-6 flex flex-col items-center">
+      <!-- National / Platform Crest -->
+      <div class="relative w-20 h-20 rounded-2xl bg-primary/40 border-2 border-secondary/50 flex items-center justify-center shadow-[0_0_40px_rgba(0,106,99,0.3)] animate-pulse">
+        <span class="material-symbols-outlined text-4xl text-secondary" data-icon="account_balance">account_balance</span>
+        <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-secondary text-[#001720] flex items-center justify-center text-xs font-bold ring-2 ring-[#001720]">
+          <span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex items-center justify-center gap-2">
+          <h1 class="text-3xl font-bold tracking-tight text-white font-serif">LAND•AI</h1>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-secondary/20 text-secondary border border-secondary/40">v3.4</span>
+        </div>
+        <p class="text-xs uppercase tracking-widest text-[#8dbed7] font-semibold">Government of Andhra Pradesh • Land Administration</p>
+        <p class="text-sm text-slate-300 font-medium pt-1" id="authLoadingStatusText">Securely restoring your session...</p>
+      </div>
+
+      <!-- Animated Progress Bar -->
+      <div class="w-64 h-1.5 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
+        <div class="h-full bg-gradient-to-r from-primary via-secondary to-[#99efe5] animate-[pulse_1.5s_ease-in-out_infinite] rounded-full w-full"></div>
+      </div>
+
+      <div class="pt-4 flex items-center justify-center gap-2 text-[11px] font-data-mono text-slate-400">
+        <span class="material-symbols-outlined text-xs text-secondary" data-icon="verified_user">verified_user</span>
+        <span>Statutory Cryptographic Session Handshake</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- VIEW: REAL SUPABASE AUTHENTICATION LOGIN PAGE             -->
+  <!-- ========================================================= -->
+  <div id="view-login" class="fixed inset-0 z-40 bg-[#001720]/98 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-md my-auto relative z-10">
+      
+      <!-- Login Glassmorphic Container -->
+      <div class="glass-surface p-6 sm:p-8 rounded-3xl border border-white/40 shadow-2xl space-y-6 relative overflow-hidden">
+        
+        <!-- Header / Government Authority Badge -->
+        <div class="text-center space-y-2">
+          <div class="mx-auto w-16 h-16 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-lg border border-secondary/40 relative overflow-hidden group hover-lift">
+            <span class="material-symbols-outlined text-3xl text-secondary-container" data-icon="account_balance">account_balance</span>
+            <div class="absolute inset-0 bg-gradient-to-tr from-secondary/40 to-transparent"></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-center gap-1.5">
+              <h2 class="text-2xl font-bold tracking-tight text-primary">LAND•AI</h2>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-secondary/20 text-secondary border border-secondary/40">AUTHENTICATION</span>
+            </div>
+            <p class="text-xs text-on-surface-variant font-medium mt-0.5">National Cadastral Integrity &amp; Verification Portal</p>
+            <p class="text-[11px] text-outline font-data-mono">Govt. of India • Department of Land Revenue</p>
+          </div>
+        </div>
+
+        <!-- Error Banner (Sanitized) -->
+        <div id="loginErrorBanner" class="hidden p-3.5 rounded-xl bg-[#FDE8EA] border border-[#F8B4B9] text-error text-xs flex items-center gap-2.5 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-150">
+          <span class="material-symbols-outlined text-base shrink-0" data-icon="error">error</span>
+          <span id="loginErrorMessage" class="font-semibold">Invalid email or password.</span>
+        </div>
+
+        <!-- Supabase Configuration Notice (Shown only if .env.local needs setup) -->
+        <div id="loginConfigNotice" class="hidden p-3 rounded-xl bg-secondary/10 border border-secondary/30 text-xs text-primary space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-secondary">
+            <span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+            <span>Supabase Configuration Notice</span>
+          </div>
+          <p class="text-[11px] text-on-surface-variant leading-relaxed">
+            Please configure <code class="font-data-mono px-1 py-0.5 rounded bg-surface-container text-primary">VITE_SUPABASE_URL</code> and <code class="font-data-mono px-1 py-0.5 rounded bg-surface-container text-primary">VITE_SUPABASE_ANON_KEY</code> in <code class="font-data-mono font-bold">.env.local</code>.
+          </p>
+        </div>
+
+        <!-- Login Form: STRICTLY Email, Password, and Sign In -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label for="loginEmail" class="block text-xs font-bold text-on-surface mb-1.5">Email</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="mail">mail</span>
+              <input id="loginEmail" type="email" required autocomplete="email" placeholder="name@domain.gov.in" class="w-full h-11 pl-10 pr-3.5 text-xs sm:text-sm bg-surface-container-low border border-outline-variant rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary focus:outline-none transition shadow-2xs font-medium">
+            </div>
+          </div>
+
+          <div>
+            <label for="loginPassword" class="block text-xs font-bold text-on-surface mb-1.5">Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="key">key</span>
+              <input id="loginPassword" type="password" required autocomplete="current-password" placeholder="••••••••••••" class="w-full h-11 pl-10 pr-10 text-xs sm:text-sm bg-surface-container-low border border-outline-variant rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary focus:outline-none transition shadow-2xs font-medium">
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition" title="Toggle password visibility">
+                <span id="passwordToggleIcon" class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sign In Submit Button -->
+          <button id="loginSubmitBtn" type="submit" class="w-full py-3 px-4 rounded-xl bg-primary hover:bg-secondary text-on-primary font-bold text-xs sm:text-sm transition-all duration-200 hover-lift btn-shimmer shadow-md flex items-center justify-center gap-2 mt-2">
+            <span class="material-symbols-outlined text-lg" data-icon="login">login</span>
+            <span id="loginBtnText">Sign In</span>
+          </button>
+        </form>
+
+        <!-- Security Notice -->
+        <p class="text-[10px] text-center text-outline leading-tight pt-2 border-t border-outline-variant/40">
+          Statutory Cadastral Access • All authentication attempts are cryptographically audited.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Mobile Drawer Overlay -->
   <div id="mobileNavOverlay" onclick="closeMobileNav()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 lg:hidden hidden transition-opacity duration-300"></div>
 
   <!-- ========================================================= -->
   <!-- SIDE NAVIGATION (Responsive Off-Canvas on Mobile / Tablet) -->
   <!-- ========================================================= -->
-  <aside id="appSidebar" class="fixed lg:static inset-y-0 left-0 w-72 lg:w-64 min-w-[16rem] h-full shrink-0 flex flex-col justify-between bg-surface-container-lowest/95 backdrop-blur-md border-r border-outline-variant shadow-2xl lg:shadow-sm z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out select-none">
+  <aside id="appSidebar" class="fixed lg:static inset-y-0 left-0 w-72 lg:w-64 min-w-[16rem] h-full shrink-0 flex flex-col justify-between bg-surface-container-lowest/95 backdrop-blur-md border-r border-outline-variant shadow-2xl lg:shadow-sm z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out select-none hidden">
     <div>
       <!-- Top Brand Anchor with Mobile Close Button -->
       <div class="p-space-md border-b border-outline-variant bg-surface-container-lowest/90">
@@ -353,27 +466,28 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs (8 Items) -->
+      <!-- Navigation Tabs (Role-Aware) -->
       <nav class="p-space-sm space-y-1" id="sideNavTabs">
         <!-- 1. Dashboard -->
-        <button id="nav-btn-dashboard" onclick="switchView('dashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 border-r-2 border-primary bg-surface-container-low text-primary font-semibold hover-lift">
+        <button id="nav-btn-dashboard" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('dashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 border-r-2 border-primary bg-surface-container-low text-primary font-semibold hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
             <span>Dashboard</span>
           </div>
         </button>
 
-        <!-- 2. Documents -->
-        <button id="nav-btn-documents" onclick="openUploadModal()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <!-- 2. Documents (Read-Only for REVIEWER, Hidden for VIEWER) -->
+        <button id="nav-btn-documents" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('documents')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="description">description</span>
             <span>Documents</span>
           </div>
-          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-primary/10 text-primary">+ Upload</span>
+          <span data-roles="ADMIN,REVENUE_OFFICER" class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-primary/10 text-primary">+ Upload</span>
+          <span data-roles="REVIEWER" class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-surface-container text-outline">Read-Only</span>
         </button>
 
         <!-- 3. AI Extraction -->
-        <button id="nav-btn-extraction" onclick="switchView('extraction')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <button id="nav-btn-extraction" data-roles="ADMIN,REVENUE_OFFICER" onclick="switchView('extraction')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="auto_detect_voice">auto_detect_voice</span>
             <span>AI Extraction</span>
@@ -382,7 +496,7 @@
         </button>
 
         <!-- 4. Validation Ledger -->
-        <button id="nav-btn-ledger" onclick="switchView('ledger')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <button id="nav-btn-ledger" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('ledger')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
             <span>Validation Ledger</span>
@@ -391,7 +505,7 @@
         </button>
 
         <!-- 5. GIS Shajra Map -->
-        <button id="nav-btn-gis" onclick="switchView('gis')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <button id="nav-btn-gis" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('gis')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="map">map</span>
             <span>GIS Shajra Map</span>
@@ -400,7 +514,7 @@
         </button>
 
         <!-- 6. Review Queue -->
-        <button id="nav-btn-review" onclick="switchView('review')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <button id="nav-btn-review" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('review')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="rule">rule</span>
             <span>Review Queue</span>
@@ -409,7 +523,7 @@
         </button>
 
         <!-- 7. Human Verification -->
-        <button id="nav-btn-verification" onclick="switchView('verification')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <button id="nav-btn-verification" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('verification')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="gavel">gavel</span>
             <span>Human Verification</span>
@@ -417,36 +531,68 @@
           <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-secondary text-on-secondary">DECISION</span>
         </button>
 
-        <!-- 8. Audit Trail -->
-        <button id="nav-btn-audit" onclick="switchView('audit')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+        <!-- 8. Certificates -->
+        <button id="nav-btn-certificate" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('certificate')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="verified">verified</span>
+            <span>Certificates</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono text-outline">Issued</span>
+        </button>
+
+        <!-- 9. Audit Trail -->
+        <button id="nav-btn-audit" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('audit')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined" data-icon="history_toggle_off">history_toggle_off</span>
             <span>Audit Trail</span>
           </div>
           <span class="material-symbols-outlined text-xs text-secondary" data-icon="lock">lock</span>
         </button>
+
+        <!-- 10. User Management (ADMIN ONLY) -->
+        <button id="nav-btn-users" data-roles="ADMIN" onclick="switchView('users')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-purple-600" data-icon="manage_accounts">manage_accounts</span>
+            <span>User Management</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-purple-100 text-purple-700">ADMIN</span>
+        </button>
+
+        <!-- 11. System Settings (ADMIN ONLY) -->
+        <button id="nav-btn-settings" data-roles="ADMIN" onclick="switchView('settings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-purple-600" data-icon="settings">settings</span>
+            <span>Settings</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-purple-100 text-purple-700">ADMIN</span>
+        </button>
       </nav>
     </div>
 
     <!-- CTA & District Officer Badge -->
     <div class="p-space-md border-t border-outline-variant space-y-3 bg-surface-container-lowest/90">
-      <button onclick="openUploadModal()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-semibold transition-all duration-200 hover-lift btn-shimmer shadow-md">
+      <button id="sidebarUploadBtn" data-roles="ADMIN,REVENUE_OFFICER" onclick="openUploadModal()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-semibold transition-all duration-200 hover-lift btn-shimmer shadow-md">
         <span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
         <span>Upload Document</span>
       </button>
 
-      <!-- District Officer Badge -->
-      <div class="pt-2 border-t border-outline-variant/60 flex items-center gap-3">
-        <div class="relative w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs ring-2 ring-surface-container-highest shadow-sm">
-          <span>SS</span>
-          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary border-2 border-surface-container-lowest rounded-full"></span>
+      <!-- Authenticated User Profile & Logout in Sidebar -->
+      <div class="pt-2 border-t border-outline-variant/60 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="relative w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs ring-2 ring-surface-container-highest shadow-sm shrink-0" id="sidebarUserInitials">
+            <span>SS</span>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary border-2 border-surface-container-lowest rounded-full"></span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-bold text-on-surface truncate" id="sidebarUserName">Officer S. Sharma</p>
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] font-data-mono font-bold px-1.5 py-0.2 rounded bg-secondary/15 text-secondary truncate" id="sidebarUserRole">REVENUE_OFFICER</span>
+              <span class="text-[10px] text-on-surface-variant truncate" id="sidebarUserDistrict">• Guntur</span>
+            </div>
+          </div>
         </div>
-        <div class="min-w-0 flex-1">
-          <p class="text-label-md font-semibold text-on-surface truncate">Officer S. Sharma</p>
-          <p class="text-[11px] text-on-surface-variant truncate">District Revenue Officer • Guntur</p>
-        </div>
-        <button class="text-secondary hover:text-primary hover:scale-110 transition-transform" title="Officer Cadastral Signature Validated">
-          <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+        <button onclick="handleLogout()" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/20 transition hover-lift shrink-0" title="Sign Out">
+          <span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
         </button>
       </div>
     </div>
@@ -455,7 +601,7 @@
   <!-- ========================================================= -->
   <!-- MAIN CONTENT SHELL                                        -->
   <!-- ========================================================= -->
-  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative z-10">
+  <div id="mainAppShell" class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative z-10 hidden">
     
     <!-- TOP APP BAR -->
     <header class="h-16 shrink-0 sticky top-0 z-40 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-4 sm:px-6 shadow-xs">
@@ -508,44 +654,145 @@
           <span class="hidden sm:inline">Upload Record</span>
           <span class="sm:hidden">Upload</span>
         </button>
+
+        <!-- User Profile Dropdown Menu in Header -->
+        <div class="relative" id="headerUserMenuContainer">
+          <button onclick="toggleUserDropdown()" class="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container border border-outline-variant/80 text-on-surface transition-all duration-200 hover-lift shadow-xs group" title="Officer Profile &amp; Terminal Jurisdiction">
+            <div class="relative w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary text-on-primary flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-secondary/30 shrink-0" id="headerUserInitials">
+              <span>RS</span>
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary border-2 border-surface-container-lowest rounded-full shadow-[0_0_6px_#006a63]"></span>
+            </div>
+            <div class="hidden sm:block text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-xs font-bold text-primary leading-tight truncate max-w-[130px]" id="headerUserName">Officer R. S. Sharma</span>
+                <span class="material-symbols-outlined text-xs text-secondary" data-icon="verified">verified</span>
+              </div>
+              <div class="flex items-center gap-1 mt-0.5">
+                <span class="text-[10px] font-data-mono font-bold px-1.5 py-0.2 rounded bg-secondary/15 text-secondary border border-secondary/30 leading-none" id="headerUserRole">REVENUE_OFFICER</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-sm text-outline group-hover:text-primary transition-transform duration-200" id="headerUserChevron" data-icon="expand_more">expand_more</span>
+          </button>
+
+          <!-- Redesigned Dropdown Popover Card (Solid Opaque Background, Zero Bleed-Through) -->
+          <div id="userProfileDropdown" class="hidden absolute right-0 mt-2 w-72 sm:w-80 bg-white dark:bg-[#071923] rounded-2xl border border-outline-variant shadow-[0_20px_50px_rgba(0,0,0,0.25)] p-4 space-y-3.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+            
+            <!-- Officer Header -->
+            <div class="border-b border-outline-variant/60 pb-3 flex items-start gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-primary to-secondary text-on-primary flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-secondary/40 shrink-0">
+                <span id="dropdownInitials">RS</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5">
+                  <h3 class="text-sm font-bold text-primary truncate" id="dropdownFullName">Officer R. S. Sharma</h3>
+                  <span class="material-symbols-outlined text-sm text-secondary" data-icon="verified" title="Statutory Verified Officer">verified</span>
+                </div>
+                <p class="text-[11px] font-data-mono text-on-surface-variant truncate" id="dropdownEmail">officer@landai.gov.in</p>
+                <div class="mt-1 flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-secondary/15 text-secondary border border-secondary/30" id="dropdownRole">REVENUE_OFFICER</span>
+                  <span class="text-[10px] text-on-surface-variant font-medium truncate" id="dropdownDept">Revenue Department</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Database Verified Profile Role -->
+            <div class="bg-surface-container-low/70 p-2.5 rounded-xl border border-outline-variant/50 space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-semibold text-on-surface-variant">
+                <span>Verified Database Role:</span>
+                <span class="font-data-mono text-secondary text-[10px] font-bold px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30" id="currentRoleBadge">VIEWER</span>
+              </div>
+              <p class="text-[10px] text-outline leading-tight">
+                Role is governed strictly by your database profile in Supabase.
+              </p>
+            </div>
+
+            <!-- Jurisdiction & Security Metadata Grid -->
+            <div class="text-[11px] text-on-surface-variant space-y-1.5 bg-surface-container-low/40 p-2.5 rounded-xl border border-outline-variant/40">
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs text-primary" data-icon="location_on">location_on</span>
+                  <span>District:</span>
+                </span>
+                <strong class="text-on-surface font-semibold" id="dropdownDistrict">Guntur, Andhra Pradesh</strong>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs text-secondary" data-icon="shield">shield</span>
+                  <span>Statutory Rank:</span>
+                </span>
+                <strong class="text-secondary font-semibold">District Revenue Officer (DRO)</strong>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs text-outline" data-icon="security">security</span>
+                  <span>Terminal State:</span>
+                </span>
+                <span class="inline-flex items-center gap-1 text-secondary font-bold text-[10px] font-data-mono">
+                  <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                  TLS 1.3 Active
+                </span>
+              </div>
+            </div>
+
+            <!-- Sign Out Action -->
+            <div class="pt-1">
+              <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-error bg-error-container/20 hover:bg-error hover:text-white border border-error/30 transition-all duration-200 hover-lift shadow-2xs">
+                <span class="material-symbols-outlined text-base" data-icon="logout">logout</span>
+                <span>Sign Out of Terminal</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- SUB-TAB RIBBON FOR WORKFLOW PROGRESSION (Responsive Horizontal Scroll Stepper) -->
     <div class="bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant px-3 sm:px-6 py-2 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 text-label-md shrink-0 shadow-2xs relative z-20">
-      <!-- Horizontal Scrollable Pill Tabs -->
+      <!-- Horizontal Scrollable Pill Tabs (Role-Aware) -->
       <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar scroll-smooth py-0.5 -mx-1 px-1" id="workflowRibbonContainer">
-        <button id="ribbon-dashboard" onclick="switchView('dashboard')" class="ribbon-btn active-ribbon px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-dashboard" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('dashboard')" class="ribbon-btn active-ribbon px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="analytics">analytics</span>
           <span>1. Dashboard</span>
         </button>
-        <button id="ribbon-extraction" onclick="switchView('extraction')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-documents" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('documents')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+          <span class="material-symbols-outlined text-base" data-icon="description">description</span>
+          <span>2. Documents</span>
+        </button>
+        <button id="ribbon-extraction" data-roles="ADMIN,REVENUE_OFFICER" onclick="switchView('extraction')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="document_scanner">document_scanner</span>
-          <span>2. AI Extraction</span>
+          <span>3. AI Extraction</span>
         </button>
-        <button id="ribbon-ledger" onclick="switchView('ledger')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-ledger" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('ledger')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="compare">compare</span>
-          <span>3. 3-Way Validation</span>
+          <span>4. 3-Way Validation</span>
         </button>
-        <button id="ribbon-gis" onclick="switchView('gis')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-gis" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('gis')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="layers">layers</span>
-          <span>4. GIS Shajra Map</span>
+          <span>5. GIS Shajra Map</span>
         </button>
-        <button id="ribbon-review" onclick="switchView('review')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-review" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('review')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="pending_actions">pending_actions</span>
-          <span>5. Review Queue</span>
+          <span>6. Review Queue</span>
         </button>
-        <button id="ribbon-verification" onclick="switchView('verification')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-verification" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('verification')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="gavel">gavel</span>
-          <span>6. Human Verification</span>
+          <span>7. Human Verification</span>
         </button>
-        <button id="ribbon-certificate" onclick="switchView('certificate')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-certificate" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER,VIEWER" onclick="switchView('certificate')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="verified">verified</span>
-          <span>7. Verified Record</span>
+          <span>8. Verified Record</span>
         </button>
-        <button id="ribbon-audit" onclick="switchView('audit')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+        <button id="ribbon-audit" data-roles="ADMIN,REVENUE_OFFICER,REVIEWER" onclick="switchView('audit')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
           <span class="material-symbols-outlined text-base" data-icon="history_toggle_off">history_toggle_off</span>
-          <span>8. Audit Trail</span>
+          <span>9. Audit Trail</span>
+        </button>
+        <button id="ribbon-users" data-roles="ADMIN" onclick="switchView('users')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+          <span class="material-symbols-outlined text-base" data-icon="manage_accounts">manage_accounts</span>
+          <span>10. Users</span>
+        </button>
+        <button id="ribbon-settings" data-roles="ADMIN" onclick="switchView('settings')" class="ribbon-btn px-3 py-1.5 rounded-xl font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0">
+          <span class="material-symbols-outlined text-base" data-icon="settings">settings</span>
+          <span>11. Settings</span>
         </button>
       </div>
 
@@ -568,106 +815,106 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-card p-5 sm:p-6 rounded-2xl shadow-sm">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-primary text-on-primary font-bold shadow-2xs">OPERATIONAL OVERVIEW</span>
-              <h1 class="text-headline-md sm:text-headline-lg font-bold text-primary">Land Records Digitization &amp; Cadastral Validation</h1>
+              <span id="dashboardBannerBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-primary text-on-primary font-bold shadow-2xs">OPERATIONAL OVERVIEW</span>
+              <h1 id="dashboardBannerTitle" class="text-headline-md sm:text-headline-lg font-bold text-primary">Land Records Digitization &amp; Cadastral Validation</h1>
             </div>
-            <p class="text-xs sm:text-body-md text-on-surface-variant">Real-time telemetry on AI OCR throughput, GIS discrepancy reconciliation, and officer verification ledger.</p>
+            <p id="dashboardBannerDesc" class="text-xs sm:text-body-md text-on-surface-variant">Real-time telemetry on AI OCR throughput, GIS discrepancy reconciliation, and officer verification ledger.</p>
           </div>
           <div class="flex items-center gap-2.5 shrink-0">
-            <button onclick="openUploadModal()" class="px-4 py-2 bg-primary hover:bg-secondary text-on-primary rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all duration-200 hover-lift btn-shimmer shadow-md">
+            <button id="dashboardUploadBtn" data-roles="ADMIN,REVENUE_OFFICER" onclick="openUploadModal()" class="px-4 py-2 bg-primary hover:bg-secondary text-on-primary rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all duration-200 hover-lift btn-shimmer shadow-md">
               <span class="material-symbols-outlined text-base" data-icon="upload">upload</span>
               <span>Upload Document</span>
             </button>
-            <button class="p-2 bg-surface-container-low hover:bg-surface-container rounded-xl border border-outline-variant text-primary transition hover-lift shadow-2xs" onclick="triggerToast('Data telemetry refreshed across Guntur district.')" title="Refresh">
+            <button class="p-2 bg-surface-container-low hover:bg-surface-container rounded-xl border border-outline-variant text-primary transition hover-lift shadow-2xs" onclick="renderDashboard()" title="Refresh Telemetry">
               <span class="material-symbols-outlined text-base" data-icon="refresh">refresh</span>
             </button>
           </div>
         </div>
 
-        <!-- 5 KPI Cards -->
+        <!-- 5 KPI Cards (Role-Aware) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4">
           <!-- Card 1 -->
-          <div class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group" onclick="openUploadModal()">
+          <div id="dashCard1" class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group">
             <div class="flex items-center justify-between text-on-surface-variant mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider">Documents Ingested</span>
+              <span id="dashCard1Title" class="text-[11px] font-bold uppercase tracking-wider">Documents Ingested</span>
               <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-base" data-icon="folder_zip">folder_zip</span>
               </div>
             </div>
-            <div class="text-2xl sm:text-headline-lg font-bold text-primary">12,486</div>
+            <div id="dashCard1Value" class="text-2xl sm:text-headline-lg font-bold text-primary">12,486</div>
             <div class="mt-2.5 flex items-center justify-between">
-              <span class="inline-flex items-center gap-0.5 text-xs font-bold text-secondary">
+              <span id="dashCard1Badge" class="inline-flex items-center gap-0.5 text-xs font-bold text-secondary">
                 <span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> +12.4% MoM
               </span>
-              <span class="text-[10px] font-data-mono text-outline">Guntur Central</span>
+              <span id="dashCard1Sub" class="text-[10px] font-data-mono text-outline">Guntur Central</span>
             </div>
           </div>
 
           <!-- Card 2 -->
-          <div class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group" onclick="switchView('extraction')">
+          <div id="dashCard2" class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group">
             <div class="flex items-center justify-between text-on-surface-variant mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider">AI Extraction Completed</span>
+              <span id="dashCard2Title" class="text-[11px] font-bold uppercase tracking-wider">AI Extraction Completed</span>
               <div class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-base" data-icon="smart_toy">smart_toy</span>
               </div>
             </div>
-            <div class="text-2xl sm:text-headline-lg font-bold text-primary">11,920</div>
+            <div id="dashCard2Value" class="text-2xl sm:text-headline-lg font-bold text-primary">11,920</div>
             <div class="mt-2.5 flex items-center justify-between">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
+              <span id="dashCard2Badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
                 95.5% OCR Match
               </span>
-              <span class="text-[10px] font-data-mono text-outline">ResNet v3.2</span>
+              <span id="dashCard2Sub" class="text-[10px] font-data-mono text-outline">ResNet v3.2</span>
             </div>
           </div>
 
           <!-- Card 3 -->
-          <div class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group" onclick="switchView('certificate')">
+          <div id="dashCard3" class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group">
             <div class="flex items-center justify-between text-on-surface-variant mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider">Verified Records</span>
+              <span id="dashCard3Title" class="text-[11px] font-bold uppercase tracking-wider">Verified Records</span>
               <div class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-base" data-icon="verified">verified</span>
               </div>
             </div>
-            <div class="text-2xl sm:text-headline-lg font-bold text-secondary">10,842</div>
+            <div id="dashCard3Value" class="text-2xl sm:text-headline-lg font-bold text-secondary">10,842</div>
             <div class="mt-2.5 flex items-center justify-between">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
+              <span id="dashCard3Badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
                 91.0% Clearance
               </span>
-              <span class="text-[10px] font-data-mono text-outline">Gazetted</span>
+              <span id="dashCard3Sub" class="text-[10px] font-data-mono text-outline">Gazetted</span>
             </div>
           </div>
 
           <!-- Card 4 -->
-          <div class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group" onclick="switchView('review')">
+          <div id="dashCard4" class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift group">
             <div class="flex items-center justify-between text-on-surface-variant mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider">Review Required</span>
+              <span id="dashCard4Title" class="text-[11px] font-bold uppercase tracking-wider">Review Required</span>
               <div class="w-8 h-8 rounded-lg bg-[#FEF6E7] text-[#F59E0B] flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-base" data-icon="pending_actions">pending_actions</span>
               </div>
             </div>
-            <div class="text-2xl sm:text-headline-lg font-bold text-[#F59E0B]">738</div>
+            <div id="dashCard4Value" class="text-2xl sm:text-headline-lg font-bold text-[#F59E0B]">738</div>
             <div class="mt-2.5 flex items-center justify-between">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7] shadow-2xs">
+              <span id="dashCard4Badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7] shadow-2xs">
                 Pending Officer
               </span>
-              <span class="text-[10px] font-data-mono text-outline">Mandal Desk</span>
+              <span id="dashCard4Sub" class="text-[10px] font-data-mono text-outline">Mandal Desk</span>
             </div>
           </div>
 
           <!-- Card 5 -->
-          <div class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift border-error/40 hover:border-error group" onclick="switchView('ledger')">
+          <div id="dashCard5" class="workflow-card glass-card p-4 sm:p-5 rounded-2xl shadow-xs cursor-pointer hover-lift border-error/40 hover:border-error group">
             <div class="flex items-center justify-between text-on-surface-variant mb-2">
-              <span class="text-[11px] font-bold uppercase tracking-wider">GIS Conflicts</span>
+              <span id="dashCard5Title" class="text-[11px] font-bold uppercase tracking-wider">GIS Conflicts</span>
               <div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-base" data-icon="warning">warning</span>
               </div>
             </div>
-            <div class="text-2xl sm:text-headline-lg font-bold text-error">184</div>
+            <div id="dashCard5Value" class="text-2xl sm:text-headline-lg font-bold text-error">184</div>
             <div class="mt-2.5 flex items-center justify-between">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9] shadow-2xs">
+              <span id="dashCard5Badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9] shadow-2xs">
                 Area Mismatch
               </span>
-              <span class="text-[10px] font-data-mono text-outline">Action Req.</span>
+              <span id="dashCard5Sub" class="text-[10px] font-data-mono text-outline">Action Req.</span>
             </div>
           </div>
         </div>
@@ -1752,7 +1999,223 @@
         </div>
       </section>
 
-    </main>
+      <!-- ======================================================= -->
+      <!-- VIEW: DOCUMENTS REPOSITORY                              -->
+      <!-- ======================================================= -->
+      <section id="view-documents" class="space-y-6 hidden">
+        <div class="glass-card p-5 sm:p-6 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-primary text-on-primary font-bold shadow-2xs">CADASTRAL REPOSITORY</span>
+              <h2 class="text-headline-md font-bold text-primary">Ingested Land Records &amp; Deeds</h2>
+              <span id="documentsModeBadge" class="hidden px-2 py-0.5 rounded-full text-[10px] font-data-mono font-bold bg-secondary/15 text-secondary border border-secondary/30">READ-ONLY MODE</span>
+            </div>
+            <p class="text-xs sm:text-body-sm text-on-surface-variant">Archival physical survey settlements, registered titles, and bilingual revenue records.</p>
+          </div>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button id="documentsUploadBtn" data-roles="ADMIN,REVENUE_OFFICER" onclick="openUploadModal()" class="px-4 py-2 bg-primary hover:bg-secondary text-on-primary rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all duration-200 hover-lift btn-shimmer shadow-md">
+              <span class="material-symbols-outlined text-base" data-icon="upload">upload</span>
+              <span>Upload Document</span>
+            </button>
+            <button class="p-2 bg-surface-container-low hover:bg-surface-container rounded-xl border border-outline-variant text-primary transition hover-lift shadow-2xs" onclick="renderDocumentsView()" title="Refresh List">
+              <span class="material-symbols-outlined text-base" data-icon="refresh">refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl shadow-xs overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-surface-container-low text-on-surface-variant font-data-mono text-[11px] uppercase tracking-wider border-b border-outline-variant/60">
+                <tr>
+                  <th class="py-3 px-4">Document ID</th>
+                  <th class="py-3 px-4">Jurisdiction</th>
+                  <th class="py-3 px-4">Survey No</th>
+                  <th class="py-3 px-4">Pattadar / Owner</th>
+                  <th class="py-3 px-4">Type</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="documentsTableBody" class="divide-y divide-outline-variant/40">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW: USER & ROLE MANAGEMENT (ADMIN ONLY)              -->
+      <!-- ======================================================= -->
+      <section id="view-users" class="space-y-6 hidden">
+        <div class="glass-card p-5 sm:p-6 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-purple-100 text-purple-800 font-bold border border-purple-300">ADMINISTRATIVE ACCESS</span>
+              <h2 class="text-headline-md font-bold text-primary">Authorized Personnel &amp; Role Management</h2>
+            </div>
+            <p class="text-xs sm:text-body-sm text-on-surface-variant">Statutory user profiles and role governance stored in Supabase <code class="font-data-mono font-bold text-primary">public.profiles</code>.</p>
+          </div>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button class="px-3.5 py-2 rounded-xl bg-surface-container-low border border-outline-variant text-primary font-bold text-xs hover:bg-surface-container transition hover-lift shadow-2xs flex items-center gap-1.5" onclick="renderUserManagement()">
+              <span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+              <span>Refresh Profiles</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Role Permissions Reference Card -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1">
+            <span class="font-data-mono font-bold text-purple-800 text-[11px] block">ADMIN</span>
+            <p class="text-on-surface-variant text-[11px]">Full platform clearance, role governance, system telemetry, and audit inspection.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-secondary/30 bg-secondary/10 space-y-1">
+            <span class="font-data-mono font-bold text-secondary text-[11px] block">REVENUE_OFFICER</span>
+            <p class="text-on-surface-variant text-[11px]">Operational jurisdiction: deed ingestion, AI extractions, GIS reconciliation, and adjudication.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-1">
+            <span class="font-data-mono font-bold text-amber-800 text-[11px] block">REVIEWER</span>
+            <p class="text-on-surface-variant text-[11px]">Review queue and verification workflow. Read-only document inspection.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 space-y-1">
+            <span class="font-data-mono font-bold text-blue-800 text-[11px] block">VIEWER</span>
+            <p class="text-on-surface-variant text-[11px]">Read-only access: public cadastral records, GIS parcel inspection, and verified certificates.</p>
+          </div>
+        </div>
+
+        <!-- Users Table Container -->
+        <div class="glass-card rounded-2xl shadow-xs overflow-hidden">
+          <div class="p-4 border-b border-outline-variant/60 flex items-center justify-between">
+            <h3 class="text-sm font-bold text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-base text-secondary" data-icon="shield_person">shield_person</span>
+              <span>Registered Personnel &amp; Roles</span>
+            </h3>
+            <span class="text-[11px] font-data-mono text-outline">Database Profile Authority</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-surface-container-low text-on-surface-variant font-data-mono text-[11px] uppercase tracking-wider border-b border-outline-variant/60">
+                <tr>
+                  <th class="py-3 px-4">Officer / Official</th>
+                  <th class="py-3 px-4">Email</th>
+                  <th class="py-3 px-4">Department &amp; District</th>
+                  <th class="py-3 px-4">Current Database Role</th>
+                  <th class="py-3 px-4 text-right">Assign Role</th>
+                </tr>
+              </thead>
+              <tbody id="userManagementTableBody" class="divide-y divide-outline-variant/40">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW: SYSTEM & SECURITY SETTINGS (ADMIN ONLY)           -->
+      <!-- ======================================================= -->
+      <section id="view-settings" class="space-y-6 hidden">
+        <div class="glass-card p-5 sm:p-6 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-purple-100 text-purple-800 font-bold border border-purple-300">ADMINISTRATIVE SETTINGS</span>
+              <h2 class="text-headline-md font-bold text-primary">System Telemetry &amp; Security Governance</h2>
+            </div>
+            <p class="text-xs sm:text-body-sm text-on-surface-variant">Core security parameters, Supabase database Row-Level Security (RLS), and API endpoints.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Card 1: Supabase Security Architecture -->
+          <div class="glass-card p-5 rounded-2xl space-y-4">
+            <div class="flex items-center gap-2.5 border-b border-outline-variant/60 pb-3">
+              <span class="material-symbols-outlined text-secondary text-xl" data-icon="security">security</span>
+              <h3 class="font-bold text-primary text-sm sm:text-base">Supabase RLS &amp; Authentication Status</h3>
+            </div>
+            <div class="space-y-2.5 text-xs text-on-surface-variant">
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Row Level Security (public.profiles):</span>
+                <span class="font-data-mono font-bold text-[#198754] flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> ENABLED
+                </span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Role Update Policy:</span>
+                <span class="font-data-mono font-bold text-[#198754]">Admin Only</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Audit Log Append-Only:</span>
+                <span class="font-data-mono font-bold text-[#198754]">Enforced</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5">
+                <span>Connection Status:</span>
+                <span class="font-data-mono text-[11px] text-primary" id="settingsSupabaseStatus">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: DILRMP National Land Records Sync -->
+          <div class="glass-card p-5 rounded-2xl space-y-4">
+            <div class="flex items-center gap-2.5 border-b border-outline-variant/60 pb-3">
+              <span class="material-symbols-outlined text-primary text-xl" data-icon="hub">hub</span>
+              <h3 class="font-bold text-primary text-sm sm:text-base">National Cadastral Sync (DILRMP)</h3>
+            </div>
+            <div class="space-y-2.5 text-xs text-on-surface-variant">
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Central Gateway Status:</span>
+                <span class="font-data-mono font-bold text-[#198754]">Connected</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Coordinate Reference System:</span>
+                <span class="font-data-mono font-bold text-primary">EPSG:7760</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-outline-variant/30">
+                <span>Cryptographic Block Hashing:</span>
+                <span class="font-data-mono font-bold text-secondary">SHA-256</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5">
+                <span>Active Jurisdiction Unit:</span>
+                <span class="font-semibold text-on-surface">Mandal Mangalagiri / Guntur</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW: ACCESS DENIED / RESTRICTED MODULE                 -->
+      <!-- ======================================================= -->
+      <section id="view-access-denied" class="space-y-6 hidden">
+        <div class="glass-card p-8 sm:p-12 rounded-3xl text-center max-w-xl mx-auto space-y-6 border border-error/30 shadow-xl">
+          <div class="w-16 h-16 rounded-2xl bg-error-container text-error mx-auto flex items-center justify-center shadow-lg ring-4 ring-error/10">
+            <span class="material-symbols-outlined text-3xl" data-icon="gpp_bad">gpp_bad</span>
+          </div>
+          <div class="space-y-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono bg-error-container text-error font-bold border border-error/20">ACCESS RESTRICTED</span>
+            <h2 class="text-2xl font-bold text-primary">Statutory Permission Required</h2>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+              Your authenticated database role <strong class="font-data-mono text-primary px-1.5 py-0.5 rounded bg-surface-container" id="deniedUserRoleBadge">VIEWER</strong> is not authorized to access module <code class="font-data-mono font-bold text-error px-1.5 py-0.5 rounded bg-error-container/40" id="deniedModulePath">/extraction</code>.
+            </p>
+          </div>
+          <div class="p-3.5 bg-surface-container-low rounded-xl text-left text-xs text-on-surface-variant space-y-1.5 border border-outline-variant/60">
+            <p class="font-semibold text-primary flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-secondary" data-icon="policy">policy</span>
+              <span>Cadastral Governance Protocol:</span>
+            </p>
+            <p class="text-[11px] text-outline leading-tight">
+              Under statutory land administration rules, operational workflows, document ingestion, and system configurations are restricted to authorized departmental personnel.
+            </p>
+          </div>
+          <div class="pt-2">
+            <button onclick="switchView('dashboard')" class="px-6 py-2.5 rounded-xl bg-primary hover:bg-secondary text-on-primary font-bold text-xs sm:text-sm transition-all duration-200 hover-lift btn-shimmer shadow-md inline-flex items-center gap-2">
+              <span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+              <span>Return to Allowed Workspace</span>
+            </button>
+          </div>
+        </div>
+      </section>
   </div>
 
   <!-- ========================================================= -->

@@ -102,6 +102,8 @@ class AuditService {
     const newLog = {
       id: `AUD-${String(this.logs.length + 1).padStart(3, '0')}`,
       documentId: entry.documentId || 'DOC-2026-00421',
+      userId: entry.userId || 'system', // Immutable Supabase auth.users(id)
+      role: entry.role || 'REVENUE_OFFICER',
       timestamp,
       actor: entry.actor || 'Officer S. Sharma',
       action: entry.action,
