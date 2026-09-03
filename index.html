@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard — ILRDVS</title>
+<meta name="description" content="ILRDVS Dashboard — Monitor land record digitization progress, extraction accuracy, and verification status across India."/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+/* India SVG map placeholder */
+.india-map-svg{width:100%;height:340px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 40% 50%,rgba(30,111,255,0.06),transparent 70%);border-radius:var(--radius-lg);position:relative;overflow:hidden}
+.india-map-svg img{height:320px;opacity:0.85;filter:drop-shadow(0 0 24px rgba(30,111,255,0.25))}
+.map-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted)}
+.legend-swatch{width:12px;height:12px;border-radius:3px}
+/* Chart placeholder */
+.chart-area{width:100%;height:200px;display:flex;align-items:flex-end;gap:3px;padding:8px 0 0}
+.chart-bar{flex:1;border-radius:3px 3px 0 0;position:relative;transition:.6s ease;cursor:pointer}
+.chart-bar:hover{filter:brightness(1.2)}
+/* Activity feed */
+.activity-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(30,48,80,0.4)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.activity-text{font-size:13px;color:var(--text-primary);line-height:1.4}
+.activity-time{font-size:11px;color:var(--text-muted);margin-top:3px}
+/* Accuracy ring */
+.ring-wrap{display:flex;align-items:center;justify-content:center;position:relative}
+.ring-label{position:absolute;text-align:center}
+.ring-pct{font-size:28px;font-weight:800;color:var(--text-primary)}
+.ring-sub{font-size:10px;color:var(--text-muted)}
+/* State rows */
+.state-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(30,48,80,0.4)}
+.state-row:last-child{border-bottom:none}
+.state-name{font-size:13px;color:var(--text-primary);width:90px;flex-shrink:0}
+.state-bar{flex:1;height:8px;background:var(--navy-border);border-radius:4px;overflow:hidden}
+.state-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--blue-light))}
+.state-pct{font-size:12px;color:var(--blue-light);font-weight:700;width:38px;text-align:right}
+/* Quick actions */
+.qa-card{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-lg);padding:16px;text-align:center;cursor:pointer;transition:var(--transition);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+.qa-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.qa-icon{font-size:28px}
+.qa-label{font-size:13px;font-weight:600;color:var(--text-primary)}
+.qa-sub{font-size:11px;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-logo" onclick="location.href='index.html'">
+    <div class="nav-logo-icon">🏛</div>
+    <div><div class="nav-logo-text">ILRDVS</div><div class="nav-logo-sub">Land Record System</div></div>
+  </div>
+  <div class="nav-links"><a class="nav-link active" href="index.html">Dashboard</a>
+<a class="nav-link" href="upload.html">Upload</a>
+<a class="nav-link" href="documents.html">Documents</a>
+<a class="nav-link" href="verify.html">Verify</a>
+<a class="nav-link" href="gis-map.html">GIS Map</a>
+<a class="nav-link" href="reports.html">Reports</a>
+</div>
+  <div class="nav-right">
+    <span class="nav-badge">🛰 BHUVAN LIVE</span>
+    <div class="nav-divider"></div>
+    <div class="nav-avatar" title="District Officer — Nilgiris">DO</div>
+  </div>
+</nav>
+<div class="page-shell">
+<div class="page-content">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">📊 Dashboard</div>
+      <div class="page-subtitle">Digitization overview — updated 2 minutes ago</div>
+    </div>
+    <div class="page-actions">
+      <select class="form-select" style="width:160px;padding:8px 32px 8px 12px;font-size:12px">
+        <option>All States</option><option>Karnataka</option><option>Maharashtra</option>
+        <option>Uttar Pradesh</option><option>Rajasthan</option>
+      </select>
+      <select class="form-select" style="width:140px;padding:8px 32px 8px 12px;font-size:12px">
+        <option>All Districts</option><option>Nilgiris</option><option>Nashik</option>
+      </select>
+      <button class="btn btn-secondary btn-sm">📥 Export Report</button>
+      <button class="btn btn-primary btn-sm" onclick="location.href='upload.html'">📤 Upload Docs</button>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="grid-5 stagger mb-24">
+    <div class="kpi-card blue">
+      <div class="kpi-icon blue">📄</div>
+      <div class="kpi-num" id="kpi-total">0</div>
+      <div class="kpi-label">Total Documents</div>
+      <div class="kpi-delta up">↑ 342 this week</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon green">✅</div>
+      <div class="kpi-num" id="kpi-valid">0</div>
+      <div class="kpi-label">Validated</div>
+      <div class="kpi-delta up">↑ 94.2% accuracy</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-icon gold">⏳</div>
+      <div class="kpi-num" id="kpi-review">0</div>
+      <div class="kpi-label">Pending Review</div>
+      <div class="kpi-delta down">↓ 12% from yesterday</div>
+    </div>
+    <div class="kpi-card coral">
+      <div class="kpi-icon coral">❌</div>
+      <div class="kpi-num" id="kpi-error">0</div>
+      <div class="kpi-label">Errors / Failed</div>
+      <div class="kpi-delta up">↑ Improving</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-icon purple">🧠</div>
+      <div class="kpi-num" id="kpi-acc">0%</div>
+      <div class="kpi-label">AI Accuracy</div>
+      <div class="kpi-delta up">↑ +2.1% this month</div>
+    </div>
+  </div>
+
+  <!-- Row 2: Map + Chart -->
+  <div class="grid-6040 mb-24">
+    <!-- State-wise map card -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📍 State-wise Digitization Progress</span>
+        <a href="gis-map.html" class="btn btn-ghost btn-sm">Open GIS Map →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+        <div>
+          <div class="india-map-svg">
+            <!-- SVG India Map representation -->
+            <svg viewBox="0 0 400 500" width="200" style="opacity:.9;filter:drop-shadow(0 0 20px rgba(30,111,255,0.3))">
+              <!-- Simplified India outline shapes -->
+              <ellipse cx="200" cy="200" rx="120" ry="140" fill="none" stroke="#1E6FFF" stroke-width="1.5" stroke-dasharray="4 2" opacity=".4"/>
+              <circle cx="160" cy="160" r="18" fill="#1E6FFF" opacity=".7" class="map-state"/>
+              <circle cx="220" cy="180" r="22" fill="#00C896" opacity=".7"/>
+              <circle cx="195" cy="240" r="16" fill="#FFB800" opacity=".7"/>
+              <circle cx="170" cy="290" r="20" fill="#1E6FFF" opacity=".6"/>
+              <circle cx="230" cy="260" r="14" fill="#00C896" opacity=".7"/>
+              <circle cx="145" cy="210" r="12" fill="#FF4757" opacity=".6"/>
+              <circle cx="250" cy="220" r="16" fill="#1E6FFF" opacity=".65"/>
+              <circle cx="185" cy="320" r="10" fill="#00C896" opacity=".75"/>
+              <circle cx="175" cy="380" r="8" fill="#1E6FFF" opacity=".5"/>
+              <text x="200" y="460" text-anchor="middle" fill="#4A6080" font-size="10" font-family="Inter">India</text>
+            </svg>
+          </div>
+          <div class="map-legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--emerald)"></div>85–100%</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--blue)"></div>60–85%</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--amber)"></div>30–60%</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:var(--coral)"></div>&lt;30%</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Top States</div>
+          <div id="state-bars"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accuracy ring + trend -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🎯 Extraction Accuracy</span>
+        <span class="badge badge-validated">Live</span>
+      </div>
+      <div class="ring-wrap mb-16" style="height:160px">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="60" fill="none" stroke="#1E3050" stroke-width="14"/>
+          <circle cx="75" cy="75" r="60" fill="none" stroke="url(#ringGrad)" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="376.99" stroke-dashoffset="22"
+            transform="rotate(-90 75 75)" id="accuracy-ring"/>
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#1E6FFF"/>
+              <stop offset="100%" stop-color="#00C896"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-pct">94.2%</div>
+          <div class="ring-sub">AI Confidence</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:var(--emerald)">8,450</div>
+          <div style="font-size:10px;color:var(--text-muted)">High Conf (&gt;0.85)</div>
+        </div>
+        <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:var(--amber)">1,890</div>
+          <div style="font-size:10px;color:var(--text-muted)">Needs Review</div>
+        </div>
+      </div>
+      <!-- Mini trend bars -->
+      <div class="card-title mb-8">Monthly Trend</div>
+      <div class="chart-area" id="mini-chart"></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:4px">
+        <span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Recent Docs + Activity + Quick Actions -->
+  <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px;margin-bottom:24px">
+
+    <!-- Recent Documents table -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--navy-border);display:flex;justify-content:space-between;align-items:center">
+        <span class="card-title">📋 Recent Documents</span>
+        <a href="documents.html" class="btn btn-ghost btn-sm">View All →</a>
+      </div>
+      <div class="table-wrap" style="border:none;border-radius:0">
+        <table>
+          <thead><tr>
+            <th>Doc ID</th><th>State</th><th>Status</th><th>Confidence</th><th>Date</th>
+          </tr></thead>
+          <tbody id="recent-docs"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Activity feed -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">⚡ Live Activity</span>
+        <div class="pulse-dot" style="background:var(--emerald)"></div>
+      </div>
+      <div id="activity-feed"></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Quick Actions</div>
+      <a href="upload.html" class="qa-card">
+        <div class="qa-icon">📤</div>
+        <div class="qa-label">Upload Documents</div>
+        <div class="qa-sub">Batch or single upload</div>
+      </a>
+      <a href="verify.html" class="qa-card">
+        <div class="qa-icon">✏️</div>
+        <div class="qa-label">Verify Records</div>
+        <div class="qa-sub">1,890 pending</div>
+      </a>
+      <a href="gis-map.html" class="qa-card">
+        <div class="qa-icon">🗺</div>
+        <div class="qa-label">GIS Map</div>
+        <div class="qa-sub">Bhuvan 2D live view</div>
+      </a>
+      <a href="reports.html" class="qa-card">
+        <div class="qa-icon">📊</div>
+        <div class="qa-label">Generate Report</div>
+        <div class="qa-sub">Export CSV / PDF</div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page-content -->
+</div><!-- /page-shell -->
+
+<div class="toast-wrap"><div id="toast" class="toast-msg" style="display:none"></div></div>
+
+<script>
+// Animate KPIs
+function animateNum(id, target, suffix="") {
+  const el = document.getElementById(id);
+  let n = 0; const step = Math.ceil(target / 60);
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = n.toLocaleString() + suffix;
+    if (n >= target) clearInterval(t);
+  }, 20);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  animateNum('kpi-total', 12450);
+  animateNum('kpi-valid', 10230);
+  animateNum('kpi-review', 1890);
+  animateNum('kpi-error', 330);
+  setTimeout(() => { document.getElementById('kpi-acc').textContent = '94.2%'; }, 500);
+});
+
+// State bars
+const states = [
+  {name:'Karnataka', pct:92},
+  {name:'Maharashtra',pct:87},
+  {name:'Uttar Pradesh',pct:74},
+  {name:'Rajasthan',pct:68},
+  {name:'Gujarat',pct:83},
+  {name:'Madhya Pradesh',pct:61},
+  {name:'Tamil Nadu',pct:78},
+];
+const sb = document.getElementById('state-bars');
+states.forEach(s => {
+  sb.innerHTML += `<div class="state-row">
+    <div class="state-name">${s.name}</div>
+    <div class="state-bar"><div class="state-fill" style="width:${s.pct}%"></div></div>
+    <div class="state-pct">${s.pct}%</div>
+  </div>`;
+});
+
+// Mini chart
+const vals = [78, 81, 85, 88, 91, 94];
+const mc = document.getElementById('mini-chart');
+vals.forEach(v => {
+  const h = (v - 70) * 5;
+  mc.innerHTML += `<div class="chart-bar" style="height:${h}px;background:linear-gradient(180deg,var(--blue),rgba(30,111,255,.3));flex:1" title="${v}%"></div>`;
+});
+
+// Recent docs
+const docs = [
+  {id:'KA-2024-00453', state:'Karnataka', status:'validated', conf:96, date:'03 Sep 2026'},
+  {id:'MH-2024-01122', state:'Maharashtra', status:'validated', conf:91, date:'03 Sep 2026'},
+  {id:'UP-2024-03301', state:'UP', status:'review', conf:67, date:'02 Sep 2026'},
+  {id:'RJ-2024-00789', state:'Rajasthan', status:'validated', conf:94, date:'02 Sep 2026'},
+  {id:'MH-2024-01123', state:'Maharashtra', status:'error', conf:38, date:'01 Sep 2026'},
+];
+const badgeMap = {validated:'badge-validated',review:'badge-review',error:'badge-error'};
+const labelMap = {validated:'✅ VALIDATED',review:'⏳ REVIEW',error:'❌ ERROR'};
+const confColor = c => c > 75 ? 'var(--emerald)' : c > 60 ? 'var(--amber)' : 'var(--coral)';
+const tbody = document.getElementById('recent-docs');
+docs.forEach(d => {
+  tbody.innerHTML += `<tr>
+    <td class="td-mono">${d.id}</td>
+    <td>${d.state}</td>
+    <td><span class="badge ${badgeMap[d.status]}">${labelMap[d.status]}</span></td>
+    <td><span style="color:${confColor(d.conf)};font-weight:700;font-size:13px">${d.conf}%</span></td>
+    <td class="td-muted">${d.date}</td>
+  </tr>`;
+});
+
+// Activity feed
+const activities = [
+  {dot:'#00C896', text:'KA-2024-00453 validated by Officer Priya', time:'2 min ago'},
+  {dot:'#1E6FFF', text:'Batch upload: 48 docs from Nashik District', time:'8 min ago'},
+  {dot:'#FFB800', text:'UP-2024-03302 flagged for manual review', time:'15 min ago'},
+  {dot:'#FF4757', text:'Validation error in RJ-2024-00790', time:'31 min ago'},
+  {dot:'#9B59B6', text:'GIS sync completed for Jaipur district', time:'1 hr ago'},
+];
+const af = document.getElementById('activity-feed');
+activities.forEach(a => {
+  af.innerHTML += `<div class="activity-item">
+    <div class="activity-dot" style="background:${a.dot}"></div>
+    <div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div>
+  </div>`;
+});
+</script>
+</body>
+</html>

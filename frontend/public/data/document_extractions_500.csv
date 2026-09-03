@@ -1,0 +1,501 @@
+document_id,parcel_id,ocr_survey_number,ocr_owner_name,ocr_area_acres,ocr_village,ocr_confidence,extraction_status,validation_issue
+DOC-00001,P0001,101/1,Synthetic Owner 001,14.2205,Example Village,0.939,Extracted,
+DOC-00002,P0002,102,Synthetic Owner 002,14.2205,Example Village,0.948,Extracted,
+DOC-00003,P0003,103,Synthetic Owner 003,14.2205,Example Village,0.736,Extracted,Missing mutation information
+DOC-00004,P0004,104,Synthetic Owner 004,14.2205,Example Village,0.748,Extracted,Missing mutation information
+DOC-00005,P0005,105,Synthetic Owner 005,14.2205,Example Village,0.975,Extracted,
+DOC-00006,P0006,106/1,Synthetic Owner 006,14.2205,Example Village,0.984,Extracted,
+DOC-00007,P0007,107,Synthetic Owner 007,14.2205,Example Village,0.93,Extracted,
+DOC-00008,P0008,108,Synthetic Owner 008,14.2205,Example Village,0.939,Extracted,
+DOC-00009,P0009,109,Synthetic Owner 009,14.2205,Example Village,0.948,Extracted,
+DOC-00010,P0010,110,Synthetic Owner 010,14.2205,Example Village,0.957,Extracted,
+DOC-00011,P0011,111/3,Synthetic Owner 011,14.2205,Example Village,0.966,Extracted,
+DOC-00012,P0012,112,Synthetic Owner 012,14.2205,Example Village,0.564,Needs Review,Survey number uncertainty
+DOC-00013,P0013,113,Synthetic Owner 013,14.2205,Example Village,0.856,Extracted,Possible duplicate
+DOC-00014,P0014,114,Synthetic Owner 014,14.2205,Example Village,0.93,Extracted,
+DOC-00015,P0015,115,Synthetic Owner 015,14.2205,Example Village,0.939,Extracted,
+DOC-00016,P0016,116/2,Synthetic Owner 016,14.2205,Example Village,0.948,Extracted,
+DOC-00017,P0017,117,Synthetic Owner 017,14.2205,Example Village,0.957,Extracted,
+DOC-00018,P0018,118,Synthetic Owner 018,14.2205,Example Village,0.966,Extracted,
+DOC-00019,P0019,119,Synthetic Owner 019,14.2205,Example Village,0.648,Needs Review,Low OCR confidence
+DOC-00020,P0020,120,Synthetic Owner 020,14.2205,Example Village,0.984,Extracted,
+DOC-00021,P0021,121/1,Synthetic Owner 021,14.2205,Example Village,0.93,Extracted,
+DOC-00022,P0022,122,Synthetic Owner 022,14.2205,Example Village,0.939,Extracted,
+DOC-00023,P0023,123,Synthetic Owner 023,14.2205,Example Village,0.948,Extracted,
+DOC-00024,P0024,124,Synthetic Owner 024,14.2205,Example Village,0.708,Needs Review,Survey number uncertainty
+DOC-00025,P0025,125,Synthetic Owner 025,14.2205,Example Village,0.966,Extracted,
+DOC-00026,P0026,126/3,Synthetic Owner 026,14.2204,Example Village,0.432,Needs Review,Low OCR confidence
+DOC-00027,P0027,127,Synthetic Owner 027,14.2204,Example Village,0.444,Needs Review,Survey number uncertainty
+DOC-00028,P0028,128,Synthetic Owner 028,14.2204,Example Village,0.93,Extracted,
+DOC-00029,P0029,129,Synthetic Owner 029,14.2204,Example Village,0.939,Extracted,
+DOC-00030,P0030,130,Synthetic Owner 030,14.2204,Example Village,0.48,Needs Review,Survey number uncertainty
+DOC-00031,P0031,131/2,Synthetic Owner 031,14.2204,Example Village,0.957,Extracted,
+DOC-00032,P0032,132,Synthetic Owner 032,14.2204,Example Village,0.966,Extracted,
+DOC-00033,P0033,133,Synthetic Owner 033,14.2204,Example Village,0.975,Extracted,
+DOC-00034,P0034,134,Synthetic Owner 034,15.358,Example Village,0.528,Needs Review,Area mismatch
+DOC-00035,P0035,135,Synthetic Owner 035,14.2204,Example Village,0.93,Extracted,
+DOC-00036,P0036,136/1,Synthetic Owner 036,14.2204,Example Village,0.939,Extracted,
+DOC-00037,P0037,137,Synthetic Owner 037,14.2204,Example Village,0.948,Extracted,
+DOC-00038,P0038,138,Synthetic Owner 038,14.2204,Example Village,0.576,Needs Review,Low OCR confidence
+DOC-00039,P0039,139,Synthetic Owner 039,14.2204,Example Village,0.966,Extracted,
+DOC-00040,P0040,140,Synthetic Owner 040,14.2204,Example Village,0.975,Extracted,
+DOC-00041,P0041,141/3,Synthetic Owner 041,14.2204,Example Village,0.984,Extracted,
+DOC-00042,P0042,142,Synthetic Owner 042,14.2204,Example Village,0.844,Extracted,Missing mutation information
+DOC-00043,P0043,143,Synthetic Owner 043,14.2204,Example Village,0.939,Extracted,
+DOC-00044,P0044,144,Synthetic Owner 044,14.2204,Example Village,0.948,Extracted,
+DOC-00045,P0045,145,Synthetic Owner 045,14.2204,Example Village,0.957,Extracted,
+DOC-00046,P0046,146/2,Synthetic Owner 046,14.2204,Example Village,0.966,Extracted,
+DOC-00047,P0047,147,Synthetic Owner 047,14.2204,Example Village,0.975,Extracted,
+DOC-00048,P0048,148,Synthetic Owner 048,14.2204,Example Village,0.984,Extracted,
+DOC-00049,P0049,149,Synthetic Owner 049,14.2204,Example Village,0.93,Extracted,
+DOC-00050,P0050,150,Synthetic Owner 050,14.2204,Example Village,0.939,Extracted,
+DOC-00051,P0051,151/1,Synthetic Owner 051,15.3578,Example Village,0.432,Needs Review,Area mismatch
+DOC-00052,P0052,152,Synthetic Owner 052,14.2202,Example Village,0.957,Extracted,
+DOC-00053,P0053,153,Synthetic Owner 053,14.2202,Example Village,0.966,Extracted,
+DOC-00054,P0054,154,Synthetic Owner 054,14.2202,Example Village,0.468,Needs Review,Survey number uncertainty
+DOC-00055,P0055,155,Synthetic Owner 055,14.2202,Example Village,0.984,Extracted,
+DOC-00056,P0056,156/3,Synthetic Owner 056,14.2202,Example Village,0.93,Extracted,
+DOC-00057,P0057,157,Synthetic Owner 057,14.2202,Example Village,0.939,Extracted,
+DOC-00058,P0058,158,Synthetic Owner 058,14.2202,Example Village,0.948,Extracted,
+DOC-00059,P0059,159,Synthetic Owner 059,14.2202,Example Village,0.957,Extracted,
+DOC-00060,P0060,160,Synthetic Owner 060,14.2202,Example Village,0.966,Extracted,
+DOC-00061,P0061,161/2,Synthetic Owner 061,14.2202,Example Village,0.975,Extracted,
+DOC-00062,P0062,162,Synthetic Owner 062,14.2202,Example Village,0.724,Extracted,Missing mutation information
+DOC-00063,P0063,163,Synthetic Owner 063,14.2202,Example Village,0.93,Extracted,
+DOC-00064,P0064,164,Synthetic Owner 064,14.2202,Example Village,0.939,Extracted,
+DOC-00065,P0065,165,Synthetic Owner 065,14.2202,Example Village,0.76,Extracted,Possible duplicate
+DOC-00066,P0066,166/1,Synthetic Owner 066,14.2202,Example Village,0.772,Extracted,Missing mutation information
+DOC-00067,P0067,167,Synthetic Owner 067,14.2202,Example Village,0.624,Needs Review,Survey number uncertainty
+DOC-00068,P0068,168,Synthetic Owner 068,14.2202,Example Village,0.975,Extracted,
+DOC-00069,P0069,169,Synthetic Owner 069,14.2202,Example Village,0.984,Extracted,
+DOC-00070,P0070,170,Synthetic Owner 070,14.2202,Example Village,0.93,Extracted,
+DOC-00071,P0071,171/3,Synthetic Owner 071,14.2202,Example Village,0.939,Extracted,
+DOC-00072,P0072,172,Synthetic Owner 072,14.2202,Example Village,0.684,Needs Review,Low OCR confidence
+DOC-00073,P0073,173,Synthetic Owner 073,14.2202,Example Village,0.957,Extracted,
+DOC-00074,P0074,174,Synthetic Owner 074,14.2202,Example Village,0.966,Extracted,
+DOC-00075,P0075,175,Synthetic Owner 075,14.2202,Example Village,0.975,Extracted,
+DOC-00076,P0076,176/2,Synthetic Owner 076,14.2201,Example Village,0.984,Extracted,
+DOC-00077,P0077,177,Synthetic Owner 077,14.2201,Example Village,0.93,Extracted,
+DOC-00078,P0078,178,Synthetic Owner 078,14.2201,Example Village,0.736,Extracted,Possible duplicate
+DOC-00079,P0079,179,Synthetic Owner 079,14.2201,Example Village,0.948,Extracted,
+DOC-00080,P0080,180,Synthetic Owner 080,14.2201,Example Village,0.957,Extracted,
+DOC-00081,P0081,181/1,Synthetic Owner 081,14.2201,Example Village,0.966,Extracted,
+DOC-00082,P0082,182,Synthetic Owner 082,14.2201,Example Village,0.784,Extracted,Missing mutation information
+DOC-00083,P0083,183,Synthetic Owner 083,14.2201,Example Village,0.984,Extracted,
+DOC-00084,P0084,184,Synthetic Owner 084,14.2201,Example Village,0.93,Extracted,
+DOC-00085,P0085,185,Synthetic Owner 085,14.2201,Example Village,0.939,Extracted,
+DOC-00086,P0086,186/3,Synthetic Owner 086,14.2201,Example Village,0.948,Extracted,
+DOC-00087,P0087,187,Synthetic Owner 087,15.3577,Example Village,0.564,Needs Review,Area mismatch
+DOC-00088,P0088,188,Synthetic Owner 088,14.2201,Example Village,0.966,Extracted,
+DOC-00089,P0089,189,Synthetic Owner 089,14.2201,Example Village,0.975,Extracted,
+DOC-00090,P0090,190,Synthetic Owner 090,14.2201,Example Village,0.984,Extracted,
+DOC-00091,P0091,191/2,Synthetic Owner 091,14.2201,Example Village,0.712,Extracted,Missing mutation information
+DOC-00092,P0092,192,Synthetic Owner 092,14.2201,Example Village,0.939,Extracted,
+DOC-00093,P0093,193,Synthetic Owner 093,14.2201,Example Village,0.948,Extracted,
+DOC-00094,P0094,194,Synthetic Owner 094,14.2201,Example Village,0.957,Extracted,
+DOC-00095,P0095,195,Synthetic Owner 095,14.2201,Example Village,0.966,Extracted,
+DOC-00096,P0096,196/1,Synthetic Owner 096,14.2201,Example Village,0.975,Extracted,
+DOC-00097,P0097,197,Synthetic Owner 115,14.2201,Example Village,0.684,Needs Review,Owner mismatch
+DOC-00098,P0098,198,Synthetic Owner 098,14.2201,Example Village,0.696,Needs Review,Low OCR confidence
+DOC-00099,P0099,199,Synthetic Owner 099,14.2201,Example Village,0.939,Extracted,
+DOC-00100,P0100,200,Synthetic Owner 100,14.2201,Example Village,0.948,Extracted,
+DOC-00101,P0101,201/3,Synthetic Owner 101,14.22,Example Village,0.957,Extracted,
+DOC-00102,P0102,202,Synthetic Owner 102,14.22,Example Village,0.444,Needs Review,Survey number uncertainty
+DOC-00103,P0103,203,Synthetic Owner 103,14.22,Example Village,0.975,Extracted,
+DOC-00104,P0104,204,Synthetic Owner 104,14.22,Example Village,0.984,Extracted,
+DOC-00105,P0105,205,Synthetic Owner 105,14.22,Example Village,0.93,Extracted,
+DOC-00106,P0106,206/2,Synthetic Owner 106,14.22,Example Village,0.939,Extracted,
+DOC-00107,P0107,207,Synthetic Owner 107,14.22,Example Village,0.948,Extracted,
+DOC-00108,P0108,208,Synthetic Owner 108,14.22,Example Village,0.957,Extracted,
+DOC-00109,P0109,209,Synthetic Owner 109,14.22,Example Village,0.966,Extracted,
+DOC-00110,P0110,210,Synthetic Owner 110,14.22,Example Village,0.76,Extracted,Missing mutation information
+DOC-00111,P0111,211/1,Synthetic Owner 111,14.22,Example Village,0.984,Extracted,
+DOC-00112,P0112,212,Synthetic Owner 112,14.22,Example Village,0.564,Needs Review,Survey number uncertainty
+DOC-00113,P0113,213,Synthetic Owner 113,14.22,Example Village,0.939,Extracted,
+DOC-00114,P0114,214,Synthetic Owner 114,14.22,Example Village,0.948,Extracted,
+DOC-00115,P0115,215,Synthetic Owner 115,14.22,Example Village,0.957,Extracted,
+DOC-00116,P0116,216/3,Synthetic Owner 116,14.22,Example Village,0.966,Extracted,
+DOC-00117,P0117,217,Synthetic Owner 117,15.3576,Example Village,0.624,Needs Review,Area mismatch
+DOC-00118,P0118,218,Synthetic Owner 118,14.22,Example Village,0.984,Extracted,
+DOC-00119,P0119,219,Synthetic Owner 119,14.22,Example Village,0.868,Extracted,Possible duplicate
+DOC-00120,P0120,220,Synthetic Owner 120,14.22,Example Village,0.7,Extracted,Missing mutation information
+DOC-00121,P0121,221/2,Synthetic Owner 139,14.22,Example Village,0.672,Needs Review,Owner mismatch
+DOC-00122,P0122,222,Synthetic Owner 122,14.22,Example Village,0.724,Extracted,Missing mutation information
+DOC-00123,P0123,223,Synthetic Owner 123,14.22,Example Village,0.966,Extracted,
+DOC-00124,P0124,224,Synthetic Owner 124,14.22,Example Village,0.975,Extracted,
+DOC-00125,P0125,225,Synthetic Owner 125,14.22,Example Village,0.984,Extracted,
+DOC-00126,P0126,226/1,Synthetic Owner 126,14.2198,Example Village,0.93,Extracted,
+DOC-00127,P0127,227,Synthetic Owner 127,14.2198,Example Village,0.939,Extracted,
+DOC-00128,P0128,228,Synthetic Owner 128,14.2198,Example Village,0.456,Needs Review,Low OCR confidence
+DOC-00129,P0129,229,Synthetic Owner 129,14.2198,Example Village,0.808,Extracted,Missing mutation information
+DOC-00130,P0130,230,Synthetic Owner 130,14.2198,Example Village,0.82,Extracted,Missing mutation information
+DOC-00131,P0131,231/3,Synthetic Owner 131,14.2198,Example Village,0.975,Extracted,
+DOC-00132,P0132,232,Synthetic Owner 132,14.2198,Example Village,0.984,Extracted,
+DOC-00133,P0133,233,Synthetic Owner 133,14.2198,Example Village,0.93,Extracted,
+DOC-00134,P0134,234,Synthetic Owner 134,14.2198,Example Village,0.939,Extracted,
+DOC-00135,P0135,235,Synthetic Owner 135,14.2198,Example Village,0.948,Extracted,
+DOC-00136,P0136,236/2,Synthetic Owner 136,14.2198,Example Village,0.957,Extracted,
+DOC-00137,P0137,237,Synthetic Owner 137,14.2198,Example Village,0.966,Extracted,
+DOC-00138,P0138,238,Synthetic Owner 138,14.2198,Example Village,0.975,Extracted,
+DOC-00139,P0139,239,Synthetic Owner 139,14.2198,Example Village,0.588,Needs Review,Low OCR confidence
+DOC-00140,P0140,240,Synthetic Owner 140,14.2198,Example Village,0.93,Extracted,
+DOC-00141,P0141,241/1,Synthetic Owner 141,14.2198,Example Village,0.772,Extracted,Possible duplicate
+DOC-00142,P0142,242,Synthetic Owner 142,14.2198,Example Village,0.784,Extracted,Possible duplicate
+DOC-00143,P0143,243,Synthetic Owner 143,14.2198,Example Village,0.636,Needs Review,Low OCR confidence
+DOC-00144,P0144,244,Synthetic Owner 144,14.2198,Example Village,0.966,Extracted,
+DOC-00145,P0145,245,Synthetic Owner 145,14.2198,Example Village,0.66,Needs Review,Low OCR confidence
+DOC-00146,P0146,246/3,Synthetic Owner 146,15.3574,Example Village,0.672,Needs Review,Area mismatch
+DOC-00147,P0147,247,Synthetic Owner 147,14.2198,Example Village,0.93,Extracted,
+DOC-00148,P0148,248,Synthetic Owner 148,14.2198,Example Village,0.939,Extracted,
+DOC-00149,P0149,249,Synthetic Owner 149,14.2198,Example Village,0.868,Extracted,Missing mutation information
+DOC-00150,P0150,250,Synthetic Owner 150,14.2198,Example Village,0.957,Extracted,
+DOC-00151,P0151,251/2,Synthetic Owner 151,14.2197,Example Village,0.966,Extracted,
+DOC-00152,P0152,252,Synthetic Owner 152,14.2197,Example Village,0.975,Extracted,
+DOC-00153,P0153,253,Synthetic Owner 153,14.2197,Example Village,0.984,Extracted,
+DOC-00154,P0154,254,Synthetic Owner 154,14.2197,Example Village,0.93,Extracted,
+DOC-00155,P0155,255,Synthetic Owner 155,14.2197,Example Village,0.939,Extracted,
+DOC-00156,P0156,256/1,Synthetic Owner 156,14.2197,Example Village,0.772,Extracted,Possible duplicate
+DOC-00157,P0157,257,Synthetic Owner 157,14.2197,Example Village,0.957,Extracted,
+DOC-00158,P0158,258,Synthetic Owner 158,14.2197,Example Village,0.796,Extracted,Missing mutation information
+DOC-00159,P0159,259,Synthetic Owner 159,14.2197,Example Village,0.975,Extracted,
+DOC-00160,P0160,260,Synthetic Owner 160,14.2197,Example Village,0.984,Extracted,
+DOC-00161,P0161,261/3,Synthetic Owner 161,14.2197,Example Village,0.93,Extracted,
+DOC-00162,P0162,262,Synthetic Owner 162,14.2197,Example Village,0.844,Extracted,Missing mutation information
+DOC-00163,P0163,263,Synthetic Owner 163,14.2197,Example Village,0.948,Extracted,
+DOC-00164,P0164,264,Synthetic Owner 164,14.2197,Example Village,0.588,Needs Review,Low OCR confidence
+DOC-00165,P0165,265,Synthetic Owner 165,14.2197,Example Village,0.966,Extracted,
+DOC-00166,P0166,266/2,Synthetic Owner 166,14.2197,Example Village,0.975,Extracted,
+DOC-00167,P0167,267,Synthetic Owner 167,14.2197,Example Village,0.724,Extracted,Missing mutation information
+DOC-00168,P0168,268,Synthetic Owner 168,14.2197,Example Village,0.736,Extracted,Missing mutation information
+DOC-00169,P0169,269,Synthetic Owner 169,14.2197,Example Village,0.939,Extracted,
+DOC-00170,P0170,270,Synthetic Owner 170,14.2197,Example Village,0.948,Extracted,
+DOC-00171,P0171,271/1,Synthetic Owner 171,14.2197,Example Village,0.957,Extracted,
+DOC-00172,P0172,272,Synthetic Owner 172,14.2197,Example Village,0.784,Extracted,Missing mutation information
+DOC-00173,P0173,273,Synthetic Owner 173,15.3573,Example Village,0.696,Needs Review,Area mismatch
+DOC-00174,P0174,274,Synthetic Owner 174,14.2197,Example Village,0.808,Extracted,Possible duplicate
+DOC-00175,P0175,275,Synthetic Owner 175,15.3573,Example Village,0.42,Needs Review,Area mismatch
+DOC-00176,P0176,276/3,Synthetic Owner 176,14.2196,Example Village,0.939,Extracted,
+DOC-00177,P0177,277,Synthetic Owner 177,14.2196,Example Village,0.948,Extracted,
+DOC-00178,P0178,278,Synthetic Owner 178,14.2196,Example Village,0.456,Needs Review,Low OCR confidence
+DOC-00179,P0179,279,Synthetic Owner 179,14.2196,Example Village,0.966,Extracted,
+DOC-00180,P0180,280,Synthetic Owner 180,14.2196,Example Village,0.7,Extracted,Missing mutation information
+DOC-00181,P0181,281/2,Synthetic Owner 181,14.2196,Example Village,0.984,Extracted,
+DOC-00182,P0182,282,Synthetic Owner 182,14.2196,Example Village,0.724,Extracted,Missing mutation information
+DOC-00183,P0183,283,Synthetic Owner 183,14.2196,Example Village,0.736,Extracted,Missing mutation information
+DOC-00184,P0184,284,Synthetic Owner 184,14.2196,Example Village,0.948,Extracted,
+DOC-00185,P0185,285,Synthetic Owner 185,14.2196,Example Village,0.957,Extracted,
+DOC-00186,P0186,286/1,Synthetic Owner 186,14.2196,Example Village,0.772,Extracted,Missing mutation information
+DOC-00187,P0187,287,Synthetic Owner 187,14.2196,Example Village,0.975,Extracted,
+DOC-00188,P0188,288,Synthetic Owner 188,14.2196,Example Village,0.984,Extracted,
+DOC-00189,P0189,289,Synthetic Owner 189,14.2196,Example Village,0.93,Extracted,
+DOC-00190,P0190,290,Synthetic Owner 190,14.2196,Example Village,0.939,Extracted,
+DOC-00191,P0191,291/3,Synthetic Owner 191,14.2196,Example Village,0.948,Extracted,
+DOC-00192,P0192,292,Synthetic Owner 192,14.2196,Example Village,0.844,Extracted,Possible duplicate
+DOC-00193,P0193,293,Synthetic Owner 193,14.2196,Example Village,0.966,Extracted,
+DOC-00194,P0194,294,Synthetic Owner 194,14.2196,Example Village,0.648,Needs Review,Survey number uncertainty
+DOC-00195,P0195,295,Synthetic Owner 195,14.2196,Example Village,0.984,Extracted,
+DOC-00196,P0196,296/2,Synthetic Owner 196,14.2196,Example Village,0.93,Extracted,
+DOC-00197,P0197,297,Synthetic Owner 197,14.2196,Example Village,0.939,Extracted,
+DOC-00198,P0198,298,Synthetic Owner 198,15.3572,Example Village,0.696,Needs Review,Area mismatch
+DOC-00199,P0199,299,Synthetic Owner 199,14.2196,Example Village,0.957,Extracted,
+DOC-00200,P0200,300,Synthetic Owner 200,14.2196,Example Village,0.966,Extracted,
+DOC-00201,P0201,301/1,Synthetic Owner 201,14.2195,Example Village,0.772,Extracted,Missing mutation information
+DOC-00202,P0202,302,Synthetic Owner 202,14.2195,Example Village,0.984,Extracted,
+DOC-00203,P0203,303,Synthetic Owner 203,15.3571,Example Village,0.456,Needs Review,Area mismatch
+DOC-00204,P0204,304,Synthetic Owner 204,14.2195,Example Village,0.468,Needs Review,Low OCR confidence
+DOC-00205,P0205,305,Synthetic Owner 223,14.2195,Example Village,0.48,Needs Review,Owner mismatch
+DOC-00206,P0206,306/3,Synthetic Owner 206,14.2195,Example Village,0.832,Extracted,Possible duplicate
+DOC-00207,P0207,307,Synthetic Owner 207,14.2195,Example Village,0.966,Extracted,
+DOC-00208,P0208,308,Synthetic Owner 208,14.2195,Example Village,0.975,Extracted,
+DOC-00209,P0209,309,Synthetic Owner 209,14.2195,Example Village,0.868,Extracted,Possible duplicate
+DOC-00210,P0210,310,Synthetic Owner 210,14.2195,Example Village,0.93,Extracted,
+DOC-00211,P0211,311/2,Synthetic Owner 211,14.2195,Example Village,0.939,Extracted,
+DOC-00212,P0212,312,Synthetic Owner 212,14.2195,Example Village,0.948,Extracted,
+DOC-00213,P0213,313,Synthetic Owner 213,14.2195,Example Village,0.957,Extracted,
+DOC-00214,P0214,314,Synthetic Owner 214,14.2195,Example Village,0.966,Extracted,
+DOC-00215,P0215,315,Synthetic Owner 215,14.2195,Example Village,0.975,Extracted,
+DOC-00216,P0216,316/1,Synthetic Owner 234,14.2195,Example Village,0.612,Needs Review,Owner mismatch
+DOC-00217,P0217,317,Synthetic Owner 217,14.2195,Example Village,0.93,Extracted,
+DOC-00218,P0218,318,Synthetic Owner 218,14.2195,Example Village,0.939,Extracted,
+DOC-00219,P0219,319,Synthetic Owner 219,14.2195,Example Village,0.948,Extracted,
+DOC-00220,P0220,320,Synthetic Owner 220,14.2195,Example Village,0.957,Extracted,
+DOC-00221,P0221,321/3,Synthetic Owner 221,14.2195,Example Village,0.966,Extracted,
+DOC-00222,P0222,322,Synthetic Owner 222,14.2195,Example Village,0.844,Extracted,Possible duplicate
+DOC-00223,P0223,323,Synthetic Owner 223,14.2195,Example Village,0.984,Extracted,
+DOC-00224,P0224,324,Synthetic Owner 224,14.2195,Example Village,0.93,Extracted,
+DOC-00225,P0225,325,Synthetic Owner 225,14.2195,Example Village,0.939,Extracted,
+DOC-00226,P0226,326/2,Synthetic Owner 226,14.2193,Example Village,0.948,Extracted,
+DOC-00227,P0227,327,Synthetic Owner 227,14.2193,Example Village,0.957,Extracted,
+DOC-00228,P0228,328,Synthetic Owner 228,14.2193,Example Village,0.736,Extracted,Missing mutation information
+DOC-00229,P0229,329,Synthetic Owner 229,14.2193,Example Village,0.975,Extracted,
+DOC-00230,P0230,330,Synthetic Owner 230,14.2193,Example Village,0.984,Extracted,
+DOC-00231,P0231,331/1,Synthetic Owner 231,14.2193,Example Village,0.93,Extracted,
+DOC-00232,P0232,332,Synthetic Owner 232,14.2193,Example Village,0.939,Extracted,
+DOC-00233,P0233,333,Synthetic Owner 233,14.2193,Example Village,0.948,Extracted,
+DOC-00234,P0234,334,Synthetic Owner 234,14.2193,Example Village,0.957,Extracted,
+DOC-00235,P0235,335,Synthetic Owner 235,14.2193,Example Village,0.966,Extracted,
+DOC-00236,P0236,336/3,Synthetic Owner 236,14.2193,Example Village,0.975,Extracted,
+DOC-00237,P0237,337,Synthetic Owner 237,14.2193,Example Village,0.984,Extracted,
+DOC-00238,P0238,338,Synthetic Owner 238,14.2193,Example Village,0.93,Extracted,
+DOC-00239,P0239,339,Synthetic Owner 239,15.3568,Example Village,0.588,Needs Review,Area mismatch
+DOC-00240,P0240,340,Synthetic Owner 240,14.2193,Example Village,0.948,Extracted,
+DOC-00241,P0241,341/2,Synthetic Owner 241,14.2193,Example Village,0.957,Extracted,
+DOC-00242,P0242,342,Synthetic Owner 242,14.2193,Example Village,0.624,Needs Review,Low OCR confidence
+DOC-00243,P0243,343,Synthetic Owner 243,14.2193,Example Village,0.975,Extracted,
+DOC-00244,P0244,344,Synthetic Owner 244,14.2193,Example Village,0.984,Extracted,
+DOC-00245,P0245,345,Synthetic Owner 245,14.2193,Example Village,0.66,Needs Review,Survey number uncertainty
+DOC-00246,P0246,346/1,Synthetic Owner 246,14.2193,Example Village,0.939,Extracted,
+DOC-00247,P0247,347,Synthetic Owner 247,14.2193,Example Village,0.948,Extracted,
+DOC-00248,P0248,348,Synthetic Owner 248,14.2193,Example Village,0.796,Extracted,Possible duplicate
+DOC-00249,P0249,349,Synthetic Owner 249,14.2193,Example Village,0.966,Extracted,
+DOC-00250,P0250,350,Synthetic Owner 250,14.2193,Example Village,0.975,Extracted,
+DOC-00251,P0251,351/3,Synthetic Owner 251,14.2192,Example Village,0.984,Extracted,
+DOC-00252,P0252,352,Synthetic Owner 252,14.2192,Example Village,0.93,Extracted,
+DOC-00253,P0253,353,Synthetic Owner 253,14.2192,Example Village,0.939,Extracted,
+DOC-00254,P0254,354,Synthetic Owner 254,14.2192,Example Village,0.868,Extracted,Missing mutation information
+DOC-00255,P0255,355,Synthetic Owner 255,14.2192,Example Village,0.7,Extracted,Possible duplicate
+DOC-00256,P0256,356/2,Synthetic Owner 256,14.2192,Example Village,0.966,Extracted,
+DOC-00257,P0257,357,Synthetic Owner 257,14.2192,Example Village,0.724,Extracted,Missing mutation information
+DOC-00258,P0258,358,Synthetic Owner 258,14.2192,Example Village,0.984,Extracted,
+DOC-00259,P0259,359,Synthetic Owner 259,14.2192,Example Village,0.93,Extracted,
+DOC-00260,P0260,360,Synthetic Owner 260,14.2192,Example Village,0.939,Extracted,
+DOC-00261,P0261,361/1,Synthetic Owner 261,14.2192,Example Village,0.552,Needs Review,Low OCR confidence
+DOC-00262,P0262,362,Synthetic Owner 262,14.2192,Example Village,0.957,Extracted,
+DOC-00263,P0263,363,Synthetic Owner 263,14.2192,Example Village,0.796,Extracted,Possible duplicate
+DOC-00264,P0264,364,Synthetic Owner 264,14.2192,Example Village,0.975,Extracted,
+DOC-00265,P0265,365,Synthetic Owner 265,14.2192,Example Village,0.984,Extracted,
+DOC-00266,P0266,366/3,Synthetic Owner 266,14.2192,Example Village,0.93,Extracted,
+DOC-00267,P0267,367,Synthetic Owner 267,14.2192,Example Village,0.939,Extracted,
+DOC-00268,P0268,368,Synthetic Owner 268,14.2192,Example Village,0.856,Extracted,Possible duplicate
+DOC-00269,P0269,369,Synthetic Owner 269,15.3567,Example Village,0.648,Needs Review,Area mismatch
+DOC-00270,P0270,370,Synthetic Owner 270,14.2192,Example Village,0.966,Extracted,
+DOC-00271,P0271,371/2,Synthetic Owner 271,14.2192,Example Village,0.975,Extracted,
+DOC-00272,P0272,372,Synthetic Owner 272,14.2192,Example Village,0.984,Extracted,
+DOC-00273,P0273,373,Synthetic Owner 273,14.2192,Example Village,0.93,Extracted,
+DOC-00274,P0274,374,Synthetic Owner 292,14.2192,Example Village,0.708,Needs Review,Owner mismatch
+DOC-00275,P0275,375,Synthetic Owner 275,14.2192,Example Village,0.948,Extracted,
+DOC-00276,P0276,376/1,Synthetic Owner 276,14.2191,Example Village,0.957,Extracted,
+DOC-00277,P0277,377,Synthetic Owner 277,14.2191,Example Village,0.966,Extracted,
+DOC-00278,P0278,378,Synthetic Owner 278,14.2191,Example Village,0.975,Extracted,
+DOC-00279,P0279,379,Synthetic Owner 279,14.2191,Example Village,0.808,Extracted,Missing mutation information
+DOC-00280,P0280,380,Synthetic Owner 280,14.2191,Example Village,0.93,Extracted,
+DOC-00281,P0281,381/3,Synthetic Owner 281,14.2191,Example Village,0.939,Extracted,
+DOC-00282,P0282,382,Synthetic Owner 282,14.2191,Example Village,0.948,Extracted,
+DOC-00283,P0283,383,Synthetic Owner 283,14.2191,Example Village,0.957,Extracted,
+DOC-00284,P0284,384,Synthetic Owner 284,14.2191,Example Village,0.966,Extracted,
+DOC-00285,P0285,385,Synthetic Owner 285,14.2191,Example Village,0.975,Extracted,
+DOC-00286,P0286,386/2,Synthetic Owner 286,14.2191,Example Village,0.984,Extracted,
+DOC-00287,P0287,387,Synthetic Owner 287,14.2191,Example Village,0.93,Extracted,
+DOC-00288,P0288,388,Synthetic Owner 288,14.2191,Example Village,0.939,Extracted,
+DOC-00289,P0289,389,Synthetic Owner 289,14.2191,Example Village,0.588,Needs Review,Survey number uncertainty
+DOC-00290,P0290,390,Synthetic Owner 290,14.2191,Example Village,0.957,Extracted,
+DOC-00291,P0291,391/1,Synthetic Owner 291,14.2191,Example Village,0.966,Extracted,
+DOC-00292,P0292,392,Synthetic Owner 292,14.2191,Example Village,0.784,Extracted,Possible duplicate
+DOC-00293,P0293,393,Synthetic Owner 311,14.2191,Example Village,0.636,Needs Review,Owner mismatch
+DOC-00294,P0294,394,Synthetic Owner 294,14.2191,Example Village,0.93,Extracted,
+DOC-00295,P0295,395,Synthetic Owner 313,14.2191,Example Village,0.66,Needs Review,Owner mismatch
+DOC-00296,P0296,396/3,Synthetic Owner 296,14.2191,Example Village,0.948,Extracted,
+DOC-00297,P0297,397,Synthetic Owner 297,14.2191,Example Village,0.684,Needs Review,Low OCR confidence
+DOC-00298,P0298,398,Synthetic Owner 298,14.2191,Example Village,0.966,Extracted,
+DOC-00299,P0299,399,Synthetic Owner 299,14.2191,Example Village,0.868,Extracted,Missing mutation information
+DOC-00300,P0300,400,Synthetic Owner 300,14.2191,Example Village,0.984,Extracted,
+DOC-00301,P0301,401/2,Synthetic Owner 301,14.2189,Example Village,0.93,Extracted,
+DOC-00302,P0302,402,Synthetic Owner 302,14.2189,Example Village,0.939,Extracted,
+DOC-00303,P0303,403,Synthetic Owner 303,14.2189,Example Village,0.948,Extracted,
+DOC-00304,P0304,404,Synthetic Owner 322,14.2189,Example Village,0.468,Needs Review,Owner mismatch
+DOC-00305,P0305,405,Synthetic Owner 305,14.2189,Example Village,0.76,Extracted,Possible duplicate
+DOC-00306,P0306,406/1,Synthetic Owner 324,14.2189,Example Village,0.492,Needs Review,Owner mismatch
+DOC-00307,P0307,407,Synthetic Owner 307,14.2189,Example Village,0.504,Needs Review,Low OCR confidence
+DOC-00308,P0308,408,Synthetic Owner 308,14.2189,Example Village,0.93,Extracted,
+DOC-00309,P0309,409,Synthetic Owner 309,14.2189,Example Village,0.939,Extracted,
+DOC-00310,P0310,410,Synthetic Owner 310,14.2189,Example Village,0.948,Extracted,
+DOC-00311,P0311,411/3,Synthetic Owner 311,14.2189,Example Village,0.957,Extracted,
+DOC-00312,P0312,412,Synthetic Owner 312,14.2189,Example Village,0.966,Extracted,
+DOC-00313,P0313,413,Synthetic Owner 313,14.2189,Example Village,0.856,Extracted,Missing mutation information
+DOC-00314,P0314,414,Synthetic Owner 314,14.2189,Example Village,0.984,Extracted,
+DOC-00315,P0315,415,Synthetic Owner 315,14.2189,Example Village,0.93,Extracted,
+DOC-00316,P0316,416/2,Synthetic Owner 316,14.2189,Example Village,0.939,Extracted,
+DOC-00317,P0317,417,Synthetic Owner 317,14.2189,Example Village,0.948,Extracted,
+DOC-00318,P0318,418,Synthetic Owner 318,14.2189,Example Village,0.957,Extracted,
+DOC-00319,P0319,419,Synthetic Owner 319,14.2189,Example Village,0.748,Extracted,Missing mutation information
+DOC-00320,P0320,420,Synthetic Owner 320,14.2189,Example Village,0.975,Extracted,
+DOC-00321,P0321,421/1,Synthetic Owner 321,14.2189,Example Village,0.984,Extracted,
+DOC-00322,P0322,422,Synthetic Owner 322,14.2189,Example Village,0.93,Extracted,
+DOC-00323,P0323,423,Synthetic Owner 323,14.2189,Example Village,0.939,Extracted,
+DOC-00324,P0324,424,Synthetic Owner 324,14.2189,Example Village,0.948,Extracted,
+DOC-00325,P0325,425,Synthetic Owner 325,14.2189,Example Village,0.957,Extracted,
+DOC-00326,P0326,426/3,Synthetic Owner 326,14.2188,Example Village,0.432,Needs Review,Low OCR confidence
+DOC-00327,P0327,427,Synthetic Owner 327,14.2188,Example Village,0.975,Extracted,
+DOC-00328,P0328,428,Synthetic Owner 328,14.2188,Example Village,0.984,Extracted,
+DOC-00329,P0329,429,Synthetic Owner 329,14.2188,Example Village,0.93,Extracted,
+DOC-00330,P0330,430,Synthetic Owner 330,14.2188,Example Village,0.939,Extracted,
+DOC-00331,P0331,431/2,Synthetic Owner 331,14.2188,Example Village,0.712,Extracted,Possible duplicate
+DOC-00332,P0332,432,Synthetic Owner 332,14.2188,Example Village,0.957,Extracted,
+DOC-00333,P0333,433,Synthetic Owner 333,14.2188,Example Village,0.966,Extracted,
+DOC-00334,P0334,434,Synthetic Owner 334,14.2188,Example Village,0.975,Extracted,
+DOC-00335,P0335,435,Synthetic Owner 335,14.2188,Example Village,0.984,Extracted,
+DOC-00336,P0336,436/1,Synthetic Owner 336,15.3563,Example Village,0.552,Needs Review,Area mismatch
+DOC-00337,P0337,437,Synthetic Owner 337,14.2188,Example Village,0.939,Extracted,
+DOC-00338,P0338,438,Synthetic Owner 338,14.2188,Example Village,0.948,Extracted,
+DOC-00339,P0339,439,Synthetic Owner 339,14.2188,Example Village,0.957,Extracted,
+DOC-00340,P0340,440,Synthetic Owner 340,14.2188,Example Village,0.966,Extracted,
+DOC-00341,P0341,441/3,Synthetic Owner 341,14.2188,Example Village,0.975,Extracted,
+DOC-00342,P0342,442,Synthetic Owner 342,14.2188,Example Village,0.624,Needs Review,Low OCR confidence
+DOC-00343,P0343,443,Synthetic Owner 343,14.2188,Example Village,0.93,Extracted,
+DOC-00344,P0344,444,Synthetic Owner 344,14.2188,Example Village,0.939,Extracted,
+DOC-00345,P0345,445,Synthetic Owner 363,14.2188,Example Village,0.66,Needs Review,Owner mismatch
+DOC-00346,P0346,446/2,Synthetic Owner 346,14.2188,Example Village,0.957,Extracted,
+DOC-00347,P0347,447,Synthetic Owner 347,14.2188,Example Village,0.966,Extracted,
+DOC-00348,P0348,448,Synthetic Owner 366,14.2188,Example Village,0.696,Needs Review,Owner mismatch
+DOC-00349,P0349,449,Synthetic Owner 349,14.2188,Example Village,0.708,Needs Review,Low OCR confidence
+DOC-00350,P0350,450,Synthetic Owner 350,14.2188,Example Village,0.42,Needs Review,Low OCR confidence
+DOC-00351,P0351,451/1,Synthetic Owner 351,14.2187,Example Village,0.772,Extracted,Missing mutation information
+DOC-00352,P0352,452,Synthetic Owner 352,14.2187,Example Village,0.948,Extracted,
+DOC-00353,P0353,453,Synthetic Owner 353,14.2187,Example Village,0.957,Extracted,
+DOC-00354,P0354,454,Synthetic Owner 354,14.2187,Example Village,0.808,Extracted,Possible duplicate
+DOC-00355,P0355,455,Synthetic Owner 355,14.2187,Example Village,0.975,Extracted,
+DOC-00356,P0356,456/3,Synthetic Owner 356,14.2187,Example Village,0.984,Extracted,
+DOC-00357,P0357,457,Synthetic Owner 357,14.2187,Example Village,0.844,Extracted,Missing mutation information
+DOC-00358,P0358,458,Synthetic Owner 358,14.2187,Example Village,0.939,Extracted,
+DOC-00359,P0359,459,Synthetic Owner 359,14.2187,Example Village,0.948,Extracted,
+DOC-00360,P0360,460,Synthetic Owner 360,14.2187,Example Village,0.957,Extracted,
+DOC-00361,P0361,461/2,Synthetic Owner 361,14.2187,Example Village,0.552,Needs Review,Low OCR confidence
+DOC-00362,P0362,462,Synthetic Owner 362,14.2187,Example Village,0.975,Extracted,
+DOC-00363,P0363,463,Synthetic Owner 363,14.2187,Example Village,0.736,Extracted,Possible duplicate
+DOC-00364,P0364,464,Synthetic Owner 364,14.2187,Example Village,0.93,Extracted,
+DOC-00365,P0365,465,Synthetic Owner 365,14.2187,Example Village,0.939,Extracted,
+DOC-00366,P0366,466/1,Synthetic Owner 366,14.2187,Example Village,0.612,Needs Review,Low OCR confidence
+DOC-00367,P0367,467,Synthetic Owner 367,14.2187,Example Village,0.784,Extracted,Missing mutation information
+DOC-00368,P0368,468,Synthetic Owner 368,14.2187,Example Village,0.966,Extracted,
+DOC-00369,P0369,469,Synthetic Owner 369,14.2187,Example Village,0.975,Extracted,
+DOC-00370,P0370,470,Synthetic Owner 370,14.2187,Example Village,0.984,Extracted,
+DOC-00371,P0371,471/3,Synthetic Owner 371,14.2187,Example Village,0.93,Extracted,
+DOC-00372,P0372,472,Synthetic Owner 372,14.2187,Example Village,0.939,Extracted,
+DOC-00373,P0373,473,Synthetic Owner 373,14.2187,Example Village,0.948,Extracted,
+DOC-00374,P0374,474,Synthetic Owner 374,14.2187,Example Village,0.957,Extracted,
+DOC-00375,P0375,475,Synthetic Owner 375,14.2187,Example Village,0.966,Extracted,
+DOC-00376,P0376,476/2,Synthetic Owner 376,14.2185,Example Village,0.712,Extracted,Missing mutation information
+DOC-00377,P0377,477,Synthetic Owner 377,14.2185,Example Village,0.724,Extracted,Missing mutation information
+DOC-00378,P0378,478,Synthetic Owner 378,14.2185,Example Village,0.736,Extracted,Missing mutation information
+DOC-00379,P0379,479,Synthetic Owner 379,14.2185,Example Village,0.939,Extracted,
+DOC-00380,P0380,480,Synthetic Owner 380,14.2185,Example Village,0.48,Needs Review,Survey number uncertainty
+DOC-00381,P0381,481/1,Synthetic Owner 381,14.2185,Example Village,0.772,Extracted,Possible duplicate
+DOC-00382,P0382,482,Synthetic Owner 382,14.2185,Example Village,0.966,Extracted,
+DOC-00383,P0383,483,Synthetic Owner 383,14.2185,Example Village,0.975,Extracted,
+DOC-00384,P0384,484,Synthetic Owner 384,14.2185,Example Village,0.808,Extracted,Missing mutation information
+DOC-00385,P0385,485,Synthetic Owner 385,14.2185,Example Village,0.93,Extracted,
+DOC-00386,P0386,486/3,Synthetic Owner 386,14.2185,Example Village,0.939,Extracted,
+DOC-00387,P0387,487,Synthetic Owner 387,14.2185,Example Village,0.948,Extracted,
+DOC-00388,P0388,488,Synthetic Owner 388,14.2185,Example Village,0.957,Extracted,
+DOC-00389,P0389,489,Synthetic Owner 389,14.2185,Example Village,0.966,Extracted,
+DOC-00390,P0390,490,Synthetic Owner 390,14.2185,Example Village,0.975,Extracted,
+DOC-00391,P0391,491/2,Synthetic Owner 391,14.2185,Example Village,0.984,Extracted,
+DOC-00392,P0392,492,Synthetic Owner 392,14.2185,Example Village,0.93,Extracted,
+DOC-00393,P0393,493,Synthetic Owner 393,14.2185,Example Village,0.636,Needs Review,Survey number uncertainty
+DOC-00394,P0394,494,Synthetic Owner 394,14.2185,Example Village,0.948,Extracted,
+DOC-00395,P0395,495,Synthetic Owner 395,14.2185,Example Village,0.957,Extracted,
+DOC-00396,P0396,496/1,Synthetic Owner 396,14.2185,Example Village,0.966,Extracted,
+DOC-00397,P0397,497,Synthetic Owner 397,14.2185,Example Village,0.784,Extracted,Possible duplicate
+DOC-00398,P0398,498,Synthetic Owner 398,14.2185,Example Village,0.796,Extracted,Possible duplicate
+DOC-00399,P0399,499,Synthetic Owner 417,14.2185,Example Village,0.708,Needs Review,Owner mismatch
+DOC-00400,P0400,500,Synthetic Owner 400,14.2185,Example Village,0.939,Extracted,
+DOC-00401,P0401,501/3,Synthetic Owner 401,15.3559,Example Village,0.432,Needs Review,Area mismatch
+DOC-00402,P0402,502,Synthetic Owner 402,14.2184,Example Village,0.957,Extracted,
+DOC-00403,P0403,503,Synthetic Owner 403,15.3559,Example Village,0.456,Needs Review,Area mismatch
+DOC-00404,P0404,504,Synthetic Owner 404,14.2184,Example Village,0.975,Extracted,
+DOC-00405,P0405,505,Synthetic Owner 405,14.2184,Example Village,0.984,Extracted,
+DOC-00406,P0406,506/2,Synthetic Owner 406,14.2184,Example Village,0.93,Extracted,
+DOC-00407,P0407,507,Synthetic Owner 407,14.2184,Example Village,0.939,Extracted,
+DOC-00408,P0408,508,Synthetic Owner 408,14.2184,Example Village,0.736,Extracted,Missing mutation information
+DOC-00409,P0409,509,Synthetic Owner 409,14.2184,Example Village,0.528,Needs Review,Low OCR confidence
+DOC-00410,P0410,510,Synthetic Owner 410,14.2184,Example Village,0.966,Extracted,
+DOC-00411,P0411,511/1,Synthetic Owner 411,14.2184,Example Village,0.975,Extracted,
+DOC-00412,P0412,512,Synthetic Owner 412,14.2184,Example Village,0.984,Extracted,
+DOC-00413,P0413,513,Synthetic Owner 431,14.2184,Example Village,0.576,Needs Review,Owner mismatch
+DOC-00414,P0414,514,Synthetic Owner 414,14.2184,Example Village,0.808,Extracted,Missing mutation information
+DOC-00415,P0415,515,Synthetic Owner 415,14.2184,Example Village,0.6,Needs Review,Low OCR confidence
+DOC-00416,P0416,516/3,Synthetic Owner 416,15.3559,Example Village,0.612,Needs Review,Area mismatch
+DOC-00417,P0417,517,Synthetic Owner 417,14.2184,Example Village,0.966,Extracted,
+DOC-00418,P0418,518,Synthetic Owner 418,14.2184,Example Village,0.856,Extracted,Possible duplicate
+DOC-00419,P0419,519,Synthetic Owner 419,14.2184,Example Village,0.984,Extracted,
+DOC-00420,P0420,520,Synthetic Owner 420,15.3559,Example Village,0.66,Needs Review,Area mismatch
+DOC-00421,P0421,521/2,Synthetic Owner 421,14.2184,Example Village,0.939,Extracted,
+DOC-00422,P0422,522,Synthetic Owner 422,14.2184,Example Village,0.724,Extracted,Possible duplicate
+DOC-00423,P0423,523,Synthetic Owner 423,14.2184,Example Village,0.957,Extracted,
+DOC-00424,P0424,524,Synthetic Owner 424,14.2184,Example Village,0.748,Extracted,Missing mutation information
+DOC-00425,P0425,525,Synthetic Owner 425,14.2184,Example Village,0.76,Extracted,Possible duplicate
+DOC-00426,P0426,526/1,Synthetic Owner 426,14.2183,Example Village,0.432,Needs Review,Low OCR confidence
+DOC-00427,P0427,527,Synthetic Owner 427,14.2183,Example Village,0.93,Extracted,
+DOC-00428,P0428,528,Synthetic Owner 428,14.2183,Example Village,0.939,Extracted,
+DOC-00429,P0429,529,Synthetic Owner 429,14.2183,Example Village,0.808,Extracted,Possible duplicate
+DOC-00430,P0430,530,Synthetic Owner 430,14.2183,Example Village,0.957,Extracted,
+DOC-00431,P0431,531/3,Synthetic Owner 431,14.2183,Example Village,0.966,Extracted,
+DOC-00432,P0432,532,Synthetic Owner 432,15.3558,Example Village,0.504,Needs Review,Area mismatch
+DOC-00433,P0433,533,Synthetic Owner 451,14.2183,Example Village,0.516,Needs Review,Owner mismatch
+DOC-00434,P0434,534,Synthetic Owner 434,14.2183,Example Village,0.93,Extracted,
+DOC-00435,P0435,535,Synthetic Owner 435,14.2183,Example Village,0.939,Extracted,
+DOC-00436,P0436,536/2,Synthetic Owner 436,14.2183,Example Village,0.552,Needs Review,Low OCR confidence
+DOC-00437,P0437,537,Synthetic Owner 437,14.2183,Example Village,0.564,Needs Review,Low OCR confidence
+DOC-00438,P0438,538,Synthetic Owner 438,14.2183,Example Village,0.966,Extracted,
+DOC-00439,P0439,539,Synthetic Owner 439,14.2183,Example Village,0.748,Extracted,Missing mutation information
+DOC-00440,P0440,540,Synthetic Owner 440,14.2183,Example Village,0.984,Extracted,
+DOC-00441,P0441,541/1,Synthetic Owner 441,14.2183,Example Village,0.93,Extracted,
+DOC-00442,P0442,542,Synthetic Owner 442,14.2183,Example Village,0.939,Extracted,
+DOC-00443,P0443,543,Synthetic Owner 443,14.2183,Example Village,0.796,Extracted,Missing mutation information
+DOC-00444,P0444,544,Synthetic Owner 462,14.2183,Example Village,0.648,Needs Review,Owner mismatch
+DOC-00445,P0445,545,Synthetic Owner 445,14.2183,Example Village,0.966,Extracted,
+DOC-00446,P0446,546/3,Synthetic Owner 464,14.2183,Example Village,0.672,Needs Review,Owner mismatch
+DOC-00447,P0447,547,Synthetic Owner 447,14.2183,Example Village,0.844,Extracted,Missing mutation information
+DOC-00448,P0448,548,Synthetic Owner 448,14.2183,Example Village,0.93,Extracted,
+DOC-00449,P0449,549,Synthetic Owner 449,15.3558,Example Village,0.708,Needs Review,Area mismatch
+DOC-00450,P0450,550,Synthetic Owner 450,14.2183,Example Village,0.7,Extracted,Missing mutation information
+DOC-00451,P0451,551/2,Synthetic Owner 451,14.2182,Example Village,0.957,Extracted,
+DOC-00452,P0452,552,Synthetic Owner 452,14.2182,Example Village,0.966,Extracted,
+DOC-00453,P0453,553,Synthetic Owner 453,14.2182,Example Village,0.975,Extracted,
+DOC-00454,P0454,554,Synthetic Owner 454,14.2182,Example Village,0.984,Extracted,
+DOC-00455,P0455,555,Synthetic Owner 455,14.2182,Example Village,0.93,Extracted,
+DOC-00456,P0456,556/1,Synthetic Owner 456,14.2182,Example Village,0.939,Extracted,
+DOC-00457,P0457,557,Synthetic Owner 457,14.2182,Example Village,0.504,Needs Review,Low OCR confidence
+DOC-00458,P0458,558,Synthetic Owner 458,14.2182,Example Village,0.957,Extracted,
+DOC-00459,P0459,559,Synthetic Owner 459,14.2182,Example Village,0.966,Extracted,
+DOC-00460,P0460,560,Synthetic Owner 460,14.2182,Example Village,0.975,Extracted,
+DOC-00461,P0461,561/3,Synthetic Owner 479,14.2182,Example Village,0.552,Needs Review,Owner mismatch
+DOC-00462,P0462,562,Synthetic Owner 462,14.2182,Example Village,0.844,Extracted,Possible duplicate
+DOC-00463,P0463,563,Synthetic Owner 463,14.2182,Example Village,0.939,Extracted,
+DOC-00464,P0464,564,Synthetic Owner 464,14.2182,Example Village,0.948,Extracted,
+DOC-00465,P0465,565,Synthetic Owner 465,14.2182,Example Village,0.957,Extracted,
+DOC-00466,P0466,566/2,Synthetic Owner 466,14.2182,Example Village,0.966,Extracted,
+DOC-00467,P0467,567,Synthetic Owner 467,14.2182,Example Village,0.724,Extracted,Missing mutation information
+DOC-00468,P0468,568,Synthetic Owner 468,14.2182,Example Village,0.984,Extracted,
+DOC-00469,P0469,569,Synthetic Owner 469,14.2182,Example Village,0.93,Extracted,
+DOC-00470,P0470,570,Synthetic Owner 470,14.2182,Example Village,0.939,Extracted,
+DOC-00471,P0471,571/1,Synthetic Owner 471,14.2182,Example Village,0.948,Extracted,
+DOC-00472,P0472,572,Synthetic Owner 472,14.2182,Example Village,0.957,Extracted,
+DOC-00473,P0473,573,Synthetic Owner 473,14.2182,Example Village,0.966,Extracted,
+DOC-00474,P0474,574,Synthetic Owner 474,14.2182,Example Village,0.975,Extracted,
+DOC-00475,P0475,575,Synthetic Owner 493,14.2182,Example Village,0.42,Needs Review,Owner mismatch
+DOC-00476,P0476,576/3,Synthetic Owner 476,14.218,Example Village,0.93,Extracted,
+DOC-00477,P0477,577,Synthetic Owner 477,14.218,Example Village,0.939,Extracted,
+DOC-00478,P0478,578,Synthetic Owner 478,14.218,Example Village,0.948,Extracted,
+DOC-00479,P0479,579,Synthetic Owner 479,14.218,Example Village,0.957,Extracted,
+DOC-00480,P0480,580,Synthetic Owner 480,14.218,Example Village,0.966,Extracted,
+DOC-00481,P0481,581/2,Synthetic Owner 481,14.218,Example Village,0.975,Extracted,
+DOC-00482,P0482,582,Synthetic Owner 482,14.218,Example Village,0.724,Extracted,Possible duplicate
+DOC-00483,P0483,583,Synthetic Owner 483,14.218,Example Village,0.93,Extracted,
+DOC-00484,P0484,584,Synthetic Owner 484,14.218,Example Village,0.748,Extracted,Missing mutation information
+DOC-00485,P0485,585,Synthetic Owner 485,14.218,Example Village,0.948,Extracted,
+DOC-00486,P0486,586/1,Synthetic Owner 486,14.218,Example Village,0.957,Extracted,
+DOC-00487,P0487,587,Synthetic Owner 487,14.218,Example Village,0.966,Extracted,
+DOC-00488,P0488,588,Synthetic Owner 488,14.218,Example Village,0.975,Extracted,
+DOC-00489,P0489,589,Synthetic Owner 489,14.218,Example Village,0.984,Extracted,
+DOC-00490,P0490,590,Synthetic Owner 490,14.218,Example Village,0.93,Extracted,
+DOC-00491,P0491,591/3,Synthetic Owner 473,14.218,Example Village,0.612,Needs Review,Owner mismatch
+DOC-00492,P0492,592,Synthetic Owner 492,14.218,Example Village,0.624,Needs Review,Low OCR confidence
+DOC-00493,P0493,593,Synthetic Owner 493,14.218,Example Village,0.957,Extracted,
+DOC-00494,P0494,594,Synthetic Owner 494,14.218,Example Village,0.966,Extracted,
+DOC-00495,P0495,595,Synthetic Owner 495,14.218,Example Village,0.975,Extracted,
+DOC-00496,P0496,596/2,Synthetic Owner 496,14.218,Example Village,0.984,Extracted,
+DOC-00497,P0497,597,Synthetic Owner 497,14.218,Example Village,0.724,Extracted,Possible duplicate
+DOC-00498,P0498,598,Synthetic Owner 498,14.218,Example Village,0.939,Extracted,
+DOC-00499,P0499,599,Synthetic Owner 499,14.218,Example Village,0.948,Extracted,
+DOC-00500,P0500,600,Synthetic Owner 500,14.218,Example Village,0.957,Extracted,

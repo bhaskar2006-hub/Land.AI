@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Documents — ILRDVS</title>
+<meta name="description" content="Browse, search and filter all land record documents in the ILRDVS system."/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.chip-filter{padding:6px 14px;border-radius:20px;border:1px solid var(--navy-border2);background:var(--navy-card);font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+.chip-filter.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue-light)}
+.chip-filter:hover{border-color:var(--navy-border2);color:var(--text-secondary)}
+.doc-row-actions{display:flex;gap:6px;opacity:0;transition:var(--transition)}
+tbody tr:hover .doc-row-actions{opacity:1}
+.conf-bar-sm{height:4px;border-radius:2px;background:var(--navy-border);overflow:hidden;width:60px;margin-top:4px}
+.conf-fill{height:100%;border-radius:2px}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="nav-logo" onclick="location.href='index.html'"><div class="nav-logo-icon">🏛</div><div><div class="nav-logo-text">ILRDVS</div><div class="nav-logo-sub">Land Record System</div></div></div><div class="nav-links"><a class="nav-link" href="index.html">Dashboard</a><a class="nav-link" href="upload.html">Upload</a><a class="nav-link active" href="documents.html">Documents</a><a class="nav-link" href="verify.html">Verify</a><a class="nav-link" href="gis-map.html">GIS Map</a><a class="nav-link" href="reports.html">Reports</a></div><div class="nav-right"><span class="nav-badge">🛰 BHUVAN LIVE</span><div class="nav-divider"></div><div class="nav-avatar">DO</div></div></nav>
+<div class="page-shell"><div class="page-content">
+
+  <div class="page-header">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Dashboard</a><span class="breadcrumb-sep">›</span><span>Documents</span></div>
+      <div class="page-title">📋 All Documents</div>
+      <div class="page-subtitle">12,450 total records • Last updated 2 min ago</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-ghost btn-sm">📥 Export CSV</button>
+      <button class="btn btn-primary btn-sm" onclick="location.href='upload.html'">📤 Upload</button>
+    </div>
+  </div>
+
+  <!-- Summary KPIs -->
+  <div class="grid-5 stagger mb-24">
+    <div class="kpi-card blue"><div class="kpi-icon blue">📄</div><div class="kpi-num">12,450</div><div class="kpi-label">Total Documents</div></div>
+    <div class="kpi-card green"><div class="kpi-icon green">✅</div><div class="kpi-num">10,230</div><div class="kpi-label">Validated</div></div>
+    <div class="kpi-card gold"><div class="kpi-icon gold">⏳</div><div class="kpi-num">1,890</div><div class="kpi-label">In Review</div></div>
+    <div class="kpi-card coral"><div class="kpi-icon coral">❌</div><div class="kpi-num">330</div><div class="kpi-label">Errors</div></div>
+    <div class="kpi-card purple"><div class="kpi-icon purple">⚙️</div><div class="kpi-num">48</div><div class="kpi-label">Processing</div></div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-box flex-1" style="max-width:360px">
+      <span class="search-icon-abs">🔍</span>
+      <input type="text" class="form-input search-input-padded" placeholder="Search by ID, owner, survey no, village…" oninput="filterDocs(this.value)" id="doc-search"/>
+    </div>
+    <span class="chip-filter active" onclick="setStatus('all',this)">All</span>
+    <span class="chip-filter" onclick="setStatus('validated',this)">✅ Validated</span>
+    <span class="chip-filter" onclick="setStatus('review',this)">⏳ In Review</span>
+    <span class="chip-filter" onclick="setStatus('error',this)">❌ Error</span>
+    <span class="chip-filter" onclick="setStatus('processing',this)">⚙️ Processing</span>
+    <select class="form-select" style="width:150px;padding:7px 28px 7px 10px;font-size:12px" onchange="filterByState(this.value)">
+      <option value="">All States</option>
+      <option>Karnataka</option><option>Maharashtra</option>
+      <option>Uttar Pradesh</option><option>Rajasthan</option><option>Gujarat</option>
+    </select>
+    <select class="form-select" style="width:130px;padding:7px 28px 7px 10px;font-size:12px">
+      <option>All Types</option><option>Khasra</option><option>Khatauni</option><option>Sale Deed</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th><input type="checkbox" style="accent-color:var(--blue)" onchange="toggleAll(this)"/></th>
+        <th>Document ID</th><th>Owner Name</th><th>Survey No.</th>
+        <th>Village / District</th><th>State</th><th>Status</th>
+        <th>Confidence</th><th>Date</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="docs-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:13px;color:var(--text-muted)">
+    <span>Showing <span id="showing-count">10</span> of 12,450 records</span>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm">← Prev</button>
+      <button class="btn btn-secondary btn-sm">1</button>
+      <button class="btn btn-ghost btn-sm">2</button>
+      <button class="btn btn-ghost btn-sm">3</button>
+      <span style="padding:6px 8px;color:var(--text-muted)">…</span>
+      <button class="btn btn-ghost btn-sm">1245</button>
+      <button class="btn btn-ghost btn-sm">Next →</button>
+    </div>
+  </div>
+
+</div></div>
+
+<script>
+const ALL_DOCS = [
+  {id:"KA-2024-00453",owner:"Ramesh Kumar",survey:"123/4A",village:"Kotagiri",district:"Nilgiris",state:"Karnataka",status:"validated",conf:96,type:"Khasra",date:"03 Sep 2026"},
+  {id:"KA-2024-00454",owner:"Sunita Devi",survey:"124/1",village:"Gudalur",district:"Nilgiris",state:"Karnataka",status:"review",conf:67,type:"Khatauni",date:"03 Sep 2026"},
+  {id:"MH-2024-01122",owner:"Prakash Patil",survey:"88/2B",village:"Nashik",district:"Nashik",state:"Maharashtra",status:"validated",conf:91,type:"Sale Deed",date:"02 Sep 2026"},
+  {id:"MH-2024-01123",owner:"Anita Rao",survey:"89/A",village:"Ozar",district:"Nashik",state:"Maharashtra",status:"error",conf:38,type:"Khasra",date:"02 Sep 2026"},
+  {id:"UP-2024-03301",owner:"Mahesh Sharma",survey:"445/3",village:"Lucknow",district:"Lucknow",state:"Uttar Pradesh",status:"validated",conf:89,type:"Khatauni",date:"02 Sep 2026"},
+  {id:"UP-2024-03302",owner:"Geeta Singh",survey:"446/1A",village:"Bakshi Ka",district:"Lucknow",state:"Uttar Pradesh",status:"review",conf:72,type:"Patta",date:"01 Sep 2026"},
+  {id:"RJ-2024-00789",owner:"Govind Meena",survey:"56/7",village:"Amber",district:"Jaipur",state:"Rajasthan",status:"validated",conf:94,type:"ROR",date:"01 Sep 2026"},
+  {id:"RJ-2024-00790",owner:"Lalita Gupta",survey:"57/2",village:"Sanganer",district:"Jaipur",state:"Rajasthan",status:"error",conf:41,type:"Khasra",date:"31 Aug 2026"},
+  {id:"MP-2024-02211",owner:"Raju Yadav",survey:"78/4",village:"Bhopal",district:"Bhopal",state:"Madhya Pradesh",status:"validated",conf:88,type:"Mutation",date:"31 Aug 2026"},
+  {id:"GJ-2024-00334",owner:"Haresh Patel",survey:"112/B",village:"Daskroi",district:"Ahmedabad",state:"Gujarat",status:"validated",conf:97,type:"Sale Deed",date:"30 Aug 2026"},
+];
+const bm={validated:'badge-validated',review:'badge-review',error:'badge-error',processing:'badge-processing'};
+const lm={validated:'✅ VALIDATED',review:'⏳ REVIEW',error:'❌ ERROR',processing:'⚙️ PROCESSING'};
+const cc=c=>c>75?'var(--emerald)':c>60?'var(--amber)':'var(--coral)';
+let currentStatus='all';
+
+function renderDocs(list) {
+  const tb=document.getElementById('docs-tbody');
+  tb.innerHTML=list.map(d=>`<tr>
+    <td><input type="checkbox" style="accent-color:var(--blue)"/></td>
+    <td class="td-mono">${d.id}</td>
+    <td style="font-weight:600">${d.owner}</td>
+    <td class="td-mono">${d.survey}</td>
+    <td>${d.village}<div class="td-muted">${d.district}</div></td>
+    <td>${d.state}</td>
+    <td><span class="badge ${bm[d.status]}">${lm[d.status]}</span></td>
+    <td>
+      <span style="color:${cc(d.conf)};font-weight:700;font-size:13px">${d.conf}%</span>
+      <div class="conf-bar-sm"><div class="conf-fill" style="width:${d.conf}%;background:${cc(d.conf)}"></div></div>
+    </td>
+    <td class="td-muted">${d.date}</td>
+    <td><div class="doc-row-actions">
+      <a href="verify-detail.html" class="btn btn-ghost btn-sm">View</a>
+      <a href="verify-detail.html" class="btn btn-secondary btn-sm">Verify</a>
+    </div></td>
+  </tr>`).join('');
+  document.getElementById('showing-count').textContent=list.length;
+}
+
+function filterDocs(q) {
+  const low=q.toLowerCase();
+  const f=ALL_DOCS.filter(d=>(currentStatus==='all'||d.status===currentStatus)&&(!low||[d.id,d.owner,d.survey,d.village,d.district].some(v=>v.toLowerCase().includes(low))));
+  renderDocs(f);
+}
+
+function setStatus(s,el) {
+  currentStatus=s;
+  document.querySelectorAll('.chip-filter').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterDocs(document.getElementById('doc-search').value);
+}
+
+function filterByState(st) {
+  const f=ALL_DOCS.filter(d=>(!st||d.state===st)&&(currentStatus==='all'||d.status===currentStatus));
+  renderDocs(f);
+}
+
+function toggleAll(cb) {
+  document.querySelectorAll('tbody input[type=checkbox]').forEach(c=>c.checked=cb.checked);
+}
+
+renderDocs(ALL_DOCS);
+</script>
+</body>
+</html>

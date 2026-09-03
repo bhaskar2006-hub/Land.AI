@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Verify Document — ILRDVS</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.split-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:0;height:calc(100vh - var(--topnav-h) - 56px);overflow:hidden}
+.doc-viewer{position:relative;background:var(--navy-mid);border-right:1px solid var(--navy-border);display:flex;flex-direction:column;overflow:hidden}
+.viewer-toolbar{padding:10px 16px;background:rgba(10,22,40,0.8);border-bottom:1px solid var(--navy-border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.viewer-area{flex:1;display:flex;align-items:center;justify-content:center;overflow:auto;padding:16px;position:relative;background:repeating-linear-gradient(0deg,transparent,transparent 29px,rgba(30,48,80,0.15) 30px),repeating-linear-gradient(90deg,transparent,transparent 29px,rgba(30,48,80,0.15) 30px)}
+.doc-image-mock{max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.6);position:relative}
+.highlight-box{position:absolute;border:2px solid;border-radius:3px;pointer-events:none;transition:.2s}
+.highlight-box.blue{border-color:var(--blue);background:rgba(30,111,255,0.08)}
+.highlight-box.green{border-color:var(--emerald);background:rgba(0,200,150,0.08)}
+.highlight-box.red{border-color:var(--coral);background:rgba(255,71,87,0.08)}
+.highlight-box.amber{border-color:var(--amber);background:rgba(255,184,0,0.08)}
+.fields-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--navy-card)}
+.fields-header{padding:14px 20px;border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.fields-body{flex:1;overflow-y:auto;padding:16px}
+.field-row{margin-bottom:12px;position:relative}
+.field-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.field-input-wrap{position:relative}
+.field-input{width:100%;padding:9px 36px 9px 12px;background:var(--navy-card2);border:1px solid var(--navy-border2);border-radius:var(--radius-md);color:var(--text-primary);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:var(--transition)}
+.field-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
+.field-input.conf-low{border-color:rgba(255,71,87,0.5);background:rgba(255,71,87,0.04)}
+.field-input.conf-medium{border-color:rgba(255,184,0,0.4)}
+.field-input.conf-high{border-color:rgba(0,200,150,0.3)}
+.field-conf-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px}
+.fields-footer{padding:14px 16px;border-top:1px solid var(--navy-border);background:var(--navy-mid);flex-shrink:0}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.action-row{display:flex;gap:8px;margin-top:10px}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="nav-logo" onclick="location.href='index.html'"><div class="nav-logo-icon">🏛</div><div><div class="nav-logo-text">ILRDVS</div><div class="nav-logo-sub">Land Record System</div></div></div><div class="nav-links"><a class="nav-link" href="index.html">Dashboard</a><a class="nav-link" href="upload.html">Upload</a><a class="nav-link" href="documents.html">Documents</a><a class="nav-link active" href="verify.html">Verify</a><a class="nav-link" href="gis-map.html">GIS Map</a><a class="nav-link" href="reports.html">Reports</a></div><div class="nav-right"><span class="nav-badge">🛰 BHUVAN LIVE</span><div class="nav-divider"></div><div class="nav-avatar">DO</div></div></nav>
+<div class="page-shell" style="padding-bottom:0">
+
+  <!-- Sub-header bar -->
+  <div style="padding:10px 20px;background:var(--navy-mid);border-bottom:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="verify.html" class="btn btn-ghost btn-sm">← Back to Queue</a>
+      <div style="width:1px;height:20px;background:var(--navy-border)"></div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-primary)">Document #KA-2024-00453</div>
+      <span class="badge badge-review">⏳ NEEDS REVIEW</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:var(--text-muted)">23 of 1,890 in queue</span>
+      <button class="btn btn-ghost btn-sm">← Prev</button>
+      <button class="btn btn-ghost btn-sm">Next →</button>
+      <button class="btn btn-danger btn-sm" onclick="showToast('❌ Record rejected')">Reject</button>
+      <button class="btn btn-success" onclick="approveDoc()">✅ Approve</button>
+    </div>
+  </div>
+
+  <!-- Split View -->
+  <div class="split-layout">
+
+    <!-- Document Viewer -->
+    <div class="doc-viewer">
+      <div class="viewer-toolbar">
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Zoom in')">🔍+</button>
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Zoom out')">🔍-</button>
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Fit to screen')">⊡</button>
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Rotate')">↻</button>
+        <div style="margin-left:auto;font-size:12px;color:var(--text-muted)">Page <strong style="color:var(--text-primary)">1</strong> of 4</div>
+        <button class="btn btn-ghost btn-sm">‹</button>
+        <button class="btn btn-ghost btn-sm">›</button>
+      </div>
+      <div class="viewer-area">
+        <!-- Simulated scanned land record document -->
+        <div class="doc-image-mock" style="width:100%;max-width:520px;position:relative">
+          <svg viewBox="0 0 520 700" width="100%" style="background:#f5ede0;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.6)">
+            <!-- Paper texture / aged document look -->
+            <rect width="520" height="700" fill="#f0e6d0" rx="2"/>
+            <rect x="20" y="20" width="480" height="660" fill="none" stroke="#c8a878" stroke-width="1.5"/>
+            
+            <!-- Header -->
+            <text x="260" y="55" text-anchor="middle" font-size="13" font-weight="bold" fill="#5a3e28" font-family="serif">ಭಾರತ ಸರ್ಕಾರ — GOVERNMENT OF INDIA</text>
+            <text x="260" y="75" text-anchor="middle" font-size="11" fill="#7a5a38" font-family="serif">ಕಂದಾಯ ಇಲಾಖೆ / Revenue Department</text>
+            <text x="260" y="95" text-anchor="middle" font-size="14" font-weight="bold" fill="#3a2010" font-family="serif">ಜಮೀನಿನ ದಾಖಲೆ / LAND RECORD</text>
+            <line x1="30" y1="108" x2="490" y2="108" stroke="#c8a878" stroke-width="1"/>
+            
+            <!-- Fields -->
+            <text x="40" y="135" font-size="10" fill="#6a4a28" font-family="sans-serif">ಸಮೀಕ್ಷೆ ಸಂಖ್ಯೆ / Survey Number:</text>
+            <rect x="200" y="120" width="140" height="22" fill="#ddeeff" stroke="#1E6FFF" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="135" font-size="11" font-weight="bold" fill="#0047CC" font-family="sans-serif">123/4A</text>
+            
+            <text x="40" y="175" font-size="10" fill="#6a4a28" font-family="sans-serif">ಖಾತೆದಾರರ ಹೆಸರು / Owner Name:</text>
+            <rect x="200" y="160" width="200" height="22" fill="#ffe5e5" stroke="#FF4757" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="175" font-size="11" fill="#cc2233" font-family="sans-serif">Ramesh Ku_ar</text>
+            <text x="402" y="168" font-size="9" fill="#FF4757">⚠️ Low</text>
+            
+            <text x="40" y="215" font-size="10" fill="#6a4a28" font-family="sans-serif">ಖಾಸ್ರಾ ಸಂಖ್ಯೆ / Khasra Number:</text>
+            <rect x="200" y="200" width="120" height="22" fill="#fff8e0" stroke="#FFB800" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="215" font-size="11" fill="#cc8800" font-family="sans-serif">456-B</text>
+            
+            <text x="40" y="255" font-size="10" fill="#6a4a28" font-family="sans-serif">ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ / Plot Area:</text>
+            <rect x="200" y="240" width="120" height="22" fill="#e0fff5" stroke="#00C896" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="255" font-size="11" fill="#008866" font-family="sans-serif">2.5 Acres</text>
+            
+            <text x="40" y="295" font-size="10" fill="#6a4a28" font-family="sans-serif">ಗ್ರಾಮ / Village:</text>
+            <rect x="200" y="280" width="160" height="22" fill="#e0fff5" stroke="#00C896" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="295" font-size="11" fill="#008866" font-family="sans-serif">Kotagiri</text>
+            
+            <text x="40" y="335" font-size="10" fill="#6a4a28" font-family="sans-serif">ತಾಲ್ಲೂಕ / Tehsil:</text>
+            <rect x="200" y="320" width="160" height="22" fill="#e0fff5" stroke="#00C896" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="335" font-size="11" fill="#008866" font-family="sans-serif">Ooty</text>
+            
+            <text x="40" y="375" font-size="10" fill="#6a4a28" font-family="sans-serif">ಜಿಲ್ಲೆ / District:</text>
+            <rect x="200" y="360" width="160" height="22" fill="#e0fff5" stroke="#00C896" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="375" font-size="11" fill="#008866" font-family="sans-serif">Nilgiris</text>
+            
+            <text x="40" y="415" font-size="10" fill="#6a4a28" font-family="sans-serif">ಭೂ ವರ್ಗೀಕರಣ / Land Class:</text>
+            <rect x="200" y="400" width="160" height="22" fill="#ffe5e5" stroke="#FF4757" stroke-width="1.5" rx="2" opacity=".7"/>
+            <text x="208" y="415" font-size="11" fill="#cc2233" font-family="sans-serif" font-style="italic">??? — unreadable</text>
+            
+            <!-- Table -->
+            <line x1="30" y1="450" x2="490" y2="450" stroke="#c8a878" stroke-width="1"/>
+            <text x="260" y="468" text-anchor="middle" font-size="10" font-weight="bold" fill="#5a3e28" font-family="sans-serif">ಪಹಣಿ ವಿವರ / Pahani Details</text>
+            <line x1="30" y1="475" x2="490" y2="475" stroke="#c8a878" stroke-width="0.5"/>
+            <text x="60" y="492" font-size="9" fill="#7a5a38" font-family="sans-serif">Sl.</text>
+            <text x="100" y="492" font-size="9" fill="#7a5a38" font-family="sans-serif">Owner</text>
+            <text x="250" y="492" font-size="9" fill="#7a5a38" font-family="sans-serif">Survey No.</text>
+            <text x="360" y="492" font-size="9" fill="#7a5a38" font-family="sans-serif">Area</text>
+            <line x1="30" y1="498" x2="490" y2="498" stroke="#c8a878" stroke-width="0.5"/>
+            <text x="60" y="515" font-size="9" fill="#3a2010" font-family="sans-serif">1</text>
+            <text x="100" y="515" font-size="9" fill="#3a2010" font-family="sans-serif">Ramesh Ku_ar</text>
+            <text x="250" y="515" font-size="9" fill="#3a2010" font-family="sans-serif">123/4A</text>
+            <text x="360" y="515" font-size="9" fill="#3a2010" font-family="sans-serif">2.5 Ac</text>
+            
+            <!-- Seal/stamp -->
+            <circle cx="420" cy="600" r="45" fill="none" stroke="#8B4513" stroke-width="2" stroke-dasharray="4 2" opacity=".4"/>
+            <text x="420" y="595" text-anchor="middle" font-size="9" fill="#8B4513" opacity=".6">REVENUE</text>
+            <text x="420" y="608" text-anchor="middle" font-size="9" fill="#8B4513" opacity=".6">DEPT SEAL</text>
+            
+            <!-- Signature area -->
+            <line x1="40" y1="660" x2="160" y2="660" stroke="#8B6040" stroke-width="0.8"/>
+            <text x="100" y="674" text-anchor="middle" font-size="8" fill="#8B6040" font-family="sans-serif">Signature / ಸಹಿ</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fields Panel -->
+    <div class="fields-panel">
+      <div class="fields-header">
+        <span style="font-size:14px;font-weight:700;color:var(--text-primary)">🧠 Extracted Fields</span>
+        <span style="font-size:12px;color:var(--text-muted)">AI Confidence per field</span>
+      </div>
+      <div class="fields-body" id="fields-body"></div>
+      <div class="fields-footer">
+        <div class="progress-label">
+          <span style="color:var(--text-muted);font-size:12px">Fields confirmed</span>
+          <span style="color:var(--emerald);font-weight:700;font-size:12px" id="conf-count">6 / 9</span>
+        </div>
+        <div class="progress-bar" style="height:8px">
+          <div class="progress-fill green" style="width:67%" id="conf-bar"></div>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-ghost flex-1" onclick="showToast('Draft saved')">💾 Save Draft</button>
+          <button class="btn btn-danger" onclick="showToast('❌ Record rejected')">Reject</button>
+          <button class="btn btn-success" style="flex:2" onclick="approveDoc()">✅ Approve Record</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast-wrap"><div id="toast" class="toast-msg" style="display:none"></div></div>
+<script>
+const FIELDS = [
+  {key:"Survey No.",     val:"123/4A",      conf:0.96, cls:"high"},
+  {key:"Owner Name",    val:"Ramesh Ku_ar", conf:0.42, cls:"low"},
+  {key:"Khasra No.",    val:"456-B",        conf:0.68, cls:"medium"},
+  {key:"Plot Area",     val:"2.5 Acres",    conf:0.91, cls:"high"},
+  {key:"Village",       val:"Kotagiri",     conf:0.88, cls:"high"},
+  {key:"Tehsil",        val:"Ooty",         conf:0.95, cls:"high"},
+  {key:"District",      val:"Nilgiris",     conf:0.90, cls:"high"},
+  {key:"Land Class",    val:"",             conf:0.35, cls:"low",  placeholder:"Click to enter manually"},
+  {key:"Mutation No.",  val:"MUT-2021-4532",conf:0.71, cls:"medium"},
+];
+
+const icons={high:"🟢",medium:"🟡",low:"🔴"};
+const colors={high:"conf-high",medium:"conf-medium",low:"conf-low"};
+const inputCls={high:"conf-high",medium:"conf-medium",low:"conf-low"};
+
+const fb=document.getElementById('fields-body');
+let confirmed=0;
+FIELDS.forEach((f,i)=>{
+  const pct=Math.round(f.conf*100);
+  fb.innerHTML+=`<div class="field-row">
+    <div class="field-label">
+      <span class="conf-dot ${f.cls}"></span>
+      ${f.key}
+      <span style="margin-left:auto;font-size:10px;font-weight:700;color:${f.cls==='high'?'var(--emerald)':f.cls==='medium'?'var(--amber)':'var(--coral)'}">${pct}%</span>
+    </div>
+    <div class="field-input-wrap">
+      <input class="field-input ${f.cls==='low'?'conf-low':f.cls==='medium'?'conf-medium':'conf-high'}"
+        value="${f.val}" placeholder="${f.placeholder||''}"
+        oninput="onFieldChange(${i},this)" id="fi-${i}"/>
+      <span class="field-conf-icon">${icons[f.cls]}</span>
+    </div>
+  </div>`;
+  if(f.cls==='high'&&f.val) confirmed++;
+});
+updateProgress();
+
+function onFieldChange(i,el){
+  FIELDS[i].val=el.value;
+  updateProgress();
+}
+
+function updateProgress(){
+  const filled=FIELDS.filter(f=>f.val.trim()).length;
+  const pct=Math.round(filled/FIELDS.length*100);
+  document.getElementById('conf-count').textContent=filled+' / '+FIELDS.length;
+  document.getElementById('conf-bar').style.width=pct+'%';
+}
+
+function approveDoc(){
+  const empty=FIELDS.filter(f=>!f.val.trim());
+  if(empty.length){ showToast('⚠️ Please fill: '+empty.map(f=>f.key).join(', ')); return; }
+  showToast('✅ Record approved & submitted!');
+  setTimeout(()=>location.href='verify.html',1500);
+}
+
+function showToast(m){
+  const t=document.getElementById('toast');t.textContent=m;t.style.display='block';
+  setTimeout(()=>t.style.display='none',2500);
+}
+</script>
+</body>
+</html>

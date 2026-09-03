@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Upload Documents — ILRDVS</title>
+<meta name="description" content="Upload land record documents for AI-powered extraction and digitization."/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.drop-zone{border:2px dashed var(--navy-border2);border-radius:var(--radius-xl);padding:60px 40px;text-align:center;cursor:pointer;transition:var(--transition);background:var(--navy-card);position:relative;overflow:hidden}
+.drop-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(30,111,255,0.06),transparent 70%);pointer-events:none}
+.drop-zone:hover,.drop-zone.dragging{border-color:var(--blue);background:rgba(30,111,255,0.05);box-shadow:0 0 30px var(--blue-glow)}
+.drop-icon{font-size:52px;margin-bottom:16px;display:block}
+.drop-title{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.drop-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.drop-formats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.fmt-chip{font-size:11px;padding:4px 10px;border-radius:5px;background:var(--navy-card2);border:1px solid var(--navy-border2);color:var(--text-secondary);font-weight:600}
+.queue-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-md);margin-bottom:8px;transition:var(--transition)}
+.queue-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.queue-name{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px}
+.queue-meta{font-size:11px;color:var(--text-muted)}
+.queue-status{margin-left:auto;flex-shrink:0}
+.proc-step{display:flex;align-items:center;gap:12px;padding:12px;background:var(--navy-card2);border-radius:var(--radius-md);margin-bottom:8px}
+.proc-step-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.step-done{background:var(--emerald-dim);color:var(--emerald)}
+.step-active{background:var(--blue-dim);color:var(--blue-light);animation:pulseStep 1.5s infinite}
+.step-pending{background:var(--navy-border);color:var(--text-muted)}
+@keyframes pulseStep{0%,100%{opacity:1}50%{opacity:0.5}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-logo" onclick="location.href='index.html'">
+    <div class="nav-logo-icon">🏛</div>
+    <div><div class="nav-logo-text">ILRDVS</div><div class="nav-logo-sub">Land Record System</div></div>
+  </div>
+  <div class="nav-links"><a class="nav-link" href="index.html">Dashboard</a>
+<a class="nav-link active" href="upload.html">Upload</a>
+<a class="nav-link" href="documents.html">Documents</a>
+<a class="nav-link" href="verify.html">Verify</a>
+<a class="nav-link" href="gis-map.html">GIS Map</a>
+<a class="nav-link" href="reports.html">Reports</a>
+</div>
+  <div class="nav-right">
+    <span class="nav-badge">🛰 BHUVAN LIVE</span>
+    <div class="nav-divider"></div>
+    <div class="nav-avatar" title="District Officer — Nilgiris">DO</div>
+  </div>
+</nav>
+<div class="page-shell">
+<div class="page-content">
+
+  <div class="page-header">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Dashboard</a><span class="breadcrumb-sep">›</span><span>Upload Documents</span></div>
+      <div class="page-title">📤 Upload Land Records</div>
+      <div class="page-subtitle">Supported: Scanned PDFs, Images (JPG/PNG/TIFF), Handwritten registers</div>
+    </div>
+    <div class="page-actions">
+      <a href="documents.html" class="btn btn-ghost btn-sm">View All Documents</a>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:24px">
+
+    <!-- LEFT: Upload Zone + Queue -->
+    <div>
+      <!-- Drop Zone -->
+      <div class="drop-zone mb-16" id="dropzone" onclick="document.getElementById('fileInput').click()"
+        ondragover="event.preventDefault();this.classList.add('dragging')"
+        ondragleave="this.classList.remove('dragging')"
+        ondrop="handleDrop(event)">
+        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif" style="display:none" onchange="handleFiles(this.files)"/>
+        <span class="drop-icon">🗂</span>
+        <div class="drop-title">Drop files here or click to browse</div>
+        <div class="drop-sub">Maximum 200MB per file. Batch upload supported.</div>
+        <div class="drop-formats">
+          <span class="fmt-chip">📄 PDF</span>
+          <span class="fmt-chip">🖼 JPG</span>
+          <span class="fmt-chip">🖼 PNG</span>
+          <span class="fmt-chip">🖼 TIFF</span>
+        </div>
+      </div>
+
+      <!-- Upload Options -->
+      <div class="card mb-16">
+        <div class="card-header"><span class="card-title">⚙️ Processing Options</span></div>
+        <div class="grid-2 gap-16">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Document Language</label>
+            <select class="form-select">
+              <option>Auto-detect</option>
+              <option>Hindi (हिंदी)</option>
+              <option>Telugu (తెలుగు)</option>
+              <option>Tamil (தமிழ்)</option>
+              <option>Kannada (ಕನ್ನಡ)</option>
+              <option>Marathi (मराठी)</option>
+              <option>Bengali (বাংলা)</option>
+              <option>Gujarati (ગુજરાતી)</option>
+              <option>English</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Document Type</label>
+            <select class="form-select">
+              <option>Auto-detect</option>
+              <option>Khasra Register</option>
+              <option>Khatauni</option>
+              <option>Patta / Pattedar</option>
+              <option>ROR (Record of Rights)</option>
+              <option>Mutation Order</option>
+              <option>Sale Deed</option>
+              <option>Cadastral Map</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">State / UT</label>
+            <select class="form-select">
+              <option>Select State</option>
+              <option>Andhra Pradesh</option><option>Karnataka</option>
+              <option>Maharashtra</option><option>Rajasthan</option>
+              <option>Tamil Nadu</option><option>Uttar Pradesh</option>
+              <option>Gujarat</option><option>Madhya Pradesh</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Confidence Threshold</label>
+            <select class="form-select">
+              <option>0.75 — Standard (recommended)</option>
+              <option>0.60 — Lenient</option>
+              <option>0.85 — Strict</option>
+              <option>0.95 — Very Strict</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--navy-border)">
+          <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div></label>
+          <span style="font-size:13px;color:var(--text-secondary)">Auto-assign to verification queue if confidence &lt; threshold</span>
+        </div>
+      </div>
+
+      <!-- Upload Queue -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--navy-border);display:flex;justify-content:space-between;align-items:center">
+          <span class="card-title">📋 Upload Queue (<span id="queue-count">0</span> files)</span>
+          <button class="btn btn-primary btn-sm" id="upload-btn" onclick="startUpload()" style="display:none">🚀 Process All</button>
+        </div>
+        <div id="upload-queue" style="padding:12px 16px;min-height:80px;max-height:360px;overflow-y:auto">
+          <div class="text-center text-muted" style="padding:40px;font-size:13px" id="empty-queue">
+            <div style="font-size:36px;margin-bottom:8px">📭</div>
+            No files selected yet. Drop files above to begin.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Processing Pipeline + Stats -->
+    <div>
+      <!-- Processing Pipeline -->
+      <div class="card mb-16">
+        <div class="card-header"><span class="card-title">🤖 AI Processing Pipeline</span></div>
+        <div id="pipeline-steps">
+          <div class="proc-step"><div class="proc-step-icon step-done">✅</div><div><div style="font-size:13px;font-weight:600;color:var(--text-primary)">Image Preprocessing</div><div style="font-size:11px;color:var(--text-muted)">Deskew, denoise, enhance contrast</div></div></div>
+          <div class="proc-step"><div class="proc-step-icon step-active">🔍</div><div><div style="font-size:13px;font-weight:600;color:var(--blue-light)">OCR Extraction</div><div style="font-size:11px;color:var(--text-muted)">Tesseract + PaddleOCR multilingual</div></div></div>
+          <div class="proc-step"><div class="proc-step-icon step-pending">🧠</div><div><div style="font-size:13px;font-weight:600;color:var(--text-secondary)">NLP Entity Recognition</div><div style="font-size:11px;color:var(--text-muted)">MuRIL + spaCy NER model</div></div></div>
+          <div class="proc-step"><div class="proc-step-icon step-pending">📐</div><div><div style="font-size:13px;font-weight:600;color:var(--text-secondary)">Field Classification</div><div style="font-size:11px;color:var(--text-muted)">Survey no, owner, area, land class…</div></div></div>
+          <div class="proc-step"><div class="proc-step-icon step-pending">✔️</div><div><div style="font-size:13px;font-weight:600;color:var(--text-secondary)">Validation &amp; Scoring</div><div style="font-size:11px;color:var(--text-muted)">Business rules + duplicate detection</div></div></div>
+        </div>
+      </div>
+
+      <!-- System stats -->
+      <div class="card mb-16">
+        <div class="card-header"><span class="card-title">📈 Today's Processing</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--blue-light)">342</div>
+            <div style="font-size:11px;color:var(--text-muted)">Docs Processed</div>
+          </div>
+          <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--emerald)">94.2%</div>
+            <div style="font-size:11px;color:var(--text-muted)">Avg Accuracy</div>
+          </div>
+          <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--gold)">2.3s</div>
+            <div style="font-size:11px;color:var(--text-muted)">Avg Process Time</div>
+          </div>
+          <div style="background:var(--navy-card2);border-radius:var(--radius-md);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--amber)">48</div>
+            <div style="font-size:11px;color:var(--text-muted)">In Queue</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supported languages -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🌐 Supported Languages</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span class="fmt-chip">Hindi</span><span class="fmt-chip">Telugu</span><span class="fmt-chip">Tamil</span>
+          <span class="fmt-chip">Kannada</span><span class="fmt-chip">Marathi</span><span class="fmt-chip">Bengali</span>
+          <span class="fmt-chip">Gujarati</span><span class="fmt-chip">Odia</span><span class="fmt-chip">Punjabi</span>
+          <span class="fmt-chip">Malayalam</span><span class="fmt-chip">Urdu</span><span class="fmt-chip">English</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="toast-wrap"><div id="toast" class="toast-msg" style="display:none"></div></div>
+<script>
+let files = [];
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('dragging');
+  handleFiles(e.dataTransfer.files);
+}
+function handleFiles(fl) {
+  Array.from(fl).forEach(f => files.push(f));
+  renderQueue();
+}
+const icons = {pdf:'📄',jpg:'🖼',jpeg:'🖼',png:'🖼',tiff:'🗺',tif:'🗺'};
+function renderQueue() {
+  const q = document.getElementById('upload-queue');
+  const eq = document.getElementById('empty-queue');
+  const btn = document.getElementById('upload-btn');
+  document.getElementById('queue-count').textContent = files.length;
+  if (!files.length) { eq.style.display='block'; btn.style.display='none'; return; }
+  eq.style.display='none'; btn.style.display='flex';
+  q.innerHTML = '';
+  files.forEach((f,i) => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    const ico = icons[ext] || '📄';
+    const sz = (f.size/1024/1024).toFixed(2);
+    q.innerHTML += `<div class="queue-item" id="qi-${i}">
+      <div class="queue-icon" style="background:var(--blue-dim)">${ico}</div>
+      <div class="flex-1"><div class="queue-name truncate">${f.name}</div><div class="queue-meta">${ext.toUpperCase()} · ${sz} MB</div></div>
+      <span class="badge badge-pending queue-status" id="qs-${i}">QUEUED</span>
+      <button onclick="removeFile(${i})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:0 4px" title="Remove">×</button>
+    </div>`;
+  });
+}
+function removeFile(i) { files.splice(i,1); renderQueue(); }
+function startUpload() {
+  const statuses = ['PROCESSING','EXTRACTING','VALIDATING','VALIDATED'];
+  files.forEach((_,i) => {
+    let step = 0;
+    const interval = setInterval(() => {
+      const el = document.getElementById('qs-'+i);
+      if (!el) { clearInterval(interval); return; }
+      const cls = ['badge-pending','badge-processing','badge-review','badge-validated'];
+      el.className = 'badge '+cls[step]+' queue-status';
+      el.textContent = statuses[step];
+      step++;
+      if (step >= statuses.length) {
+        clearInterval(interval);
+        setTimeout(()=>{ if(document.getElementById('qi-'+i)) document.getElementById('qi-'+i).style.opacity='0.5'; },400);
+      }
+    }, 800 + i*300);
+  });
+  showToast('🚀 Processing '+files.length+' documents…');
+}
+function showToast(m) {
+  const t=document.getElementById('toast'); t.textContent=m; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2800);
+}
+</script>
+</body>
+</html>

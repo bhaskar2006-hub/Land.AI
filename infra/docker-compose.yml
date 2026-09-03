@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL with PostGIS Spatial Extensions
+  postgres:
+    image: postgis/postgis:15-3.4
+    container_name: ilrdvs_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ilrdvs_user
+      POSTGRES_PASSWORD: ilrdvs_password
+      POSTGRES_DB: ilrdvs_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../db/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - ilrdvs-net
+
+  # 2. Redis Message Broker & Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ilrdvs_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ilrdvs-net
+
+  # 3. MinIO S3 Object Storage for Scans & Documents
+  minio:
+    image: minio/minio:RELEASE.2024-01-18T22-51-28Z
+    container_name: ilrdvs_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - ilrdvs-net
+
+  # 4. ILRDVS FastAPI Backend & Extraction Pipeline
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    container_name: ilrdvs_backend
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://ilrdvs_user:ilrdvs_password@postgres:5432/ilrdvs_db
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=land-records
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    volumes:
+      - backend_storage:/app/storage
+    networks:
+      - ilrdvs-net
+
+  # 5. API Gateway (Nginx)
+  gateway:
+    image: nginx:alpine
+    container_name: ilrdvs_gateway
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - ilrdvs-net
+
+networks:
+  ilrdvs-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  backend_storage:

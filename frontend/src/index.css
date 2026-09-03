@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy-bg: #070d18;
+  --navy-shell: #0a1628;
+  --navy-card: #0e1e38;
+  --navy-card-hover: #14284b;
+  --navy-surface: rgba(14, 30, 56, 0.7);
+  --navy-border: #1a335a;
+  --navy-border-subtle: rgba(30, 111, 255, 0.15);
+  
+  --blue: #1e6fff;
+  --blue-light: #4d91ff;
+  --blue-glow: rgba(30, 111, 255, 0.25);
+  --blue-subtle: rgba(30, 111, 255, 0.08);
+
+  --saffron: #ff9500;
+  --saffron-subtle: rgba(255, 149, 0, 0.12);
+  
+  --green: #00c896;
+  --green-glow: rgba(0, 200, 150, 0.25);
+  --green-subtle: rgba(0, 200, 150, 0.12);
+
+  --red: #ff4757;
+  --red-subtle: rgba(255, 71, 87, 0.12);
+  
+  --text-primary: #f0f4fc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--navy-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--navy-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--navy-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-light);
+}
+
+/* Glass Card */
+.glass-panel {
+  background: var(--navy-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-card {
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+}
+.glass-card:hover {
+  border-color: rgba(30, 111, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.badge-blue { background: var(--blue-subtle); color: var(--blue-light); border: 1px solid rgba(30, 111, 255, 0.3); }
+.badge-green { background: var(--green-subtle); color: var(--green); border: 1px solid rgba(0, 200, 150, 0.3); }
+.badge-saffron { background: var(--saffron-subtle); color: var(--saffron); border: 1px solid rgba(255, 149, 0, 0.3); }
+.badge-red { background: var(--red-subtle); color: var(--red); border: 1px solid rgba(255, 71, 87, 0.3); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  text-decoration: none;
+  outline: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue), #1557cc);
+  color: #fff;
+  box-shadow: 0 2px 10px var(--blue-glow);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--blue-light), var(--blue));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--blue-glow);
+}
+.btn-success {
+  background: linear-gradient(135deg, var(--green), #009e76);
+  color: #070d18;
+  font-weight: 700;
+}
+.btn-success:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.btn-danger {
+  background: linear-gradient(135deg, var(--red), #d63031);
+  color: #fff;
+}
+.btn-danger:hover {
+  filter: brightness(1.1);
+}
+.btn-secondary {
+  background: var(--navy-card);
+  color: var(--text-primary);
+  border: 1px solid var(--navy-border);
+}
+.btn-secondary:hover {
+  background: var(--navy-card-hover);
+  border-color: var(--blue);
+}
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+/* Form inputs */
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: #070d18;
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-subtle);
+}
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--navy-border);
+  background: rgba(10, 22, 40, 0.4);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(26, 51, 90, 0.5);
+  color: var(--text-primary);
+}
+.data-table tr:hover td {
+  background: rgba(30, 111, 255, 0.04);
+}
+
+/* Leaflet dark theme override */
+.leaflet-container {
+  background: #08101e !important;
+  font-family: inherit;
+}
+.leaflet-container.cadastral-paper-container {
+  background: #fdfbf7 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: var(--navy-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--blue) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+.leaflet-popup-tip {
+  background: var(--navy-card) !important;
+}
+
+/* Cadastral Map Survey Labels & Paper Canvas */
+.cadastral-survey-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.cadastral-paper-bg {
+  background-color: #fdfbf7 !important;
+  background-image: radial-gradient(#e5dcbe 0.65px, transparent 0.65px) !important;
+  background-size: 16px 16px !important;
+}

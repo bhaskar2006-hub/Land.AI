@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Verification Queue — ILRDVS</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.verify-card{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.verify-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.verify-card.priority-high::before{background:var(--coral)}
+.verify-card.priority-medium::before{background:var(--amber)}
+.verify-card.priority-low::before{background:var(--blue)}
+.verify-card:hover{border-color:var(--blue);transform:translateX(3px);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.verify-avatar{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.verify-meta{flex:1}
+.verify-id{font-size:11px;font-weight:700;color:var(--blue-light);margin-bottom:3px}
+.verify-owner{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:5px}
+.verify-chips{display:flex;gap:6px;flex-wrap:wrap}
+.verify-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.verify-time{font-size:11px;color:var(--text-muted)}
+.priority-chip{font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.5px}
+.priority-high{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,71,87,0.3)}
+.priority-medium{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,184,0,0.3)}
+.priority-low{background:var(--blue-dim);color:var(--blue-light);border:1px solid rgba(30,111,255,0.3)}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="nav-logo" onclick="location.href='index.html'"><div class="nav-logo-icon">🏛</div><div><div class="nav-logo-text">ILRDVS</div><div class="nav-logo-sub">Land Record System</div></div></div><div class="nav-links"><a class="nav-link" href="index.html">Dashboard</a><a class="nav-link" href="upload.html">Upload</a><a class="nav-link" href="documents.html">Documents</a><a class="nav-link active" href="verify.html">Verify</a><a class="nav-link" href="gis-map.html">GIS Map</a><a class="nav-link" href="reports.html">Reports</a></div><div class="nav-right"><span class="nav-badge">🛰 BHUVAN LIVE</span><div class="nav-divider"></div><div class="nav-avatar">DO</div></div></nav>
+<div class="page-shell"><div class="page-content">
+
+  <div class="page-header">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Dashboard</a><span class="breadcrumb-sep">›</span><span>Verification Queue</span></div>
+      <div class="page-title">✏️ Verification Queue</div>
+      <div class="page-subtitle">1,890 records awaiting human verification</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-ghost btn-sm">⚙️ Assign Batch</button>
+      <button class="btn btn-primary btn-sm" onclick="location.href='verify-detail.html'">Start Verifying →</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid-4 stagger mb-24">
+    <div class="kpi-card gold"><div class="kpi-icon gold">⏳</div><div class="kpi-num">1,890</div><div class="kpi-label">Total Pending</div></div>
+    <div class="kpi-card coral"><div class="kpi-icon coral">🔥</div><div class="kpi-num">234</div><div class="kpi-label">High Priority</div></div>
+    <div class="kpi-card blue"><div class="kpi-icon blue">👤</div><div class="kpi-num">12</div><div class="kpi-label">Active Verifiers</div></div>
+    <div class="kpi-card green"><div class="kpi-icon green">⚡</div><div class="kpi-num">48</div><div class="kpi-label">Verified Today</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:20px">
+    <div>
+      <!-- Filters -->
+      <div class="filter-bar mb-16">
+        <div class="search-box flex-1" style="max-width:300px">
+          <span class="search-icon-abs">🔍</span>
+          <input class="form-input search-input-padded" placeholder="Search queue…"/>
+        </div>
+        <span class="chip-filter active">All</span>
+        <span class="chip-filter">🔥 High Priority</span>
+        <span class="chip-filter">Assigned to Me</span>
+        <select class="form-select" style="width:130px;padding:7px 28px 7px 10px;font-size:12px">
+          <option>All States</option><option>Karnataka</option><option>Maharashtra</option>
+        </select>
+      </div>
+
+      <!-- Queue list -->
+      <div id="verify-queue"></div>
+    </div>
+
+    <!-- Sidebar stats -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-header"><span class="card-title">👤 My Queue</span></div>
+        <div style="text-align:center;padding:8px 0">
+          <div style="font-size:36px;font-weight:800;color:var(--blue-light)">23</div>
+          <div style="font-size:13px;color:var(--text-muted)">Assigned to you</div>
+          <button class="btn btn-primary btn-sm mt-12" style="width:100%" onclick="location.href='verify-detail.html'">Start Verifying →</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📊 Status Breakdown</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+              <span style="color:var(--text-muted)">Low Confidence OCR</span>
+              <span style="color:var(--amber);font-weight:700">45%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill gold" style="width:45%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+              <span style="color:var(--text-muted)">Missing Fields</span>
+              <span style="color:var(--coral);font-weight:700">28%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill coral" style="width:28%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+              <span style="color:var(--text-muted)">Rule Violations</span>
+              <span style="color:var(--blue-light);font-weight:700">18%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill blue" style="width:18%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+              <span style="color:var(--text-muted)">Duplicate Detected</span>
+              <span style="color:var(--purple);font-weight:700">9%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:9%;background:var(--purple)"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">⏱ Avg Verification Time</span></div>
+        <div style="text-align:center">
+          <div style="font-size:28px;font-weight:800;color:var(--emerald)">3.2 min</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Per document</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+<script>
+const Q = [
+  {id:"MH-2024-01123",owner:"Anita Rao",survey:"89/A",village:"Ozar, Nashik",state:"Maharashtra",conf:38,priority:"high",reason:"Low OCR confidence — 3 fields missing",time:"2 days ago",icon:"📄"},
+  {id:"UP-2024-03302",owner:"Geeta Singh",survey:"446/1A",village:"Bakshi Ka, Lucknow",state:"UP",conf:67,priority:"medium",reason:"Land classification unclear",time:"1 day ago",icon:"📋"},
+  {id:"KA-2024-00454",owner:"Sunita Devi",survey:"124/1",village:"Gudalur, Nilgiris",state:"Karnataka",conf:67,priority:"medium",reason:"Owner name partially extracted",time:"3 hrs ago",icon:"📄"},
+  {id:"RJ-2024-00790",owner:"Lalita Gupta",survey:"57/2",village:"Sanganer, Jaipur",state:"Rajasthan",conf:41,priority:"high",reason:"Survey number format invalid",time:"5 hrs ago",icon:"🗺"},
+  {id:"MP-2024-02212",owner:"Kavita Verma",survey:"79/1",village:"Berasia, Bhopal",state:"Madhya Pradesh",conf:65,priority:"low",reason:"Mutation record date ambiguous",time:"8 hrs ago",icon:"📋"},
+  {id:"GJ-2024-00335",owner:"Mira Shah",survey:"113/1",village:"Sanand, Ahmedabad",state:"Gujarat",conf:69,priority:"medium",reason:"Plot area unit unclear — acres or hectares",time:"12 hrs ago",icon:"📄"},
+];
+const pc=c=>c>75?'var(--emerald)':c>60?'var(--amber)':'var(--coral)';
+const q=document.getElementById('verify-queue');
+Q.forEach(item=>{
+  q.innerHTML+=`<div class="verify-card priority-${item.priority}" onclick="location.href='verify-detail.html'">
+    <div class="verify-avatar" style="background:var(--navy-card2)">${item.icon}</div>
+    <div class="verify-meta">
+      <div class="verify-id">📄 ${item.id}</div>
+      <div class="verify-owner">${item.owner}</div>
+      <div class="verify-chips">
+        <span class="meta-chip" style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-secondary)">Survey: ${item.survey}</span>
+        <span class="meta-chip" style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-secondary)">📍 ${item.village}</span>
+        <span style="font-size:11px;color:var(--amber)">⚠️ ${item.reason}</span>
+      </div>
+    </div>
+    <div class="verify-right">
+      <span class="priority-chip priority-${item.priority}">${item.priority.toUpperCase()}</span>
+      <span style="font-size:13px;font-weight:700;color:${pc(item.conf)}">${item.conf}%</span>
+      <span class="verify-time">${item.time}</span>
+    </div>
+  </div>`;
+});
+</script>
+</body>
+</html>
