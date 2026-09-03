@@ -23,6 +23,28 @@ const appState = {
 // =========================================================
 // VIEW NAVIGATION & TAB SWITCHING
 // =========================================================
+// MOBILE DRAWER CONTROLLER
+// =========================================================
+
+export function openMobileNav() {
+  const sidebar = document.getElementById('appSidebar');
+  const overlay = document.getElementById('mobileNavOverlay');
+  if (sidebar) sidebar.classList.remove('-translate-x-full');
+  if (overlay) overlay.classList.remove('hidden');
+}
+window.openMobileNav = openMobileNav;
+
+export function closeMobileNav() {
+  const sidebar = document.getElementById('appSidebar');
+  const overlay = document.getElementById('mobileNavOverlay');
+  if (sidebar) sidebar.classList.add('-translate-x-full');
+  if (overlay) overlay.classList.add('hidden');
+}
+window.closeMobileNav = closeMobileNav;
+
+// =========================================================
+// VIEW NAVIGATION & TAB SWITCHING
+// =========================================================
 
 export function switchView(viewKey) {
   const views = ['dashboard', 'extraction', 'ledger', 'gis', 'review', 'verification', 'certificate', 'audit'];
@@ -38,14 +60,16 @@ export function switchView(viewKey) {
     }
   });
 
-  // Update Ribbon buttons
+  // Update Ribbon buttons with active glowing pill style
   views.forEach(v => {
     const btn = document.getElementById('ribbon-' + v);
     if (btn) {
       if (v === viewKey) {
-        btn.className = "px-3 py-1.5 rounded font-semibold text-primary bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap";
+        btn.className = "ribbon-btn active-ribbon px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0 shadow-md";
+        // Smoothly scroll active tab into view on smaller screens
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       } else {
-        btn.className = "px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap";
+        btn.className = "ribbon-btn px-3 py-1.5 rounded-xl font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 whitespace-nowrap text-xs sm:text-sm shrink-0";
       }
     }
   });
@@ -65,9 +89,9 @@ export function switchView(viewKey) {
     const navEl = document.getElementById(navMap[key]);
     if (navEl) {
       if (key === viewKey) {
-        navEl.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 border-r-2 border-primary bg-surface-container-low text-primary font-semibold";
+        navEl.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 border-r-2 border-primary bg-surface-container-low text-primary font-semibold hover-lift shadow-xs";
       } else {
-        navEl.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface";
+        navEl.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-all duration-200 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface hover-lift";
       }
     }
   });
@@ -99,6 +123,9 @@ export function switchView(viewKey) {
   // Scroll to top
   const vp = document.getElementById('contentViewport');
   if (vp) vp.scrollTop = 0;
+
+  // Auto-close mobile drawer on view selection
+  closeMobileNav();
 }
 
 // Expose switchView to global window for onclick handlers
@@ -138,23 +165,23 @@ export async function renderDashboard() {
   docs.forEach(doc => {
     const isTarget = doc.id === 'DOC-2026-00421';
     const tr = document.createElement('tr');
-    tr.className = `hover:bg-surface-container-low/60 transition cursor-pointer ${isTarget ? 'bg-surface-container-low/30' : ''}`;
+    tr.className = `interactive-row transition-all duration-150 cursor-pointer ${isTarget ? 'bg-surface-container-low/40 font-medium' : ''}`;
     
     let statusPill = '';
     if (doc.status === 'GIS Conflict' || doc.status === 'CONFLICT') {
-      statusPill = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#FDE8EA] text-error border border-[#F8B4B9]">
+      statusPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9] shadow-2xs">
         <span class="material-symbols-outlined text-xs" data-icon="error">error</span> GIS Conflict (-0.14 Ac)
       </span>`;
     } else if (doc.status === 'VERIFIED') {
-      statusPill = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB]">
+      statusPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
         <span class="material-symbols-outlined text-xs" data-icon="verified">verified</span> Verified &amp; Signed
       </span>`;
     } else if (doc.status === 'Review Required') {
-      statusPill = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7]">
+      statusPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7] shadow-2xs">
         <span class="material-symbols-outlined text-xs" data-icon="draw">draw</span> Review Required
       </span>`;
     } else {
-      statusPill = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB]">
+      statusPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs">
         <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> Synchronized
       </span>`;
     }
@@ -174,13 +201,13 @@ export async function renderDashboard() {
         <div class="flex items-center gap-2">
           <span class="font-data-mono text-xs font-semibold ${doc.confidenceOverall >= 90 ? 'text-[#198754]' : 'text-[#F59E0B]'}">${doc.confidenceOverall}%</span>
           <div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
-            <div class="${doc.confidenceOverall >= 90 ? 'bg-[#198754]' : 'bg-[#F59E0B]'} h-full" style="width: ${doc.confidenceOverall}%"></div>
+            <div class="${doc.confidenceOverall >= 90 ? 'bg-[#198754]' : 'bg-[#F59E0B]'} h-full transition-all duration-300" style="width: ${doc.confidenceOverall}%"></div>
           </div>
         </div>
       </td>
       <td class="py-3.5 px-4">${statusPill}</td>
       <td class="py-3.5 px-4 text-right space-x-1">
-        <button onclick="inspectDocumentWorkflow('${doc.id}')" class="px-3 py-1 rounded bg-primary text-on-primary text-label-sm font-semibold hover:bg-secondary transition shadow-2xs">
+        <button onclick="inspectDocumentWorkflow('${doc.id}')" class="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-label-sm font-semibold hover:bg-secondary transition-all duration-150 hover-lift shadow-xs">
           Open Workflow &rarr;
         </button>
       </td>
@@ -337,20 +364,20 @@ export async function renderExtraction() {
   extraction.fields.forEach(field => {
     const cat = getConfidenceCategory(field.confidence);
     const card = document.createElement('div');
-    card.className = `p-3 rounded-lg border transition ${field.needsReview ? 'bg-[#FEF6E7] border-[#FCDAA7]' : 'bg-surface-container-lowest border-outline-variant hover:border-secondary'}`;
+    card.className = `p-3.5 rounded-xl border transition-all duration-200 hover-lift ${field.needsReview ? 'bg-[#FEF6E7]/80 border-[#FCDAA7] shadow-2xs' : 'glass-card border-outline-variant hover:border-secondary shadow-xs'}`;
 
     card.innerHTML = `
-      <div class="flex items-center justify-between mb-1">
+      <div class="flex items-center justify-between mb-1.5">
         <span class="text-label-sm uppercase font-semibold ${field.needsReview ? 'text-[#8f5600]' : 'text-on-surface-variant'} flex items-center gap-1">
-          ${field.needsReview ? '<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>' : ''}
+          ${field.needsReview ? '<span class="material-symbols-outlined text-sm text-[#F59E0B]" data-icon="warning">warning</span>' : ''}
           ${field.label}
         </span>
         <div class="flex items-center gap-1.5">
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold border ${cat.colorClass}">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-data-mono font-bold border shadow-2xs ${cat.colorClass}">
             <span class="material-symbols-outlined text-xs" data-icon="${cat.icon}">${cat.icon}</span>
             ${field.confidence}% ${cat.label}
           </span>
-          <button onclick="editExtractedField('${field.id}', '${field.value.replace(/'/g, "\\'")}')" class="p-0.5 text-on-surface-variant hover:text-primary" title="Edit Field">
+          <button onclick="editExtractedField('${field.id}', '${field.value.replace(/'/g, "\\'")}')" class="p-1 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition hover-lift" title="Edit Field">
             <span class="material-symbols-outlined text-xs" data-icon="edit">edit</span>
           </button>
         </div>
@@ -463,10 +490,10 @@ export function selectCadastralParcel(surveyNo, area, owner, khata, status) {
 
   if (statusEl) {
     if (status === 'GIS Conflict') {
-      statusEl.className = 'px-2 py-0.5 rounded text-[11px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9]';
+      statusEl.className = 'px-2 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9] shadow-2xs';
       statusEl.textContent = 'GIS CONFLICT';
     } else {
-      statusEl.className = 'px-2 py-0.5 rounded text-[11px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB]';
+      statusEl.className = 'px-2 py-0.5 rounded-full text-[11px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB] shadow-2xs';
       statusEl.textContent = 'SYNCHRONIZED';
     }
   }
@@ -487,11 +514,11 @@ export async function renderReviewQueue() {
   items.forEach(item => {
     const isTarget = item.surveyNo === '124/3';
     const tr = document.createElement('tr');
-    tr.className = `hover:bg-surface-container-low/60 transition ${isTarget ? 'bg-surface-container-low/30' : ''}`;
+    tr.className = `interactive-row transition-all duration-150 ${isTarget ? 'bg-surface-container-low/40 font-medium' : ''}`;
 
     tr.innerHTML = `
       <td class="py-3.5 px-4">
-        <span class="px-2 py-0.5 rounded text-[10px] font-data-mono font-bold ${item.priority === 'CRITICAL' ? 'bg-[#FDE8EA] text-error' : 'bg-[#FEF6E7] text-[#F59E0B]'}">
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-data-mono font-bold shadow-2xs ${item.priority === 'CRITICAL' ? 'bg-[#FDE8EA] text-error border border-[#F8B4B9]' : 'bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7]'}">
           ${item.priority}
         </span>
       </td>
@@ -505,7 +532,7 @@ export async function renderReviewQueue() {
       <td class="py-3.5 px-4 font-data-mono font-semibold">${item.confidence}%</td>
       <td class="py-3.5 px-4 text-xs text-outline">${item.age}</td>
       <td class="py-3.5 px-4 text-right">
-        <button onclick="launchReview('${item.documentId}')" class="px-3 py-1 rounded bg-primary hover:bg-secondary text-on-primary text-xs font-semibold transition">
+        <button onclick="launchReview('${item.documentId}')" class="px-3 py-1.5 rounded-xl bg-primary hover:bg-secondary text-on-primary text-xs font-semibold transition-all duration-150 hover-lift shadow-xs">
           Review &rarr;
         </button>
       </td>
@@ -630,24 +657,26 @@ export async function renderAuditTrail() {
 
   logs.forEach(log => {
     const item = document.createElement('div');
-    item.className = 'relative pl-6';
+    item.className = 'relative pl-6 hover-lift glass-card p-4 rounded-xl border border-outline-variant/60 shadow-xs transition-all';
 
-    let dotColor = 'bg-primary';
-    if (log.category === 'GIS_CONFLICT') dotColor = 'bg-[#F59E0B]';
-    if (log.category === 'VERIFICATION') dotColor = 'bg-[#198754]';
-    if (log.category === 'EXTRACTION') dotColor = 'bg-secondary';
+    let dotColor = 'bg-primary shadow-[0_0_8px_#003748]';
+    if (log.category === 'GIS_CONFLICT') dotColor = 'bg-[#F59E0B] shadow-[0_0_8px_#F59E0B]';
+    if (log.category === 'VERIFICATION') dotColor = 'bg-[#198754] shadow-[0_0_8px_#198754]';
+    if (log.category === 'EXTRACTION') dotColor = 'bg-secondary shadow-[0_0_8px_#006a63]';
 
     item.innerHTML = `
-      <div class="absolute -left-6 top-1 w-5 h-5 rounded-full ${dotColor} border-4 border-surface-container-lowest"></div>
+      <div class="absolute -left-6 top-5 w-5 h-5 rounded-full ${dotColor} border-4 border-surface-container-lowest ring-2 ring-outline-variant/40"></div>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-        <span class="font-headline-sm font-semibold text-primary">${log.action}</span>
+        <span class="font-headline-sm font-bold text-primary">${log.action}</span>
         <span class="text-data-mono text-xs text-outline">${log.timestamp}</span>
       </div>
       <p class="text-body-sm text-on-surface-variant mt-1">${log.details}</p>
-      <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-data-mono">
-        <span class="bg-surface-container-low px-2 py-0.5 rounded text-primary">Actor: ${log.actor}</span>
-        <span class="bg-surface-container-low px-2 py-0.5 rounded text-outline break-all">${log.hash}</span>
-        <span class="text-secondary font-semibold">Integrity Verified</span>
+      <div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs font-data-mono">
+        <span class="bg-surface-container-low px-2 py-0.5 rounded-lg text-primary font-medium border border-outline-variant/40">Actor: ${log.actor}</span>
+        <span class="bg-surface-container-low px-2 py-0.5 rounded-lg text-outline break-all border border-outline-variant/40">${log.hash}</span>
+        <span class="text-secondary font-bold flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs" data-icon="verified">verified</span> Integrity Verified
+        </span>
       </div>
     `;
 
