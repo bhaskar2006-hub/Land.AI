@@ -1,0 +1,19 @@
+{
+  "name": "land-ai",
+  "version": "3.4.0",
+  "private": true,
+  "description": "LAND•AI — Intelligent Land Record Digitization & Validation System",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 5173",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}

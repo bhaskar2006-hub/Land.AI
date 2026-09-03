@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html class="h-full bg-background text-on-background" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>LAND•AI — Intelligent Land Record Digitization &amp; Validation System</title>
+  
+  <!-- Typography & Icons -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS Engine -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#003748",
+            "primary-container": "#164e63",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#8dbed7",
+            "secondary": "#006a63",
+            "secondary-container": "#99efe5",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#006f67",
+            "tertiary": "#002b7b",
+            "tertiary-container": "#003fab",
+            "background": "#f9f9ff",
+            "on-background": "#111c2d",
+            "surface": "#f9f9ff",
+            "on-surface": "#111c2d",
+            "surface-variant": "#d9e3fb",
+            "on-surface-variant": "#41484c",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e8eeff",
+            "surface-container-high": "#dfe8ff",
+            "surface-container-highest": "#d9e3fb",
+            "outline": "#71787d",
+            "outline-variant": "#c0c7cc",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "inverse-surface": "#273143",
+            "inverse-on-surface": "#ecf0ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-desktop": "1.5rem",
+            "space-sm": "0.75rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["IBM Plex Sans", "sans-serif"],
+            "headline-md": ["IBM Plex Sans", "sans-serif"],
+            "headline-sm": ["IBM Plex Sans", "sans-serif"],
+            "body-md": ["IBM Plex Sans", "sans-serif"],
+            "body-sm": ["IBM Plex Sans", "sans-serif"],
+            "label-md": ["IBM Plex Sans", "sans-serif"],
+            "label-sm": ["IBM Plex Sans", "sans-serif"],
+            "data-mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cadastral-grid {
+      background-size: 28px 28px;
+      background-image: radial-gradient(circle, #cbd5e1 0.75px, transparent 0.75px);
+    }
+    .vintage-doc {
+      background-color: #fbf7ee;
+      background-image: radial-gradient(#eadfca 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .badge-demo {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    /* Smooth transitions for interactive cards */
+    .workflow-card {
+      transition: all 220ms ease-in-out;
+    }
+    .workflow-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px -2px rgba(22, 78, 99, 0.08);
+    }
+  </style>
+</head>
+
+<body class="h-full flex overflow-hidden font-body-md text-on-surface cadastral-grid">
+
+  <!-- ========================================================= -->
+  <!-- SIDE NAVIGATION (Stitch-Preserved)                        -->
+  <!-- ========================================================= -->
+  <aside class="w-64 min-w-[16rem] h-screen shrink-0 sticky top-0 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant shadow-sm z-30 select-none">
+    <div>
+      <!-- Top Brand Anchor -->
+      <div class="p-space-md border-b border-outline-variant bg-surface-container-lowest">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm relative overflow-hidden border border-primary">
+            <span class="material-symbols-outlined text-secondary-container" data-icon="account_balance">account_balance</span>
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary to-transparent opacity-40"></div>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-headline-md font-semibold tracking-tight text-primary">LAND•AI</span>
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-data-mono font-semibold bg-secondary-container text-on-secondary-fixed">v3.4</span>
+            </div>
+            <p class="text-label-sm text-on-surface-variant leading-tight">Govt. of India • Land Revenue Dept</p>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between px-2.5 py-1.5 rounded bg-surface-container-low border border-outline-variant/60 text-[11px] font-label-sm text-on-surface-variant">
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            AP State Spatial Node
+          </span>
+          <span class="font-data-mono text-primary font-semibold">DIST-GNT-04</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (8 Items) -->
+      <nav class="p-space-sm space-y-1" id="sideNavTabs">
+        <!-- 1. Dashboard -->
+        <button id="nav-btn-dashboard" onclick="switchView('dashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 border-r-2 border-primary bg-surface-container-low text-primary font-semibold">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            <span>Dashboard</span>
+          </div>
+        </button>
+
+        <!-- 2. Documents -->
+        <button id="nav-btn-documents" onclick="openUploadModal()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="description">description</span>
+            <span>Documents</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-primary/10 text-primary">+ Upload</span>
+        </button>
+
+        <!-- 3. AI Extraction -->
+        <button id="nav-btn-extraction" onclick="switchView('extraction')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="auto_detect_voice">auto_detect_voice</span>
+            <span>AI Extraction</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-primary text-on-primary">LIVE</span>
+        </button>
+
+        <!-- 4. Validation Ledger -->
+        <button id="nav-btn-ledger" onclick="switchView('ledger')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+            <span>Validation Ledger</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded-full text-[10px] font-data-mono font-semibold bg-error-container text-error">184</span>
+        </button>
+
+        <!-- 5. GIS Shajra Map -->
+        <button id="nav-btn-gis" onclick="switchView('gis')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="map">map</span>
+            <span>GIS Shajra Map</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono text-outline">500 Parcels</span>
+        </button>
+
+        <!-- 6. Review Queue -->
+        <button id="nav-btn-review" onclick="switchView('review')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="rule">rule</span>
+            <span>Review Queue</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded-full text-[10px] font-data-mono font-semibold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7]">42</span>
+        </button>
+
+        <!-- 7. Human Verification -->
+        <button id="nav-btn-verification" onclick="switchView('verification')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+            <span>Human Verification</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-secondary text-on-secondary">DECISION</span>
+        </button>
+
+        <!-- 8. Audit Trail -->
+        <button id="nav-btn-audit" onclick="switchView('audit')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-label-md transition-colors duration-150 text-on-surface-variant font-normal hover:bg-surface-container-low hover:text-on-surface">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined" data-icon="history_toggle_off">history_toggle_off</span>
+            <span>Audit Trail</span>
+          </div>
+          <span class="material-symbols-outlined text-xs text-secondary" data-icon="lock">lock</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- CTA & District Officer Badge -->
+    <div class="p-space-md border-t border-outline-variant space-y-3 bg-surface-container-lowest">
+      <button onclick="openUploadModal()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-semibold transition shadow-sm">
+        <span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+        <span>Upload Document</span>
+      </button>
+
+      <!-- District Officer Badge -->
+      <div class="pt-2 border-t border-outline-variant/60 flex items-center gap-3">
+        <div class="relative w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs ring-2 ring-surface-container-highest">
+          <span>SS</span>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary border-2 border-surface-container-lowest rounded-full"></span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-label-md font-semibold text-on-surface truncate">Officer S. Sharma</p>
+          <p class="text-body-sm text-on-surface-variant truncate">District Revenue Officer • Guntur</p>
+        </div>
+        <button class="text-secondary hover:text-primary" title="Officer Cadastral Signature Validated">
+          <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================= -->
+  <!-- MAIN CONTENT SHELL                                        -->
+  <!-- ========================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- TOP APP BAR -->
+    <header class="h-16 shrink-0 sticky top-0 z-40 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-gutter-desktop shadow-sm">
+      <!-- Breadcrumb & Global Search -->
+      <div class="flex items-center gap-5 flex-1 max-w-2xl">
+        <div class="flex items-center gap-2 text-label-sm text-on-surface-variant whitespace-nowrap">
+          <span class="font-semibold text-primary">LAND•AI Cadastre</span>
+          <span>/</span>
+          <span class="text-on-surface font-medium" id="breadcrumbCurrent">Dashboard Overview</span>
+          <span class="badge-demo">DEMO DATA</span>
+        </div>
+        <div class="relative w-full max-w-md">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+          <input id="globalSearchInput" onkeyup="handleGlobalSearch(event)" class="w-full h-9 pl-9 pr-4 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition" placeholder="Search Survey No (e.g. 124/3), Khata, Owner..." type="text">
+          <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 text-[10px] font-data-mono bg-surface-container-lowest border border-outline-variant rounded text-on-surface-variant shadow-2xs">↵</kbd>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right System Status & Actions -->
+      <div class="flex items-center gap-3">
+        <div class="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-label-sm">
+          <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+          <span>Connected to DILRMP National Registry</span>
+          <span class="font-data-mono text-[10px] bg-secondary/20 px-1 rounded text-secondary font-bold">LIVE SYNC</span>
+        </div>
+
+        <div class="flex items-center border-l border-r border-outline-variant px-2 gap-1 text-on-surface-variant">
+          <button class="p-1.5 rounded-lg hover:bg-surface-container-low hover:text-on-surface transition" onclick="triggerToast('Syncing with Central Cadastral Server...')" title="Sync Records">
+            <span class="material-symbols-outlined" data-icon="sync">sync</span>
+          </button>
+          <button class="p-1.5 rounded-lg hover:bg-surface-container-low hover:text-on-surface transition relative" onclick="openNotifications()" title="Alerts">
+            <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+            <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span>
+          </button>
+          <button class="p-1.5 rounded-lg hover:bg-surface-container-low hover:text-on-surface transition" onclick="triggerToast('Help Desk: District Collectorate Land Helpline 1800-425-LAND')" title="Help">
+            <span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+          </button>
+        </div>
+
+        <button onclick="openUploadModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-label-md font-semibold transition active:scale-[0.98] shadow-sm">
+          <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+          <span>Upload Record</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- SUB-TAB RIBBON FOR WORKFLOW PROGRESSION -->
+    <div class="bg-surface-container-lowest border-b border-outline-variant px-gutter-desktop py-2 flex items-center justify-between text-label-md shrink-0 overflow-x-auto">
+      <div class="flex items-center space-x-1">
+        <button id="ribbon-dashboard" onclick="switchView('dashboard')" class="px-3 py-1.5 rounded font-semibold text-primary bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="analytics">analytics</span>
+          <span>1. Dashboard</span>
+        </button>
+        <button id="ribbon-extraction" onclick="switchView('extraction')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="document_scanner">document_scanner</span>
+          <span>2. AI Extraction</span>
+        </button>
+        <button id="ribbon-ledger" onclick="switchView('ledger')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="compare">compare</span>
+          <span>3. 3-Way Validation</span>
+        </button>
+        <button id="ribbon-gis" onclick="switchView('gis')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="layers">layers</span>
+          <span>4. GIS Shajra Map</span>
+        </button>
+        <button id="ribbon-review" onclick="switchView('review')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="pending_actions">pending_actions</span>
+          <span>5. Review Queue</span>
+        </button>
+        <button id="ribbon-verification" onclick="switchView('verification')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="gavel">gavel</span>
+          <span>6. Human Verification</span>
+        </button>
+        <button id="ribbon-certificate" onclick="switchView('certificate')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
+          <span>7. Verified Record</span>
+        </button>
+        <button id="ribbon-audit" onclick="switchView('audit')" class="px-3 py-1.5 rounded font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low flex items-center gap-1.5 transition whitespace-nowrap">
+          <span class="material-symbols-outlined text-sm" data-icon="history_toggle_off">history_toggle_off</span>
+          <span>8. Audit Trail</span>
+        </button>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-2 text-label-sm text-on-surface-variant">
+        <span>Survey Unit: <strong class="text-on-surface">Mandal Mangalagiri / Village Mangalagiri</strong></span>
+        <span class="w-1 h-3 bg-outline-variant"></span>
+        <span class="font-data-mono bg-surface-container-low px-2 py-0.5 rounded text-primary">EPSG:7760</span>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main id="contentViewport" class="flex-1 overflow-y-auto custom-scrollbar p-space-xl space-y-space-xl">
+      
+      <!-- ======================================================= -->
+      <!-- VIEW 1: OPERATIONAL DASHBOARD                           -->
+      <!-- ======================================================= -->
+      <section id="view-dashboard" class="space-y-6">
+        <!-- Banner -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded text-label-sm bg-primary text-on-primary font-bold">OPERATIONAL OVERVIEW</span>
+              <h1 class="text-headline-lg text-primary">Land Records Digitization &amp; Cadastral Validation</h1>
+            </div>
+            <p class="text-body-md text-on-surface-variant">Real-time telemetry on AI OCR throughput, GIS discrepancy reconciliation, and officer verification ledger.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="openUploadModal()" class="px-4 py-2 bg-primary hover:bg-secondary text-on-primary rounded-lg font-semibold flex items-center gap-2 transition shadow-sm">
+              <span class="material-symbols-outlined" data-icon="upload">upload</span>
+              <span>Upload Document</span>
+            </button>
+            <button class="p-2 bg-surface-container-low hover:bg-surface-container rounded-lg border border-outline-variant text-primary transition" onclick="triggerToast('Data telemetry refreshed across Guntur district.')" title="Refresh">
+              <span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Card 1 -->
+          <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm cursor-pointer" onclick="openUploadModal()">
+            <div class="flex items-center justify-between text-on-surface-variant mb-2">
+              <span class="text-label-sm font-semibold uppercase tracking-wider">Documents Ingested</span>
+              <span class="material-symbols-outlined text-primary" data-icon="folder_zip">folder_zip</span>
+            </div>
+            <div class="text-headline-lg font-bold text-primary">12,486</div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="inline-flex items-center gap-0.5 text-label-sm font-semibold text-secondary">
+                <span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> +12.4% MoM
+              </span>
+              <span class="text-[11px] font-data-mono text-outline">Guntur Central</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm cursor-pointer" onclick="switchView('extraction')">
+            <div class="flex items-center justify-between text-on-surface-variant mb-2">
+              <span class="text-label-sm font-semibold uppercase tracking-wider">AI Extraction Completed</span>
+              <span class="material-symbols-outlined text-secondary" data-icon="smart_toy">smart_toy</span>
+            </div>
+            <div class="text-headline-lg font-bold text-primary">11,920</div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB]">
+                95.5% OCR Match
+              </span>
+              <span class="text-[11px] font-data-mono text-outline">ResNet v3.2</span>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm cursor-pointer" onclick="switchView('certificate')">
+            <div class="flex items-center justify-between text-on-surface-variant mb-2">
+              <span class="text-label-sm font-semibold uppercase tracking-wider">Verified Records</span>
+              <span class="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
+            </div>
+            <div class="text-headline-lg font-bold text-secondary">10,842</div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754] border border-[#C2E7CB]">
+                91.0% Clearance
+              </span>
+              <span class="text-[11px] font-data-mono text-outline">Gazetted</span>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm cursor-pointer" onclick="switchView('review')">
+            <div class="flex items-center justify-between text-on-surface-variant mb-2">
+              <span class="text-label-sm font-semibold uppercase tracking-wider">Review Required</span>
+              <span class="material-symbols-outlined text-[#F59E0B]" data-icon="pending_actions">pending_actions</span>
+            </div>
+            <div class="text-headline-lg font-bold text-[#F59E0B]">738</div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#FEF6E7] text-[#F59E0B] border border-[#FCDAA7]">
+                Pending Officer
+              </span>
+              <span class="text-[11px] font-data-mono text-outline">Mandal Desk</span>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm cursor-pointer border-error/40 hover:border-error" onclick="switchView('ledger')">
+            <div class="flex items-center justify-between text-on-surface-variant mb-2">
+              <span class="text-label-sm font-semibold uppercase tracking-wider">GIS Cadastral Conflicts</span>
+              <span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+            </div>
+            <div class="text-headline-lg font-bold text-error">184</div>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#FDE8EA] text-error border border-[#F8B4B9]">
+                Area Mismatch
+              </span>
+              <span class="text-[11px] font-data-mono text-outline">Action Req.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts: Processing Pipeline & Resolution Distribution -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4 border-b border-outline-variant/60 pb-3">
+              <div>
+                <h3 class="text-headline-sm text-primary flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary" data-icon="area_chart">area_chart</span>
+                  Ingestion &amp; Validation Pipeline (Last 14 Days)
+                </h3>
+                <p class="text-body-sm text-on-surface-variant">Daily volume: newly scanned deeds vs AI auto-clearance vs officer escalations.</p>
+              </div>
+              <div class="flex items-center gap-3 text-label-sm">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-primary"></span> Ingested</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-secondary"></span> Auto-Verified</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-[#F59E0B]"></span> Escalated</span>
+              </div>
+            </div>
+            <div class="w-full h-56 relative">
+              <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 700 240">
+                <defs>
+                  <linearGradient id="gradPrimary" x1="0%" x2="0%" y1="0%" y2="100%">
+                    <stop offset="0%" stop-color="#003748" stop-opacity="0.25"></stop>
+                    <stop offset="100%" stop-color="#003748" stop-opacity="0.0"></stop>
+                  </linearGradient>
+                  <linearGradient id="gradSecondary" x1="0%" x2="0%" y1="0%" y2="100%">
+                    <stop offset="0%" stop-color="#006a63" stop-opacity="0.25"></stop>
+                    <stop offset="100%" stop-color="#006a63" stop-opacity="0.0"></stop>
+                  </linearGradient>
+                </defs>
+                <line stroke="#E5E7EB" stroke-dasharray="3,3" x1="0" x2="700" y1="40" y2="40"></line>
+                <line stroke="#E5E7EB" stroke-dasharray="3,3" x1="0" x2="700" y1="90" y2="90"></line>
+                <line stroke="#E5E7EB" stroke-dasharray="3,3" x1="0" x2="700" y1="140" y2="140"></line>
+                <line stroke="#E5E7EB" stroke-dasharray="3,3" x1="0" x2="700" y1="190" y2="190"></line>
+                <polygon fill="url(#gradPrimary)" points="0,220 50,180 100,160 150,170 200,130 250,110 300,120 350,80 400,90 450,60 500,75 550,50 600,60 650,35 700,40 700,220"></polygon>
+                <polyline fill="none" points="0,220 50,180 100,160 150,170 200,130 250,110 300,120 350,80 400,90 450,60 500,75 550,50 600,60 650,35 700,40" stroke="#003748" stroke-linecap="round" stroke-width="2.5"></polyline>
+                <polygon fill="url(#gradSecondary)" points="0,220 50,195 100,180 150,190 200,150 250,135 300,140 350,105 400,115 450,85 500,95 550,70 600,80 650,55 700,60 700,220"></polygon>
+                <polyline fill="none" points="0,220 50,195 100,180 150,190 200,150 250,135 300,140 350,105 400,115 450,85 500,95 550,70 600,80 650,55 700,60" stroke="#006a63" stroke-linecap="round" stroke-width="2.5"></polyline>
+                <polyline fill="none" points="0,210 50,205 100,200 150,202 200,195 250,190 300,192 350,185 400,188 450,180 500,182 550,175 600,178 650,170 700,172" stroke="#F59E0B" stroke-dasharray="4,3" stroke-width="2"></polyline>
+              </svg>
+            </div>
+            <div class="flex justify-between text-label-sm font-data-mono text-outline pt-2 border-t border-outline-variant/40">
+              <span>May 1</span><span>May 3</span><span>May 6</span><span>May 8</span><span>May 10</span><span>May 12</span><span>May 14 (Peak: 1,180)</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 class="text-headline-sm text-primary flex items-center gap-2 mb-1">
+                <span class="material-symbols-outlined text-secondary" data-icon="pie_chart">pie_chart</span>
+                Resolution Distribution
+              </h3>
+              <p class="text-body-sm text-on-surface-variant">Statutory validation breakdown.</p>
+            </div>
+            <div class="flex items-center justify-center my-3 relative">
+              <svg class="w-40 h-40" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" fill="transparent" r="60" stroke="#006a63" stroke-dasharray="327.9 376.9" stroke-dashoffset="94.2" stroke-linecap="round" stroke-width="20"></circle>
+                <circle cx="80" cy="80" fill="transparent" r="60" stroke="#164E63" stroke-dasharray="22.6 376.9" stroke-dashoffset="-233.7" stroke-linecap="round" stroke-width="20"></circle>
+                <circle cx="80" cy="80" fill="transparent" r="60" stroke="#F59E0B" stroke-dasharray="18.8 376.9" stroke-dashoffset="-256.3" stroke-linecap="round" stroke-width="20"></circle>
+                <circle cx="80" cy="80" fill="transparent" r="60" stroke="#ba1a1a" stroke-dasharray="7.5 376.9" stroke-dashoffset="-275.1" stroke-linecap="round" stroke-width="20"></circle>
+              </svg>
+              <div class="absolute text-center">
+                <span class="text-headline-lg font-bold text-primary block leading-none">87%</span>
+                <span class="text-label-sm text-on-surface-variant">Auto-Cleared</span>
+              </div>
+            </div>
+            <div class="space-y-1.5 border-t border-outline-variant/60 pt-3 text-label-sm">
+              <div class="flex justify-between items-center">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> Auto-Validated</span>
+                <span class="font-data-mono font-semibold text-primary">87% (10,862)</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span> Human Verified</span>
+                <span class="font-data-mono font-semibold text-primary">6% (749)</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span> GIS Area Mismatch</span>
+                <span class="font-data-mono font-semibold text-[#F59E0B]">5% (624)</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-error"></span> Critical Disputes</span>
+                <span class="font-data-mono font-semibold text-error">2% (251)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Documents Table (Clickable Rows) -->
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-outline-variant flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-headline-sm text-primary flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary" data-icon="table_chart">table_chart</span>
+                  Recent Documents Queue
+                </h3>
+                <span class="badge-demo">CLICK A ROW TO START WORKFLOW</span>
+              </div>
+              <p class="text-body-sm text-on-surface-variant">Select any record below to inspect OCR extraction, validation reconciliation, or GIS conflict analysis.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openUploadModal()" class="px-3 py-1.5 bg-primary text-on-primary rounded-lg text-label-sm font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm" data-icon="add">add</span> Upload Document
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant text-[11px] font-label-md uppercase tracking-wider">
+                  <th class="py-3 px-4">Document ID</th>
+                  <th class="py-3 px-4">District / Village</th>
+                  <th class="py-3 px-4">Survey No</th>
+                  <th class="py-3 px-4">Recorded Owner</th>
+                  <th class="py-3 px-4">AI Confidence</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">Workflow Action</th>
+                </tr>
+              </thead>
+              <tbody id="dashboardRecentTable" class="divide-y divide-outline-variant/50 text-body-sm">
+                <!-- Populated dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- District Performance Benchmarks -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-headline-sm text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+              District Cadastral Modernization Performance
+            </h3>
+            <span class="text-label-sm text-on-surface-variant">Statutory compliance benchmarks (AP Land Records Act)</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-primary">Guntur District</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754]">RANK 1</span>
+              </div>
+              <div class="text-headline-md font-bold text-secondary">98.2% <span class="text-body-sm font-normal text-on-surface-variant">Accuracy</span></div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-secondary h-full w-[98.2%]"></div>
+              </div>
+              <div class="mt-2 flex justify-between text-[11px] font-data-mono text-outline">
+                <span>Total: 4,120 Parcels</span>
+                <span class="text-error font-semibold">Conflicts: 12</span>
+              </div>
+            </div>
+
+            <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-primary">Visakhapatnam</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-[#EBF7EE] text-[#198754]">RANK 2</span>
+              </div>
+              <div class="text-headline-md font-bold text-secondary">97.8% <span class="text-body-sm font-normal text-on-surface-variant">Accuracy</span></div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-secondary h-full w-[97.8%]"></div>
+              </div>
+              <div class="mt-2 flex justify-between text-[11px] font-data-mono text-outline">
+                <span>Total: 3,890 Parcels</span>
+                <span class="text-error font-semibold">Conflicts: 19</span>
+              </div>
+            </div>
+
+            <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-primary">Krishna District</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-surface-container text-primary">RANK 3</span>
+              </div>
+              <div class="text-headline-md font-bold text-primary">96.4% <span class="text-body-sm font-normal text-on-surface-variant">Accuracy</span></div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-primary h-full w-[96.4%]"></div>
+              </div>
+              <div class="mt-2 flex justify-between text-[11px] font-data-mono text-outline">
+                <span>Total: 2,750 Parcels</span>
+                <span class="text-error font-semibold">Conflicts: 44</span>
+              </div>
+            </div>
+
+            <div class="workflow-card bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-primary">Chittoor District</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-data-mono font-bold bg-[#FEF6E7] text-[#F59E0B]">RANK 4</span>
+              </div>
+              <div class="text-headline-md font-bold text-[#F59E0B]">94.1% <span class="text-body-sm font-normal text-on-surface-variant">Accuracy</span></div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-[#F59E0B] h-full w-[94.1%]"></div>
+              </div>
+              <div class="mt-2 flex justify-between text-[11px] font-data-mono text-outline">
+                <span>Total: 1,726 Parcels</span>
+                <span class="text-error font-semibold">Conflicts: 109</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 2: AI EXTRACTION (Split-Screen Workspace)          -->
+      <!-- ======================================================= -->
+      <section id="view-extraction" class="space-y-4 hidden">
+        <!-- Action Header -->
+        <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <button class="p-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-on-surface transition" onclick="switchView('dashboard')">
+              <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-data-mono font-bold text-primary" id="extractionRecordId">RECORD: DOC-2026-00421</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-data-mono bg-error-container text-error font-semibold" id="extractionStatusBadge">GIS CONFLICT</span>
+                <span class="badge-demo">DEMO CASE: SY 124/3</span>
+              </div>
+              <p class="text-label-sm text-on-surface-variant">Form 1-B / 1974 Settlement Title Deed • Sub-Registrar Office Mangalagiri</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="reRunExtraction()" class="px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant hover:border-primary text-primary text-label-md font-semibold flex items-center gap-1.5 transition">
+              <span class="material-symbols-outlined text-sm" data-icon="autorenew">autorenew</span>
+              <span>Re-run Extraction</span>
+            </button>
+            <button onclick="switchView('ledger')" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-secondary text-on-primary text-label-md font-semibold flex items-center gap-1.5 transition shadow-sm">
+              <span class="material-symbols-outlined text-sm" data-icon="fact_check">fact_check</span>
+              <span>Validate Record &rarr;</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Split Screen Workspace (50/50 Grid) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-[660px]">
+          
+          <!-- LEFT: Document Viewer with Bounding Boxes -->
+          <div class="lg:col-span-6 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+            <div class="p-3 border-b border-outline-variant bg-surface-container-low/60 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary" data-icon="zoom_in">zoom_in</span>
+                <span class="text-label-sm font-semibold text-primary">Original Physical Deed Scan (300 DPI)</span>
+              </div>
+              <div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-lg border border-outline-variant text-on-surface-variant">
+                <button onclick="zoomDoc(-15)" class="p-1 hover:text-primary transition" title="Zoom Out"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+                <span id="docZoomLabel" class="text-data-mono text-xs px-2 font-semibold text-primary">100%</span>
+                <button onclick="zoomDoc(15)" class="p-1 hover:text-primary transition" title="Zoom In"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+                <button onclick="zoomDoc(0)" class="p-1 hover:text-primary transition" title="Fit Page"><span class="material-symbols-outlined text-sm" data-icon="fit_screen">fit_screen</span></button>
+                <button onclick="toggleDocContrast()" class="p-1 hover:text-primary transition" title="High Contrast Filter"><span class="material-symbols-outlined text-sm" data-icon="contrast">contrast</span></button>
+              </div>
+            </div>
+
+            <!-- Vintage Document Canvas -->
+            <div id="docViewerContainer" class="flex-1 vintage-doc p-6 overflow-auto custom-scrollbar relative select-none border-t border-b border-outline-variant/30">
+              <div id="docSheet" class="w-full max-w-xl mx-auto bg-[#faf6ed] p-8 rounded shadow-md border border-[#dfd7c2] relative font-serif text-[#332b21] space-y-4 leading-relaxed transition-transform duration-200">
+                <!-- Watermark -->
+                <div class="absolute right-8 top-8 opacity-15 pointer-events-none text-center">
+                  <span class="material-symbols-outlined text-8xl" data-icon="account_balance">account_balance</span>
+                  <div class="text-[10px] font-sans font-bold uppercase tracking-widest text-[#5c4a30]">Revenue Dept • AP</div>
+                </div>
+
+                <!-- Deed Header -->
+                <div class="border-b-2 border-[#a38c6b] pb-3 text-center space-y-1">
+                  <div class="text-[11px] font-sans uppercase font-bold tracking-widest text-[#8c6d48]">Government of Andhra Pradesh • Registration Department</div>
+                  <h4 class="text-lg font-bold uppercase tracking-wide">Registered Title &amp; Conveyance Deed</h4>
+                  <div class="text-[11px] font-mono text-[#6c583e]">Book 1 • Volume 418 • Pages 102 to 109 • Year 1974</div>
+                </div>
+
+                <!-- Deed Body -->
+                <p class="text-xs text-justify">
+                  Know all men by these presents that on this fifteenth day of June, nineteen hundred and seventy-four, registered under the jurisdiction of the Sub-Registrar of Mangalagiri:
+                </p>
+                <p class="text-xs text-justify">
+                  The scheduled agricultural wet land situated in Mangalagiri (Atchampet Ward), Revenue Mandal of Mangalagiri, bounded on the North by Zilla Parishad Road, on the South by Survey No 125, is hereby granted in fee simple unto:
+                </p>
+
+                <!-- Box 1: Owner Name -->
+                <div class="relative p-2 rounded bg-secondary/15 border-2 border-secondary inline-block my-1 shadow-sm">
+                  <span class="absolute -top-3 left-2 px-1.5 py-0.2 rounded text-[9px] font-sans font-bold bg-secondary text-on-secondary">AI DETECT: OWNER (96%)</span>
+                  <p class="font-bold text-sm text-[#002f2b]">Ravi Kumar, s/o Late Venkateswarlu</p>
+                </div>
+
+                <p class="text-xs text-justify">
+                  Bearing the cadastral sub-division demarcation and revenue Khata entry:
+                </p>
+
+                <!-- Boxes: Survey & Khata -->
+                <div class="flex flex-wrap gap-4 my-1">
+                  <div class="relative p-2 rounded bg-primary/15 border-2 border-primary inline-block">
+                    <span class="absolute -top-3 left-2 px-1.5 py-0.2 rounded text-[9px] font-sans font-bold bg-primary text-on-primary">AI: KHATA NO (99%)</span>
+                    <p class="font-bold font-mono text-sm text-primary">Khata No: KH-2048</p>
+                  </div>
+                  <div class="relative p-2 rounded bg-secondary/15 border-2 border-secondary inline-block">
+                    <span class="absolute -top-3 left-2 px-1.5 py-0.2 rounded text-[9px] font-sans font-bold bg-secondary text-on-secondary">AI: SURVEY NO (98%)</span>
+                    <p class="font-bold font-mono text-sm text-secondary">Survey No: 124/3</p>
+                  </div>
+                </div>
+
+                <p class="text-xs text-justify">
+                  Measuring an aggregate spatial extent of:
+                </p>
+
+                <!-- Box 3: Area Extent (72% Warning) -->
+                <div class="relative p-2 rounded bg-[#FEF6E7] border-2 border-[#F59E0B] inline-block my-1 animate-pulse">
+                  <span class="absolute -top-3 left-2 px-1.5 py-0.2 rounded text-[9px] font-sans font-bold bg-[#F59E0B] text-white">AI: EXTENT WARNING (72%)</span>
+                  <p class="font-bold text-sm text-[#8f5600]">Acres 2.45 (Two Acres and Forty-Five Cents / Jirayati Wet)</p>
+                </div>
+
+                <p class="text-xs text-justify">
+                  Together with all irrigation easements from the Krishna Western Canal distributor channel. In witness whereof the parties have hereto set their hands and cadastral signatures.
+                </p>
+
+                <div class="pt-4 flex justify-between items-end text-[10px] font-sans">
+                  <div class="text-center">
+                    <div class="w-16 h-16 rounded-full border-2 border-dashed border-[#a38c6b] mx-auto flex items-center justify-center text-[#a38c6b] text-xs font-bold rotate-[-12deg]">
+                      REGISTRAR<br>SEAL
+                    </div>
+                    <span class="block mt-1">Sub-Registrar Mangalagiri</span>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-serif italic text-xs underline text-[#5c4a30]">R. Kumar (Recorded Hand)</div>
+                    <span>Executant Cadastral Signature</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-2.5 bg-surface-container-low border-t border-outline-variant flex justify-between items-center text-label-sm text-on-surface-variant">
+              <span>Image Hash: <strong class="font-data-mono text-primary">e8c74a9...61f</strong></span>
+              <span class="font-data-mono text-secondary">Telugu/English OCR Complete (0.84s)</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: AI Extracted Fields & Confidence Scoring -->
+          <div class="lg:col-span-6 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between p-5 space-y-4">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+                <div>
+                  <h3 class="text-headline-sm text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary" data-icon="auto_awesome">auto_awesome</span>
+                    AI Extracted Entities &amp; Confidence Scoring
+                  </h3>
+                  <p class="text-body-sm text-on-surface-variant">Neural OCR parsed tabular fields. Every value is officer-editable.</p>
+                </div>
+                <span class="px-2 py-1 rounded text-label-sm bg-surface-container-low font-data-mono font-semibold text-primary">
+                  ResNet-Transformer v3.2
+                </span>
+              </div>
+
+              <!-- Extracted Fields List -->
+              <div id="extractionFieldsContainer" class="mt-4 space-y-3">
+                <!-- Rendered dynamically by app.js with confidence badges -->
+              </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="pt-4 border-t border-outline-variant space-y-2.5">
+              <div class="flex items-center justify-between text-label-sm text-on-surface-variant">
+                <span>Confidence Legend: <strong class="text-[#198754]">90-100% High</strong> | <strong class="text-[#F59E0B]">70-89% Medium</strong> | <strong class="text-error">&lt;70% Low</strong></span>
+                <span class="text-xs font-data-mono text-outline">Editable Fields</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="reRunExtraction()" class="px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant text-primary hover:bg-surface-container-low font-semibold text-center transition">
+                  Re-run Extraction
+                </button>
+                <button onclick="switchView('ledger')" class="px-4 py-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-semibold text-center transition shadow-sm flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-sm" data-icon="compare_arrows">compare_arrows</span>
+                  <span>Validate Record</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 3: 3-SOURCE VALIDATION & RECONCILIATION LEDGER     -->
+      <!-- ======================================================= -->
+      <section id="view-ledger" class="space-y-6 hidden">
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded text-[11px] font-data-mono bg-primary text-on-primary font-semibold">TRIPLE RECONCILIATION ENGINE</span>
+              <h2 class="text-headline-md text-primary">Cross-Ledger Discrepancy Resolution</h2>
+              <span class="badge-demo">SURVEY 124/3</span>
+            </div>
+            <p class="text-body-sm text-on-surface-variant">Statutory comparison between Scanned Deed, AI Extracted Value, Reference Land Database (Meebhoomi), and Cadastral GIS Polygon.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="px-3 py-1.5 rounded-lg border border-outline-variant text-primary text-label-sm font-medium hover:bg-surface-container-low" onclick="switchView('extraction')">
+              &larr; Back to Extraction
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-label-sm font-semibold hover:bg-secondary" onclick="switchView('gis')">
+              Inspect GIS Parcel &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Discrepancy Alert Callout -->
+        <div class="p-4 rounded-xl bg-[#FDE8EA] border-2 border-[#F8B4B9] flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-error text-on-error flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined" data-icon="crisis_alert">crisis_alert</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-error">GIS AREA MISMATCH DETECTED (Survey No. 124/3)</h4>
+              <p class="text-xs text-on-surface">
+                Scanned Deed: <strong>2.45 Acres</strong> | Land Database: <strong>2.45 Acres</strong> | GIS Vector Polygon: <strong>2.31 Acres</strong>.
+                <span class="font-semibold text-error block sm:inline">Difference: -0.14 Acres (-6,098.4 sq.ft / 566.5 m²).</span>
+              </p>
+              <p class="text-[11px] text-on-surface-variant mt-1">
+                Explanation: The survey number matches the GIS parcel, but the GIS recorded area differs from the document/database value due to northern road widening acquisition.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+            <button onclick="switchView('gis')" class="px-3 py-1.5 rounded bg-primary text-on-primary text-xs font-semibold hover:bg-secondary transition">
+              Review in GIS Map
+            </button>
+            <button onclick="switchView('verification')" class="px-3 py-1.5 rounded bg-secondary text-on-secondary text-xs font-semibold hover:bg-opacity-90 transition">
+              Adjudicate in Human Verification
+            </button>
+          </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant text-[11px] font-label-md uppercase tracking-wider">
+                  <th class="py-3 px-4 w-1/5">Field Parameter</th>
+                  <th class="py-3 px-4 w-1/5">1. Scanned Document</th>
+                  <th class="py-3 px-4 w-1/5">2. Land Database (Meebhoomi)</th>
+                  <th class="py-3 px-4 w-1/5">3. GIS Cadastral Polygon</th>
+                  <th class="py-3 px-4 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/60 text-body-sm">
+                <tr class="hover:bg-surface-container-low/30 transition">
+                  <td class="py-3.5 px-4 font-semibold text-primary">Survey &amp; Sub-Division</td>
+                  <td class="py-3.5 px-4 font-data-mono font-bold">124/3</td>
+                  <td class="py-3.5 px-4 font-data-mono font-bold">124/3</td>
+                  <td class="py-3.5 px-4 font-data-mono font-bold text-primary">124/3 (Parcel_124_3_AP)</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754]">
+                      <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> MATCH
+                    </span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-surface-container-low/30 transition">
+                  <td class="py-3.5 px-4 font-semibold text-primary">Recorded Pattadar / Owner</td>
+                  <td class="py-3.5 px-4 font-medium text-on-surface">Ravi Kumar</td>
+                  <td class="py-3.5 px-4 text-on-surface">Ravi Kumar</td>
+                  <td class="py-3.5 px-4 text-on-surface-variant">Ravi Kumar (AP-7421)</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754]">
+                      <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> MATCH
+                    </span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-surface-container-low/30 transition">
+                  <td class="py-3.5 px-4 font-semibold text-primary">Revenue Khata Number</td>
+                  <td class="py-3.5 px-4 font-data-mono">KH-2048</td>
+                  <td class="py-3.5 px-4 font-data-mono">KH-2048</td>
+                  <td class="py-3.5 px-4 font-data-mono text-outline">Linked KH-2048</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754]">
+                      <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> MATCH
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- CONFLICT ROW -->
+                <tr class="bg-[#FEF6E7]/80 border-y-2 border-[#F59E0B]">
+                  <td class="py-4 px-4 font-bold text-[#8f5600] flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#F59E0B]" data-icon="warning">warning</span>
+                    Total Area / Extent
+                  </td>
+                  <td class="py-4 px-4 font-data-mono font-bold text-on-surface">2.45 Acres</td>
+                  <td class="py-4 px-4 font-data-mono font-bold text-on-surface">2.45 Acres</td>
+                  <td class="py-4 px-4 font-data-mono font-bold text-error bg-[#FDE8EA] px-2 py-1 rounded">
+                    2.31 Acres (-0.14 Ac)
+                  </td>
+                  <td class="py-4 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9]">
+                      <span class="material-symbols-outlined text-xs" data-icon="error">error</span> CONFLICT
+                    </span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-surface-container-low/30 transition">
+                  <td class="py-3.5 px-4 font-semibold text-primary">Village / Mandal</td>
+                  <td class="py-3.5 px-4 text-on-surface">Mangalagiri</td>
+                  <td class="py-3.5 px-4 text-on-surface">Mangalagiri</td>
+                  <td class="py-3.5 px-4 text-on-surface">Mangalagiri</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754]">
+                      <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> MATCH
+                    </span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-surface-container-low/30 transition">
+                  <td class="py-3.5 px-4 font-semibold text-primary">Land Classification</td>
+                  <td class="py-3.5 px-4 text-on-surface">Agricultural Wet</td>
+                  <td class="py-3.5 px-4 text-on-surface">Wet / Jirayati</td>
+                  <td class="py-3.5 px-4 text-on-surface">Agri-Wet (Canal)</td>
+                  <td class="py-3.5 px-4 text-right">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-data-mono font-semibold bg-[#EBF7EE] text-[#198754]">
+                      <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> MATCH
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reconciliation Actions Card -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+            <div>
+              <h3 class="text-headline-sm text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary" data-icon="tune">tune</span>
+                Reconciliation Recommendations
+              </h3>
+              <p class="text-body-sm text-on-surface-variant">The government database is authoritative unless an authorized officer explicitly verifies a correction.</p>
+            </div>
+            <span class="text-label-sm font-data-mono text-outline">AP Land Revenue Regulation</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <button onclick="switchView('gis')" class="p-3 rounded-lg border border-outline-variant hover:border-primary text-left transition">
+              <div class="font-semibold text-primary text-sm flex items-center gap-1.5 mb-1">
+                <span class="material-symbols-outlined text-sm" data-icon="travel_explore">travel_explore</span> 1. Review GIS Map
+              </div>
+              <p class="text-xs text-on-surface-variant">Inspect exact road acquisition polygon coordinates.</p>
+            </button>
+
+            <button onclick="reconcileAccept('DOC')" class="p-3 rounded-lg border border-outline-variant hover:border-primary text-left transition">
+              <div class="font-semibold text-primary text-sm flex items-center gap-1.5 mb-1">
+                <span class="material-symbols-outlined text-sm" data-icon="description">description</span> 2. Accept Document Value
+              </div>
+              <p class="text-xs text-on-surface-variant">Retain 2.45 Acres and order GIS boundary redrawing.</p>
+            </button>
+
+            <button onclick="reconcileAccept('DB')" class="p-3 rounded-lg border border-outline-variant hover:border-primary text-left transition">
+              <div class="font-semibold text-primary text-sm flex items-center gap-1.5 mb-1">
+                <span class="material-symbols-outlined text-sm" data-icon="database">database</span> 3. Accept Database Value
+              </div>
+              <p class="text-xs text-on-surface-variant">Honor authoritative state Meebhoomi registry (2.45 Ac).</p>
+            </button>
+
+            <button onclick="switchView('verification')" class="p-3 rounded-lg border-2 border-secondary bg-secondary/5 text-left transition">
+              <div class="font-semibold text-secondary text-sm flex items-center gap-1.5 mb-1">
+                <span class="material-symbols-outlined text-sm" data-icon="gavel">gavel</span> 4. Send to Human Verification
+              </div>
+              <p class="text-xs text-on-surface-variant">Officer makes statutory decision with correction note.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 4: INTERACTIVE GIS SHAJRA MAP                      -->
+      <!-- ======================================================= -->
+      <section id="view-gis" class="space-y-4 hidden">
+        <!-- GIS Map Top Ribbon -->
+        <div class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 text-primary font-headline-sm font-semibold">
+              <span class="material-symbols-outlined text-secondary" data-icon="travel_explore">travel_explore</span>
+              <span>Interactive GIS Shajra Cadastral Map</span>
+            </div>
+            <span class="font-data-mono text-xs bg-surface-container-low text-primary px-2 py-0.5 rounded border border-outline-variant/60">
+              500 SYNTHETIC PARCELS • MANGALAGIRI
+            </span>
+            <span class="badge-demo">DEMO DATA</span>
+          </div>
+
+          <!-- Search Parcel in GIS -->
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <input id="gisSearchInput" onkeyup="if(event.key==='Enter') searchGisParcel()" class="h-8 pl-3 pr-8 text-xs font-data-mono bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary w-44" placeholder="Survey No (e.g. 124/3)..." type="text" value="124/3">
+              <button onclick="searchGisParcel()" class="absolute right-1.5 top-1/2 -translate-y-1/2 text-primary hover:text-secondary">
+                <span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+              </button>
+            </div>
+            <button onclick="searchGisParcel('124/3')" class="px-2.5 py-1 bg-primary text-on-primary rounded text-xs font-semibold">
+              Locate 124/3
+            </button>
+            <button onclick="triggerToast('Toggling Canal & Road infrastructure layers...')" class="p-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-primary" title="Layers">
+              <span class="material-symbols-outlined text-sm" data-icon="layers">layers</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2-Column GIS Canvas + Right Attribute Drawer -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-[580px]">
+          <!-- Vector / GeoJSON Map (8 cols) -->
+          <div class="lg:col-span-8 bg-[#0b1924] rounded-xl border border-outline-variant shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <!-- Coordinates Overlay -->
+            <div class="absolute top-3 left-3 z-10 bg-inverse-surface/90 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-outline/40 text-inverse-on-surface text-[11px] font-data-mono space-y-0.5 pointer-events-none">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+                <span>LAT: 16.43482° N | LON: 80.56621° E</span>
+              </div>
+              <div class="text-outline">Scale: 1:2,500 • Projection: UTM 44N (WGS84) • 500 Cadastral Polygons</div>
+            </div>
+
+            <!-- North Indicator -->
+            <div class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-inverse-surface/80 text-inverse-on-surface flex items-center justify-center font-serif font-bold text-xs border border-outline/40 pointer-events-none">
+              <span>N</span>
+            </div>
+
+            <!-- SVG Cadastral Renderer (Direct Vector Engine) -->
+            <div class="w-full h-full min-h-[480px] relative">
+              <svg id="cadastralSvgMap" class="w-full h-full select-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 500">
+                <defs>
+                  <pattern height="40" id="gisPattern" patternUnits="userSpaceOnUse" width="40">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#162c3d" stroke-width="0.75"></path>
+                  </pattern>
+                </defs>
+                <rect fill="#0b1924" height="500" width="800"></rect>
+                <rect fill="url(#gisPattern)" height="500" width="800"></rect>
+
+                <!-- Natural features: Irrigation Canal -->
+                <path d="M 0,200 C 200,220 400,180 800,210" fill="none" opacity="0.4" stroke="#0284c7" stroke-width="16"></path>
+                <path d="M 0,200 C 200,220 400,180 800,210" fill="none" opacity="0.8" stroke="#38bdf8" stroke-dasharray="8,6" stroke-width="2"></path>
+                <text fill="#38bdf8" font-family="JetBrains Mono" font-size="10" opacity="0.8" x="50" y="190">KRISHNA WESTERN CANAL DISTRIBUTOR (CHANNEL 4B)</text>
+
+                <!-- North Road / Zilla Parishad Highway -->
+                <path d="M 40,60 L 760,70" fill="none" stroke="#475569" stroke-width="24"></path>
+                <path d="M 40,60 L 760,70" fill="none" opacity="0.6" stroke="#f8fafc" stroke-dasharray="10,10" stroke-width="2"></path>
+                <text fill="#cbd5e1" font-family="IBM Plex Sans" font-size="11" font-weight="600" x="280" y="55">ZILLA PARISHAD MAIN ARTERIAL ROAD (WIDENED 2021)</text>
+
+                <!-- Road Expansion Encroachment Strip -->
+                <polygon fill="#ef4444" opacity="0.7" points="260,72 450,75 445,95 255,92"></polygon>
+                <text fill="#ffffff" font-family="JetBrains Mono" font-size="9" font-weight="bold" x="270" y="87">HIGHWAY STRIP (-0.14 ACRES)</text>
+
+                <!-- Adjacent Parcel 124/1 -->
+                <polygon onclick="selectCadastralParcel('124/1', '1.80 Acres', 'V. Chowdary', 'KH-1042', 'Synchronized')" class="cursor-pointer hover:fill-[#1e4976] transition" fill="#132f4c" points="80,100 240,100 230,280 70,270" stroke="#1e4976" stroke-width="2"></polygon>
+                <text fill="#93c5fd" font-family="JetBrains Mono" font-size="12" x="130" y="190">124/1 (1.80 Ac)</text>
+
+                <!-- Adjacent Parcel 124/2 -->
+                <polygon onclick="selectCadastralParcel('124/2', '0.95 Acres', 'K. Subba Rao', 'KH-1043', 'Synchronized')" class="cursor-pointer hover:fill-[#1e4976] transition" fill="#132f4c" points="240,100 420,105 410,160 235,155" stroke="#1e4976" stroke-width="2"></polygon>
+                <text fill="#93c5fd" font-family="JetBrains Mono" font-size="11" x="300" y="135">124/2 (0.95 Ac)</text>
+
+                <!-- Adjacent Parcel 125 (South) -->
+                <polygon onclick="selectCadastralParcel('125/A', '3.40 Acres', 'S. Reddy', 'KH-1120', 'Synchronized')" class="cursor-pointer hover:fill-[#1e4976] transition" fill="#132f4c" points="210,340 520,350 490,470 190,460" stroke="#1e4976" stroke-width="2"></polygon>
+                <text fill="#93c5fd" font-family="JetBrains Mono" font-size="13" x="320" y="410">125/A (3.40 Ac)</text>
+
+                <!-- East Parcel 124/4 -->
+                <polygon onclick="selectCadastralParcel('124/4', '2.10 Acres', 'P. Naidu', 'KH-1045', 'Synchronized')" class="cursor-pointer hover:fill-[#1e4976] transition" fill="#132f4c" points="460,165 620,170 590,340 440,335" stroke="#1e4976" stroke-width="2"></polygon>
+                <text fill="#93c5fd" font-family="JetBrains Mono" font-size="12" x="500" y="250">124/4 (2.10 Ac)</text>
+
+                <!-- PRIMARY TARGET PARCEL: Survey No 124/3 -->
+                <polygon id="targetParcel124_3" onclick="selectCadastralParcel('124/3', '2.31 Acres', 'Ravi Kumar', 'KH-2048', 'GIS Conflict')" class="filter drop-shadow-[0_0_14px_rgba(0,240,210,0.6)] cursor-pointer animate-pulse" fill="#006a63" fill-opacity="0.45" points="245,160 460,165 440,335 225,330" stroke="#00f0d2" stroke-width="3.5">
+                </polygon>
+
+                <!-- Parcel Center Pin -->
+                <circle cx="342" cy="245" fill="#00f0d2" r="6"></circle>
+                <circle class="animate-ping" cx="342" cy="245" fill="none" opacity="0.8" r="16" stroke="#00f0d2" stroke-width="2"></circle>
+                
+                <rect fill="#002b36" height="42" rx="4" stroke="#00f0d2" stroke-width="1.5" width="155" x="265" y="215"></rect>
+                <text fill="#ffffff" font-family="IBM Plex Sans" font-size="12" font-weight="bold" x="275" y="233">Survey No: 124/3</text>
+                <text fill="#ef4444" font-family="JetBrains Mono" font-size="11" font-weight="bold" x="275" y="248">GIS: 2.31 Ac (Conflict)</text>
+
+                <!-- Dimensions -->
+                <text fill="#00f0d2" font-family="JetBrains Mono" font-size="10" x="330" y="155">N: 215.4 ft</text>
+                <text fill="#00f0d2" font-family="JetBrains Mono" font-size="10" x="455" y="250">E: 172.8 ft</text>
+                <text fill="#00f0d2" font-family="JetBrains Mono" font-size="10" x="315" y="325">S: 218.0 ft</text>
+                <text fill="#00f0d2" font-family="JetBrains Mono" font-size="10" x="195" y="245">W: 170.2 ft</text>
+              </svg>
+            </div>
+
+            <div class="p-3 bg-inverse-surface/90 border-t border-outline/30 flex flex-wrap items-center justify-between text-[11px] font-label-sm text-inverse-on-surface z-10">
+              <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-2 rounded bg-[#00f0d2]"></span> Target Parcel (124/3)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-2 rounded bg-error"></span> Disputed Road Strip (-0.14 Ac)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-2 rounded bg-[#0284c7]"></span> Canal Buffer</span>
+              </div>
+              <span class="font-data-mono text-outline">GeoJSON: public/data/parcels_500.geojson</span>
+            </div>
+          </div>
+
+          <!-- Parcel Attribute Drawer (4 cols) -->
+          <div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+                <div>
+                  <span class="text-label-sm font-semibold uppercase text-secondary">Parcel Attribute Ledger</span>
+                  <h3 id="gisSelectedSurvey" class="text-headline-sm text-primary">Survey No. 124/3</h3>
+                </div>
+                <span id="gisSelectedStatus" class="px-2 py-0.5 rounded text-[11px] font-data-mono font-bold bg-[#FDE8EA] text-error border border-[#F8B4B9]">
+                  GIS CONFLICT
+                </span>
+              </div>
+
+              <div class="mt-4 space-y-2.5 text-body-sm">
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60">
+                  <span class="text-on-surface-variant">Village / Mandal</span>
+                  <span class="font-semibold text-on-surface text-right">Mangalagiri / Guntur</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60">
+                  <span class="text-on-surface-variant">Centroid Coordinates</span>
+                  <span class="font-data-mono font-semibold text-primary">16.4348° N, 80.5662° E</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60">
+                  <span class="text-on-surface-variant">Deed Recorded Extent</span>
+                  <span id="gisSelectedDocArea" class="font-data-mono font-semibold text-on-surface">2.45 Acres</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60 bg-[#FDE8EA] px-2 rounded">
+                  <span class="text-error font-semibold">GIS Calculated Extent</span>
+                  <span id="gisSelectedGisArea" class="font-data-mono font-bold text-error">2.31 Acres (-0.14 Ac)</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60">
+                  <span class="text-on-surface-variant">Registered Owner</span>
+                  <span id="gisSelectedOwner" class="font-semibold text-primary">Ravi Kumar</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-outline-variant/60">
+                  <span class="text-on-surface-variant">Khata Reference</span>
+                  <span id="gisSelectedKhata" class="font-data-mono font-semibold text-on-surface">KH-2048</span>
+                </div>
+
+                <div class="pt-2">
+                  <span class="text-label-sm font-semibold text-on-surface block mb-1">Adjacent Survey Boundaries:</span>
+                  <div class="grid grid-cols-2 gap-1.5 text-xs font-data-mono">
+                    <span class="p-1 rounded bg-surface-container-low border border-outline-variant/60">North: ZP Road</span>
+                    <span class="p-1 rounded bg-surface-container-low border border-outline-variant/60">South: Sy 125/A</span>
+                    <span class="p-1 rounded bg-surface-container-low border border-outline-variant/60">East: Sy 124/4</span>
+                    <span class="p-1 rounded bg-surface-container-low border border-outline-variant/60">West: Sy 124/2</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spatial Action CTAs -->
+            <div class="space-y-2 pt-3 border-t border-outline-variant">
+              <button onclick="switchView('verification')" class="w-full py-2.5 px-3 rounded-lg bg-primary hover:bg-secondary text-on-primary text-label-md font-semibold text-center transition flex items-center justify-center gap-2 shadow-sm">
+                <span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+                <span>Start Human Verification &rarr;</span>
+              </button>
+              <button onclick="switchView('ledger')" class="w-full py-2 px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-primary hover:border-primary text-label-md font-semibold text-center transition flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined" data-icon="compare">compare</span>
+                <span>Reconciliation Ledger</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 5: REVIEW QUEUE                                    -->
+      <!-- ======================================================= -->
+      <section id="view-review" class="space-y-6 hidden">
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded text-[11px] font-data-mono bg-[#FEF6E7] text-[#8f5600] font-bold border border-[#FCDAA7]">ACTION REQUIRED</span>
+              <h2 class="text-headline-md text-primary">Officer Review Queue</h2>
+              <span class="badge-demo">PRIORITY DESK</span>
+            </div>
+            <p class="text-body-sm text-on-surface-variant">Records requiring human attention due to GIS mismatches, low AI confidence, or boundary discrepancies.</p>
+          </div>
+          <span class="text-label-sm font-data-mono text-outline">Assigned to: Officer S. Sharma</span>
+        </div>
+
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+          <div class="p-3 border-b border-outline-variant flex gap-2">
+            <button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold">All Pending (3)</button>
+            <button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant text-xs font-medium">Critical GIS Mismatches (1)</button>
+            <button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant text-xs font-medium">Low AI Confidence (1)</button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant text-[11px] font-label-md uppercase tracking-wider">
+                  <th class="py-3 px-4">Priority</th>
+                  <th class="py-3 px-4">Document ID</th>
+                  <th class="py-3 px-4">Survey No</th>
+                  <th class="py-3 px-4">Village</th>
+                  <th class="py-3 px-4">Issue Description</th>
+                  <th class="py-3 px-4">AI Score</th>
+                  <th class="py-3 px-4">Wait Time</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="reviewQueueTableBody" class="divide-y divide-outline-variant/50 text-body-sm">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 6: HUMAN VERIFICATION (3-Panel Decision Stage)     -->
+      <!-- ======================================================= -->
+      <section id="view-verification" class="space-y-4 hidden">
+        <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-data-mono bg-secondary text-on-secondary font-bold">STATUTORY DECISION DESK</span>
+              <h2 class="text-headline-md text-primary font-bold">Human Verification &amp; Adjudication</h2>
+              <span class="badge-demo">FINAL DECISION STAGE</span>
+            </div>
+            <p class="text-label-sm text-on-surface-variant">Three-panel comparison: Physical Document vs AI Extracted vs Authoritative Reference &amp; GIS.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="switchView('ledger')" class="px-3 py-1.5 rounded-lg border border-outline-variant text-primary text-xs font-medium hover:bg-surface-container-low">
+              &larr; Back to Validation
+            </button>
+          </div>
+        </div>
+
+        <!-- 3-Panel Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[460px]">
+          <!-- PANEL 1 (LEFT): Scanned Document Snippet -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-2 border-b border-outline-variant">
+                <span class="text-xs font-bold text-primary flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm" data-icon="description">description</span> 1. Scanned Document
+                </span>
+                <span class="text-[10px] font-data-mono bg-surface-container-low px-1.5 py-0.5 rounded text-primary">DOC-2026-00421</span>
+              </div>
+              <div class="mt-3 p-3 vintage-doc rounded border border-[#dfd7c2] space-y-2 text-xs">
+                <div class="font-serif font-bold text-sm text-[#332b21] border-b border-[#dfd7c2] pb-1">Settlement Title Deed (1974)</div>
+                <p><strong>Pattadar:</strong> Ravi Kumar s/o Venkateswarlu</p>
+                <p><strong>Survey No:</strong> 124/3 (Mandal Mangalagiri)</p>
+                <p><strong>Khata:</strong> KH-2048</p>
+                <div class="p-1.5 bg-[#FEF6E7] border border-[#FCDAA7] rounded text-[#8f5600] font-bold">
+                  Document Area: 2.45 Acres
+                </div>
+                <p class="text-[11px] text-on-surface-variant">Northern boundary: ZP Road. Registered at SRO Mangalagiri.</p>
+              </div>
+            </div>
+            <div class="pt-2 text-[11px] text-on-surface-variant text-center">
+              Physical Scan Verified • 300 DPI
+            </div>
+          </div>
+
+          <!-- PANEL 2 (CENTER): AI Extracted Data -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-2 border-b border-outline-variant">
+                <span class="text-xs font-bold text-secondary flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm" data-icon="smart_toy">smart_toy</span> 2. AI Extracted Data
+                </span>
+                <span class="text-[10px] font-data-mono bg-[#EBF7EE] text-[#198754] px-1.5 py-0.5 rounded">95.5% Avg</span>
+              </div>
+              <div class="mt-3 space-y-2 text-xs">
+                <div class="p-2 bg-surface-container-low rounded flex justify-between items-center">
+                  <span>Owner: <strong>Ravi Kumar</strong></span>
+                  <span class="text-[#198754] font-data-mono font-bold">96%</span>
+                </div>
+                <div class="p-2 bg-surface-container-low rounded flex justify-between items-center">
+                  <span>Survey No: <strong>124/3</strong></span>
+                  <span class="text-[#198754] font-data-mono font-bold">98%</span>
+                </div>
+                <div class="p-2 bg-surface-container-low rounded flex justify-between items-center">
+                  <span>Khata: <strong>KH-2048</strong></span>
+                  <span class="text-[#198754] font-data-mono font-bold">99%</span>
+                </div>
+                <div class="p-2 bg-[#FEF6E7] border border-[#FCDAA7] rounded flex justify-between items-center text-[#8f5600]">
+                  <span>AI Area: <strong>2.45 Acres</strong></span>
+                  <span class="font-data-mono font-bold">72% (Review)</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-2 text-[11px] text-[#8f5600] font-semibold text-center">
+              Area confidence lowered due to GIS discrepancy
+            </div>
+          </div>
+
+          <!-- PANEL 3 (RIGHT): Land DB + GIS Info -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-2 border-b border-outline-variant">
+                <span class="text-xs font-bold text-primary flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm" data-icon="database">database</span> 3. Land DB &amp; GIS
+                </span>
+                <span class="text-[10px] font-data-mono bg-[#FDE8EA] text-error px-1.5 py-0.5 rounded">GIS Conflict</span>
+              </div>
+              <div class="mt-3 space-y-2 text-xs">
+                <div class="p-2 bg-surface-container-low rounded">
+                  <div class="font-semibold text-primary">Meebhoomi State DB:</div>
+                  <div class="font-data-mono text-on-surface">Area: 2.45 Acres | Khata: KH-2048</div>
+                </div>
+                <div class="p-2 bg-[#FDE8EA] rounded border border-[#F8B4B9]">
+                  <div class="font-semibold text-error">Cadastral GIS Vector Polygon:</div>
+                  <div class="font-data-mono text-error font-bold">Area: 2.31 Acres (-0.14 Ac)</div>
+                  <div class="text-[10px] text-on-surface-variant mt-0.5">ZP Road widening encroachment</div>
+                </div>
+              </div>
+            </div>
+            <div class="pt-2 text-[11px] text-error font-semibold text-center">
+              Net Deficit: 6,098.4 sq.ft along North edge
+            </div>
+          </div>
+        </div>
+
+        <!-- Officer Adjudication Deck -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm space-y-4">
+          <div class="border-b border-outline-variant pb-3">
+            <h3 class="text-headline-sm text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary" data-icon="edit_note">edit_note</span>
+              Officer Adjudication &amp; Correction Form
+            </h3>
+            <p class="text-body-sm text-on-surface-variant">Under Section 10(2) AP Survey &amp; Boundaries Act. Presiding: Officer S. Sharma (DRO Guntur).</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-label-sm font-semibold text-on-surface mb-1">Authorized Final Land Extent:</label>
+              <div class="flex gap-2">
+                <input id="verificationCorrectedArea" type="text" value="2.45 Acres" class="w-full text-sm font-data-mono bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 focus:ring-2 focus:ring-secondary focus:outline-none font-bold text-primary">
+                <button onclick="document.getElementById('verificationCorrectedArea').value = '2.45 Acres'" class="px-2.5 py-1 text-xs border rounded bg-surface-container hover:bg-surface-variant whitespace-nowrap">2.45 Ac</button>
+                <button onclick="document.getElementById('verificationCorrectedArea').value = '2.31 Acres'" class="px-2.5 py-1 text-xs border rounded bg-surface-container hover:bg-surface-variant whitespace-nowrap">2.31 Ac</button>
+              </div>
+              <p class="text-[11px] text-on-surface-variant mt-1">If "Correct &amp; Verify" is chosen, the authorized extent will be certified.</p>
+            </div>
+
+            <div>
+              <label class="block text-label-sm font-semibold text-on-surface mb-1">Verification Notes &amp; Statutory Remarks (Mandatory):</label>
+              <textarea id="verificationNotesInput" rows="2" class="w-full text-xs font-body-sm bg-surface-container-low border border-outline-variant rounded-lg p-2.5 focus:ring-2 focus:ring-secondary focus:outline-none" placeholder="Enter statutory adjudication remarks...">Survey verified with ground DGPS measurement: 2.45 Acres confirmed with boundary stone 4B. 0.14 Acres notified for ZP road easement compensation in Form 12.</textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 pt-2">
+            <input checked id="officerDscCheck" type="checkbox" class="rounded text-secondary focus:ring-secondary">
+            <label for="officerDscCheck" class="text-label-sm text-on-surface font-medium">Affix Officer Digital Signature Certificate (DSC-GOVT-IN-2026-98442)</label>
+          </div>
+
+          <!-- Decision Action Buttons -->
+          <div class="pt-3 border-t border-outline-variant flex flex-wrap items-center justify-between gap-3">
+            <div class="text-label-sm text-on-surface-variant">
+              Target Record: <strong class="font-data-mono text-primary">DOC-2026-00421 (Survey 124/3)</strong>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="submitVerificationDecision('REJECT')" class="px-4 py-2 rounded-lg border border-error text-error hover:bg-error-container text-label-md font-semibold transition">
+                Reject Record
+              </button>
+              <button onclick="submitVerificationDecision('APPROVE')" class="px-4 py-2 rounded-lg bg-surface-container-lowest border border-secondary text-secondary hover:bg-secondary/10 text-label-md font-semibold transition">
+                Approve As Is
+              </button>
+              <button onclick="submitVerificationDecision('CORRECT_AND_VERIFY')" class="px-5 py-2 rounded-lg bg-primary hover:bg-secondary text-on-primary text-label-md font-bold transition shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
+                <span>Correct &amp; Verify</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 7: VERIFIED RECORD (Digital Certificate)           -->
+      <!-- ======================================================= -->
+      <section id="view-certificate" class="space-y-6 hidden">
+        <div class="max-w-3xl mx-auto bg-surface-container-lowest p-8 rounded-2xl border-2 border-secondary shadow-xl relative overflow-hidden">
+          <!-- Official Seal Badge Watermark -->
+          <div class="absolute right-6 top-6 opacity-10 pointer-events-none">
+            <span class="material-symbols-outlined text-9xl text-secondary" data-icon="verified">verified</span>
+          </div>
+
+          <!-- Certificate Header -->
+          <div class="border-b-2 border-secondary/30 pb-5 text-center space-y-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EBF7EE] border border-[#C2E7CB] text-[#198754] text-xs font-bold font-data-mono">
+              <span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+              <span>STATUTORY VERIFIED RECORD</span>
+            </div>
+            <h2 class="text-headline-lg font-bold text-primary">State Land Administration Digital Certificate</h2>
+            <p class="text-body-sm text-on-surface-variant">Government of Andhra Pradesh • Department of Land Revenue &amp; Surveys</p>
+          </div>
+
+          <!-- Certificate Details Grid -->
+          <div class="my-6 grid grid-cols-2 gap-4 text-sm font-body-md">
+            <div class="p-3 bg-surface-container-low rounded-lg">
+              <span class="text-xs text-on-surface-variant block uppercase font-semibold">Document Reference ID</span>
+              <span id="certDocId" class="font-data-mono font-bold text-primary text-base">DOC-2026-00421</span>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-lg">
+              <span class="text-xs text-on-surface-variant block uppercase font-semibold">Cadastral Survey Number</span>
+              <span id="certSurveyNo" class="font-data-mono font-bold text-secondary text-base">124/3</span>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-lg">
+              <span class="text-xs text-on-surface-variant block uppercase font-semibold">Certified Pattadar / Owner</span>
+              <span id="certOwner" class="font-semibold text-on-surface text-base">Ravi Kumar</span>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-lg">
+              <span class="text-xs text-on-surface-variant block uppercase font-semibold">Revenue Khata Account</span>
+              <span id="certKhata" class="font-data-mono font-bold text-on-surface text-base">KH-2048</span>
+            </div>
+            <div class="p-3 bg-[#EBF7EE] border border-[#C2E7CB] rounded-lg">
+              <span class="text-xs text-[#198754] block uppercase font-bold">Authorized Final Extent</span>
+              <span id="certArea" class="font-data-mono font-bold text-[#198754] text-lg">2.45 Acres</span>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-lg">
+              <span class="text-xs text-on-surface-variant block uppercase font-semibold">Verification Method</span>
+              <span class="font-semibold text-primary">Human Verified (DRO Adjudication)</span>
+            </div>
+          </div>
+
+          <!-- Statutory Officer Note -->
+          <div class="p-3.5 bg-surface-container-low rounded-lg border border-outline-variant/60 mb-6">
+            <span class="text-xs text-on-surface-variant font-semibold block mb-1">Statutory Adjudication Remarks:</span>
+            <p id="certNotes" class="text-xs text-on-surface font-body-sm italic">
+              "Survey verified with ground DGPS measurement: 2.45 Acres confirmed with boundary stone 4B. 0.14 Acres notified for ZP road easement compensation in Form 12."
+            </p>
+          </div>
+
+          <!-- Digital Signature Stamp -->
+          <div class="pt-4 border-t border-outline-variant/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
+            <div>
+              <div class="font-semibold text-primary">Digitally Signed By: Officer S. Sharma</div>
+              <div class="text-on-surface-variant">District Revenue Officer / Tahsildar (Guntur)</div>
+              <div id="certTimestamp" class="font-data-mono text-outline mt-0.5">Timestamp: Today, 15:10:45 IST</div>
+            </div>
+            <div class="text-right">
+              <div class="font-data-mono text-[10px] text-outline break-all max-w-xs" id="certHash">
+                SHA256: 4a2f8b91c78e3401d67e20b94321fa889021bcfe871029384756102938475610
+              </div>
+              <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary mt-1">
+                <span class="material-symbols-outlined text-xs" data-icon="lock">lock</span> DSC Cryptographically Sealed
+              </span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 pt-4 border-t border-outline-variant flex flex-wrap justify-between items-center gap-3">
+            <button onclick="switchView('audit')" class="px-4 py-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-semibold text-xs flex items-center gap-1.5 transition">
+              <span class="material-symbols-outlined text-sm" data-icon="history_toggle_off">history_toggle_off</span>
+              <span>View Audit Trail</span>
+            </button>
+            <div class="flex gap-2">
+              <button onclick="triggerToast('Official Gazette Certificate PDF generated and downloaded.')" class="px-3 py-2 rounded-lg border border-outline-variant hover:border-primary text-primary text-xs font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm" data-icon="file_download">file_download</span> Download PDF
+              </button>
+              <button onclick="switchView('dashboard')" class="px-3 py-2 rounded-lg bg-surface-container hover:bg-surface-variant text-primary text-xs font-semibold">
+                Return to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- VIEW 8: AUDIT TRAIL TIMELINE                            -->
+      <!-- ======================================================= -->
+      <section id="view-audit" class="space-y-6 hidden">
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded text-[11px] font-data-mono bg-secondary text-on-secondary font-bold">TAMPER-PROOF LEDGER</span>
+              <h2 class="text-headline-md text-primary">Cryptographic Audit &amp; Mutation Ledger</h2>
+              <span class="badge-demo">IMMUTABLE LOG</span>
+            </div>
+            <p class="text-body-sm text-on-surface-variant">Chronological audit events with SHA-256 block hash verification.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-label-sm font-data-mono text-outline">Target: DOC-2026-00421</span>
+            <button class="px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant text-primary font-label-md text-label-md font-semibold hover:bg-surface-container transition" onclick="triggerToast('Verifying chain integrity... All blocks cryptographically validated.')">
+              Verify Integrity Hash
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Timeline Container -->
+        <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+          <div id="auditTimelineContainer" class="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-outline-variant">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODALS & POPUPS                                           -->
+  <!-- ========================================================= -->
+
+  <!-- 1. UPLOAD MODAL -->
+  <div id="uploadModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl max-w-xl w-full p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-base" data-icon="upload_file">upload_file</span>
+          </div>
+          <div>
+            <h3 class="text-headline-sm text-primary font-bold">Upload Land Record</h3>
+            <p class="text-xs text-on-surface-variant">Support for scanned Deeds, RoR 1-B, Patta, and Adangal</p>
+          </div>
+        </div>
+        <button onclick="closeUploadModal()" class="p-1 rounded hover:bg-surface-container text-on-surface-variant">
+          <span class="material-symbols-outlined" data-icon="close">close</span>
+        </button>
+      </div>
+
+      <!-- Quick Demo Selector -->
+      <div class="p-3 bg-secondary/10 border border-secondary/20 rounded-lg flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-secondary block">DEMO RECORD PRESET</span>
+          <span class="text-xs text-on-surface">Survey 124/3 • Mangalagiri (ROR_Mangalagiri_124_3.pdf)</span>
+        </div>
+        <button onclick="loadDemoPreset()" class="px-2.5 py-1 bg-secondary text-on-secondary rounded text-xs font-semibold hover:bg-opacity-90 transition">
+          Load Preset
+        </button>
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="border-2 border-dashed border-outline hover:border-secondary rounded-xl p-6 text-center cursor-pointer transition bg-surface-container-low/40">
+        <input id="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg,.tiff" class="hidden" onchange="handleFileSelected(event)">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-2" data-icon="cloud_upload">cloud_upload</span>
+        <p id="dropZoneFileName" class="text-sm font-semibold text-primary">Click or drag &amp; drop document here</p>
+        <p class="text-xs text-on-surface-variant mt-1">Supported formats: PDF, JPG, PNG, TIFF (Up to 25 MB)</p>
+      </div>
+
+      <!-- Form Inputs -->
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block font-semibold text-on-surface mb-1">Document Type</label>
+          <select id="uploadDocType" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-2 text-xs">
+            <option>Record of Rights (Form 1-B)</option>
+            <option>Registered Settlement Deed (1974)</option>
+            <option>Pattadar Passbook</option>
+            <option>Pahani / Adangal</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-on-surface mb-1">Language</label>
+          <select id="uploadLanguage" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-2 text-xs">
+            <option>Telugu / English (Auto-Detect)</option>
+            <option>Telugu Only</option>
+            <option>English Only</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-on-surface mb-1">District</label>
+          <select id="uploadDistrict" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-2 text-xs">
+            <option>Guntur</option>
+            <option>Krishna</option>
+            <option>Visakhapatnam</option>
+            <option>Chittoor</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-on-surface mb-1">Mandal / Village</label>
+          <input id="uploadVillage" type="text" value="Mangalagiri" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-2 text-xs">
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="pt-3 border-t border-outline-variant flex justify-end gap-2">
+        <button onclick="closeUploadModal()" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-semibold hover:bg-surface-container">
+          Cancel
+        </button>
+        <button onclick="startProcessingPipeline()" class="px-5 py-2 bg-primary hover:bg-secondary text-on-primary rounded-lg text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+          <span>Start AI Processing</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PROCESSING PIPELINE MODAL (Realistic Loading Stages) -->
+  <div id="processingModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl max-w-lg w-full p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+        <div>
+          <span class="text-xs font-data-mono text-secondary font-bold">DIGITIZATION PIPELINE</span>
+          <h3 class="text-headline-sm text-primary font-bold" id="processingDocTitle">Processing: ROR_Mangalagiri_124_3.pdf</h3>
+        </div>
+        <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-ping"></span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div>
+        <div class="flex justify-between text-xs font-data-mono text-on-surface-variant mb-1">
+          <span id="pipelineStageText">Initializing Preprocessing...</span>
+          <span id="pipelineProgressPercent" class="font-bold text-primary">15%</span>
+        </div>
+        <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+          <div id="pipelineProgressBar" class="h-full bg-secondary transition-all duration-300" style="width: 15%"></div>
+        </div>
+      </div>
+
+      <!-- 6 Visual Stages -->
+      <div class="space-y-2.5 text-xs">
+        <div id="stage-1" class="flex items-center justify-between p-2 rounded bg-surface-container-low">
+          <span class="flex items-center gap-2 font-medium">
+            <span class="material-symbols-outlined text-sm text-[#198754]" data-icon="check_circle">check_circle</span>
+            1. Document Uploaded &amp; Scanned
+          </span>
+          <span class="text-[10px] font-data-mono text-outline">Completed</span>
+        </div>
+
+        <div id="stage-2" class="flex items-center justify-between p-2 rounded bg-surface-container-low">
+          <span class="flex items-center gap-2 font-medium">
+            <span id="icon-stage-2" class="material-symbols-outlined text-sm text-secondary animate-spin" data-icon="progress_activity">progress_activity</span>
+            2. Image Preprocessing &amp; Binarization
+          </span>
+          <span id="badge-stage-2" class="text-[10px] font-data-mono text-secondary font-semibold">Running</span>
+        </div>
+
+        <div id="stage-3" class="flex items-center justify-between p-2 rounded bg-surface-container-low opacity-60">
+          <span class="flex items-center gap-2 font-medium">
+            <span id="icon-stage-3" class="material-symbols-outlined text-sm text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+            3. Multilingual OCR Text Extraction
+          </span>
+          <span id="badge-stage-3" class="text-[10px] font-data-mono text-outline">Pending</span>
+        </div>
+
+        <div id="stage-4" class="flex items-center justify-between p-2 rounded bg-surface-container-low opacity-60">
+          <span class="flex items-center gap-2 font-medium">
+            <span id="icon-stage-4" class="material-symbols-outlined text-sm text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+            4. AI Field Extraction &amp; Confidence Scoring
+          </span>
+          <span id="badge-stage-4" class="text-[10px] font-data-mono text-outline">Pending</span>
+        </div>
+
+        <div id="stage-5" class="flex items-center justify-between p-2 rounded bg-surface-container-low opacity-60">
+          <span class="flex items-center gap-2 font-medium">
+            <span id="icon-stage-5" class="material-symbols-outlined text-sm text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+            5. Land Database Cross-Validation
+          </span>
+          <span id="badge-stage-5" class="text-[10px] font-data-mono text-outline">Pending</span>
+        </div>
+
+        <div id="stage-6" class="flex items-center justify-between p-2 rounded bg-surface-container-low opacity-60">
+          <span class="flex items-center gap-2 font-medium">
+            <span id="icon-stage-6" class="material-symbols-outlined text-sm text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+            6. GIS Cadastral Parcel Matching
+          </span>
+          <span id="badge-stage-6" class="text-[10px] font-data-mono text-outline">Pending</span>
+        </div>
+      </div>
+
+      <!-- Live Terminal Output -->
+      <div class="p-2.5 bg-[#0b1924] rounded-lg text-[11px] font-data-mono text-[#38bdf8] h-16 overflow-y-auto" id="pipelineTerminalLogs">
+        [SYSTEM]: Initializing ingestion worker...
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. VERIFICATION CONFIRMATION MODAL -->
+  <div id="confirmVerifyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+        </div>
+        <div>
+          <h3 class="text-headline-sm text-primary font-bold">Confirm Statutory Verification</h3>
+          <p class="text-xs text-on-surface-variant">Are you sure you want to verify this land record?</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-on-surface leading-relaxed">
+        This action will apply <strong>Officer S. Sharma's</strong> Digital Signature Certificate, generate a cryptographic block in the Audit Ledger, and lock the record as <strong>VERIFIED</strong>.
+      </p>
+
+      <div class="pt-3 border-t border-outline-variant flex justify-end gap-2">
+        <button onclick="closeConfirmModal()" class="px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold hover:bg-surface-container">
+          Cancel
+        </button>
+        <button onclick="executeVerificationConfirmation()" class="px-4 py-1.5 bg-primary hover:bg-secondary text-on-primary rounded-lg text-xs font-bold transition shadow-sm">
+          Yes, Verify &amp; Sign Record
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Capsule -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform transition-all duration-300 pointer-events-none translate-y-20 opacity-0">
+    <div class="bg-inverse-surface text-inverse-on-surface px-4 py-3 rounded-lg shadow-xl border border-outline/30 flex items-center gap-3">
+      <span class="material-symbols-outlined text-secondary-container" data-icon="info">info</span>
+      <span id="toastMsg" class="text-body-sm font-body-sm">Notification message</span>
+    </div>
+  </div>
+
+  <!-- Application Controller Script -->
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>
