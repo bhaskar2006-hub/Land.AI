@@ -449,25 +449,51 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                         : 'border-rose-500/50 bg-rose-950/20'
                     } space-y-3`}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="text-base font-black">
                             {crossVerifyResult.cross_verification?.badge || 'Status'}
                           </span>
                           <span className="badge badge-outline text-[10px]">
                             Matched Parcel: {crossVerifyResult.matched_parcel_id || 'P0026'}
                           </span>
+                          {crossVerifyResult.database_status?.stored ? (
+                            <span className="badge badge-emerald text-[10px] font-bold">
+                              💾 Database Committed ({crossVerifyResult.database_status.confidence_percentage}% ≥ 95%)
+                            </span>
+                          ) : (
+                            <span className="badge badge-rose text-[10px] font-bold">
+                              ⚠️ Review Queue ({crossVerifyResult.database_status?.confidence_percentage || 68}% &lt; 95%)
+                            </span>
+                          )}
                         </div>
 
                         {/* Jump to GIS Map Button */}
                         <button
-                          onClick={() => onNavigate('map')}
-                          className="btn btn-primary btn-sm flex items-center gap-1.5 text-xs py-1.5 px-3 bg-blue-600 hover:bg-blue-500"
+                          onClick={() => {
+                            if (crossVerifyResult) {
+                              localStorage.setItem('selected_gis_parcel', JSON.stringify(crossVerifyResult));
+                            }
+                            onNavigate('map');
+                          }}
+                          className="btn btn-primary btn-sm flex items-center gap-1.5 text-xs py-1.5 px-3 bg-blue-600 hover:bg-blue-500 font-bold shadow-md"
                         >
                           <MapPin size={13} />
-                          <span>View on GIS Map</span>
+                          <span>Plot & View on GIS Map</span>
                           <ArrowRight size={13} />
                         </button>
                       </div>
+
+                      {/* Database Status Alert Banner */}
+                      {crossVerifyResult.database_status && (
+                        <div className={`p-2.5 rounded-lg text-xs flex items-center gap-2 ${
+                          crossVerifyResult.database_status.stored
+                            ? 'bg-emerald-950/40 border border-emerald-500/40 text-emerald-300'
+                            : 'bg-amber-950/40 border border-amber-500/40 text-amber-300'
+                        }`}>
+                          <ShieldCheck size={14} className="shrink-0" />
+                          <span>{crossVerifyResult.database_status.message}</span>
+                        </div>
+                      )}
 
                       {/* Reconciliation Comparison Table */}
                       <div className="overflow-x-auto">

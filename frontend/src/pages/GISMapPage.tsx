@@ -43,6 +43,19 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
   const [issueFilter, setIssueFilter] = useState<'all' | 'conflicts' | 'area_mismatch' | 'owner_mismatch' | 'clean'>('all');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
+  // Injected parcel from OCR validation with database commit status
+  const [injectedParcelNotice, setInjectedParcelNotice] = useState<{
+    survey: string;
+    status: string;
+    stored: boolean;
+    confidence: number;
+    message: string;
+    coordinatesText: string;
+    area: string;
+    owner: string;
+  } | null>(null);
+  const injectedLayerRef = useRef<L.GeoJSON | null>(null);
+
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3500);
@@ -196,6 +209,74 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
 
     // Default load Burgul Village Cadastral Map (Telangana LandGrid)
     loadDataset('burgul');
+
+    // Check if a parcel was passed from AI OCR Cross-Verification
+    const checkInjectedParcel = () => {
+      try {
+        const raw = localStorage.getItem('selected_gis_parcel');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const feat = parsed.polygon_geojson;
+          const dbStat = parsed.database_status;
+          const sNo = parsed.matched_survey || parsed.ocr_extracted?.survey_number || '126/1';
+          const isStored = dbStat?.stored !== undefined ? dbStat.stored : ((dbStat?.confidence_percentage || 0) >= 95 || (parsed.ocr_extracted?.overall_confidence || 0) >= 0.95);
+          const conf = dbStat?.confidence_percentage || (parsed.ocr_extracted?.overall_confidence ? parsed.ocr_extracted.overall_confidence * 100 : 98.0);
+
+          setInjectedParcelNotice({
+            survey: sNo,
+            status: parsed.cross_verification?.status || 'VERIFIED',
+            stored: isStored,
+            confidence: Number(conf.toFixed(1)),
+            message: dbStat?.message || (isStored ? `Record stored in master database (Confidence ${conf.toFixed(1)}% >= 95%)` : `Routed to Review Queue (${conf.toFixed(1)}% < 95%)`),
+            coordinatesText: feat?.geometry?.coordinates ? JSON.stringify(feat.geometry.coordinates[0][0]) : '78.25°E, 17.07°N',
+            area: parsed.ocr_extracted?.area_acres ? `${parsed.ocr_extracted.area_acres} Acres` : `${parsed.gis_registered?.area_acres || 0.233} Acres`,
+            owner: parsed.ocr_extracted?.owner_name || parsed.gis_registered?.owner_name || 'Titleholder'
+          });
+
+          setSelectedParcel({
+            parcel_id: parsed.matched_parcel_id || 'P0026',
+            survey_no: sNo,
+            survey_display: sNo,
+            owner_name: parsed.gis_registered?.owner_name || parsed.ocr_extracted?.owner_name,
+            ocr_owner: parsed.ocr_extracted?.owner_name,
+            area_acres: parsed.gis_registered?.area_acres || 0.233,
+            ocr_area_acres: parsed.ocr_extracted?.area_acres,
+            centroid_lat: parsed.gis_registered?.centroid?.lat || (feat?.properties?.centroid_lat || 17.07),
+            centroid_lon: parsed.gis_registered?.centroid?.lon || (feat?.properties?.centroid_lon || 78.25),
+            verification_status: parsed.cross_verification?.status === 'VERIFIED' ? 'Verified' : 'Conflict',
+            validation_issue: parsed.cross_verification?.issues?.join(', ') || '',
+            db_committed: isStored
+          });
+
+          if (feat) {
+            setTimeout(() => {
+              if (mapInstanceRef.current) {
+                if (injectedLayerRef.current) {
+                  mapInstanceRef.current.removeLayer(injectedLayerRef.current);
+                }
+                const highlightLayer = L.geoJSON(feat as any, {
+                  style: {
+                    color: isStored ? '#10b981' : '#f43f5e',
+                    weight: 5.0,
+                    fillColor: isStored ? '#34d399' : '#fb7185',
+                    fillOpacity: 0.70
+                  }
+                }).addTo(mapInstanceRef.current);
+
+                injectedLayerRef.current = highlightLayer;
+                const bounds = highlightLayer.getBounds();
+                if (bounds.isValid()) {
+                  mapInstanceRef.current.fitBounds(bounds, { maxZoom: 18, padding: [40, 40] });
+                }
+              }
+            }, 600);
+          }
+        }
+      } catch (err) {
+        console.warn('Error reading selected_gis_parcel:', err);
+      }
+    };
+    checkInjectedParcel();
 
     return () => {
       map.remove();
@@ -907,6 +988,48 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
               </button>
             </div>
           </div>
+
+          {/* Real-Time Plotted Parcel & Database Commit Status Banner */}
+          {injectedParcelNotice && (
+            <div className={`p-3 px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 z-[400] relative border-b ${
+              injectedParcelNotice.stored
+                ? 'bg-emerald-950/95 border-emerald-500/50 text-emerald-200'
+                : 'bg-rose-950/95 border-rose-500/50 text-rose-200'
+            }`}>
+              <div className="flex items-center gap-2.5 text-xs">
+                {injectedParcelNotice.stored ? (
+                  <ShieldCheck size={18} className="text-emerald-400 shrink-0" />
+                ) : (
+                  <AlertTriangle size={18} className="text-rose-400 shrink-0" />
+                )}
+                <div>
+                  <div className="font-bold flex items-center gap-2">
+                    <span>
+                      {injectedParcelNotice.stored
+                        ? `🟢 Stored in Master Database (${injectedParcelNotice.confidence}% ≥ 95.0%)`
+                        : `🔴 Plotted with Audit Flag (${injectedParcelNotice.confidence}% < 95.0%)`
+                      } — Plotted Survey #{injectedParcelNotice.survey}
+                    </span>
+                    <span className="badge badge-outline text-[10px] text-white">
+                      {injectedParcelNotice.area} | {injectedParcelNotice.owner}
+                    </span>
+                  </div>
+                  <div className="text-[11px] opacity-90 mt-0.5">
+                    {injectedParcelNotice.message} • First Coordinate Point: <span className="font-mono text-cyan-300">{injectedParcelNotice.coordinatesText}</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setInjectedParcelNotice(null);
+                  localStorage.removeItem('selected_gis_parcel');
+                }}
+                className="text-[11px] bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded border border-white/20 font-bold self-end sm:self-auto text-white"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
 
           {/* North Arrow / Compass Rose (Top-Right inside map frame) */}
           <div className="absolute top-16 right-4 z-[400] bg-white/95 p-1.5 rounded-full shadow-lg border border-slate-300 flex flex-col items-center justify-center w-11 h-11 pointer-events-none">
