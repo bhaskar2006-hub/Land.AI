@@ -52,6 +52,13 @@ def verify_document_against_gis_parcel(survey_or_doc_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail=result.get("error"))
     return result
 
+@router.post("/cross-verify-ocr")
+def verify_ocr_payload_against_cadastral(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Cross-verifies any dynamic OCR extraction payload (e.g. Gemini OCR) against the 500-parcel reference database.
+    """
+    return cross_verification_service.verify_ocr_payload_against_gis(payload)
+
 @router.get("/parcel/{survey_no}", response_model=Optional[ParcelOut])
 def get_parcel_by_survey(survey_no: str, db: Session = Depends(get_db)):
     parcel = gis_service.get_parcel_by_survey(db, survey_no)

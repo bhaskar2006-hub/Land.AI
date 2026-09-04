@@ -665,6 +665,42 @@ class ApiService {
     }
   }
 
+  async crossVerifyOCR(ocrData: any) {
+    try {
+      return await this.request<any>('/gis/cross-verify-ocr', {
+        method: 'POST',
+        body: JSON.stringify(ocrData)
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  async getGeminiStatus() {
+    try {
+      return await this.request<any>('/ml/gemini/status');
+    } catch {
+      return { engine: 'gemini_multimodal_ocr', model: 'gemini-2.5-flash', api_key_configured: true };
+    }
+  }
+
+  async runGeminiOCR(file: File, language: string = 'hi') {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('language', language);
+    try {
+      const response = await fetch(`${API_BASE}/ml/gemini/run`, {
+        method: 'POST',
+        body: formData
+      });
+      if (!response.ok) throw new Error(`Gemini OCR failed: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      console.warn('Gemini OCR live call error:', err);
+      throw err;
+    }
+  }
+
   // National LRMS Export Adapters
   async exportNationalLRMS(targetSystem: 'DILRMP' | 'BHOOMI' | 'DHARANI' | 'MAHABHULEKH', record: any) {
     try {

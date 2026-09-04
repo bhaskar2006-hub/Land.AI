@@ -7,6 +7,7 @@ from backend.app.models.document import Document
 from backend.app.models.extraction import ExtractedField
 from backend.app.models.verification import VerificationTask
 from backend.app.services.ocr_engine import ocr_engine
+from backend.app.services.gemini_ocr import gemini_ocr_engine
 from backend.app.ml.preprocessor import cv_preprocessor
 from backend.app.ml.script_normalizer import script_normalizer
 from backend.app.ml.entity_extractor import entity_extractor
@@ -16,9 +17,9 @@ from backend.app.core.config import settings
 class ExtractionService:
     """
     Production AI/ML Extraction Pipeline:
-    1. Computer Vision Image Preprocessing (Deskew, CLAHE, Noise reduction)
-    2. Multilingual Indic OCR (Devanagari, Tamil, Telugu, Kannada, Marathi)
-    3. NLP Named Entity Recognition & Revenue Term Standardization
+    1. Multimodal Indic LLM / Vision OCR (Gemini 2.5 Flash API with Indic System Prompt)
+    2. Computer Vision Image Preprocessing (Deskew, CLAHE, Noise reduction)
+    3. Multilingual Indic OCR & Domain Entity Extraction via NLP / Regex NER
     4. Multi-signal Confidence Scoring & HITL Queue Routing
     """
     def __init__(self):
@@ -32,16 +33,27 @@ class ExtractionService:
         doc.status = "PROCESSING"
         db.commit()
 
-        # 1. Image Preprocessing (CV)
-        cv_result = cv_preprocessor.process_document(doc.file_path)
+        # 1. Try Gemini Multimodal OCR first if key available or enabled
+        gemini_result = None
+        if settings.GEMINI_API_KEY:
+            try:
+                gemini_res = gemini_ocr_engine.extract_from_file(doc.file_path, language=doc.language)
+                if gemini_res.get("status") in ["SUCCESS", "FALLBACK"]:
+                    gemini_result = gemini_res.get("data", {})
+            except Exception as e:
+                pass
 
-        # 2. Perform OCR
+        # 2. Image Preprocessing (CV) & OCR Engine fallback/enrichment
+        cv_result = cv_preprocessor.process_document(doc.file_path)
         ocr_result = ocr_engine.perform_ocr(doc.file_path, language=doc.language, doc_type=doc.document_type)
-        raw_text = ocr_result.get("raw_text", "")
+        raw_text = (gemini_result.get("raw_text") if gemini_result else None) or ocr_result.get("raw_text", "")
         vision_blocks = ocr_result.get("blocks", [])
 
         # 3. Domain Entity Extraction via NLP / Regex NER
         parsed_entities = entity_extractor.extract_entities_from_text(raw_text, language=doc.language)
+
+        # Merge Gemini extractions if available
+        sample = gemini_result if gemini_result else ocr_result.get("parsed_sample", {})
 
         # Helper to align entity bounding boxes with Vision OCR block geometry
         def get_best_bbox(target_text: str, default_box: Dict[str, Any]) -> Dict[str, Any]:
@@ -53,9 +65,6 @@ class ExtractionService:
                 if needle in cand or (len(needle) > 4 and cand in needle):
                     return blk.get("bbox", default_box)
             return default_box
-
-        # Fallback to parsed sample from OCR profile if text is sparse
-        sample = ocr_result.get("parsed_sample", {})
 
         fields_data: List[tuple] = []
 
