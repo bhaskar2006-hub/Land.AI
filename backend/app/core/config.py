@@ -1,9 +1,10 @@
 import os
 from typing import List
+# pyrefly: ignore [missing-import]
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Land.Ai Backend"
+    PROJECT_NAME: str = "LAND AI Backend"
     PROJECT_VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     

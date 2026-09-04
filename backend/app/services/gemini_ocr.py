@@ -188,8 +188,12 @@ Output strictly valid JSON matching this structure without markdown code blocks,
 
         # Check API Key
         if not self.api_key:
-            logger.info("GEMINI_API_KEY not set. Returning structured fallback for local development.")
-            fb = self._normalize_extracted_data(self._generate_fallback(language))
+            logger.info("GEMINI_API_KEY not set. Attempting local OCR extraction on uploaded file.")
+            # Try to extract real text from the uploaded bytes using PaddleOCR
+            local_text = self._extract_text_locally(file_bytes, actual_mime)
+            fb = self._normalize_extracted_data(
+                self._generate_fallback_from_text(local_text, language)
+            )
             return {
                 "status": "FALLBACK",
                 "engine": "gemini_multimodal_ocr",
@@ -265,39 +269,203 @@ Output strictly valid JSON matching this structure without markdown code blocks,
                 "data": fb
             }
 
+    # -----------------------------------------------------------------------
+    # Local (no-API-key) helpers
+    # -----------------------------------------------------------------------
+
+    def _extract_text_locally(self, file_bytes: bytes, mime_type: str) -> str:
+        """
+        Best-effort plain-text extraction from the uploaded bytes without
+        calling the Gemini API.  Falls back to an empty string gracefully.
+        """
+        try:
+            # PDF → extract text layer with PyMuPDF
+            if mime_type == "application/pdf" or file_bytes.startswith(b"%PDF"):
+                try:
+                    import fitz  # PyMuPDF
+                    doc = fitz.open(stream=file_bytes, filetype="pdf")
+                    pages_text = [doc[i].get_text() for i in range(len(doc))]
+                    doc.close()
+                    text = "\n".join(pages_text).strip()
+                    if text:
+                        return text
+                except Exception:
+                    pass
+
+            # Image → try PaddleOCR
+            try:
+                import numpy as np
+                from PIL import Image as PILImage
+                from paddleocr import PaddleOCR
+                ocr = PaddleOCR(use_angle_cls=True, lang="en", show_log=False)
+                img = PILImage.open(io.BytesIO(file_bytes)).convert("RGB")
+                result = ocr.ocr(np.array(img), cls=True)
+                if result and result[0]:
+                    return "\n".join(item[1][0] for item in result[0] if item)
+            except Exception:
+                pass
+        except Exception as e:
+            logger.debug(f"Local text extraction failed: {e}")
+        return ""
+
     def _generate_fallback(self, language: str = "hi") -> Dict[str, Any]:
-        """Provides realistic revenue extract if API key is not active."""
+        """Generates fallback data when API call fails or yields no content."""
+        return self._generate_fallback_from_text("", language)
+
+    def _generate_fallback_from_text(self, raw_text: str, language: str = "hi") -> Dict[str, Any]:
+        """
+        Parses whatever text was extracted locally using simple regex NER so
+        that each uploaded file produces its own distinct JSON output.  Falls
+        back to language-specific profile placeholders only for fields that
+        could not be found in the text.
+        """
+        import re
+
+        # Language-specific profile defaults (used only when regex finds nothing)
+        profiles: Dict[str, Dict[str, Any]] = {
+            "mr": {
+                "state": "Maharashtra", "district": "Nashik", "tehsil": "Niphad",
+                "village": "Pimpalgaon Baswant",
+                "owner": "Tukaram Ganpat Patil", "owner_local": "तुकाराम गणपत पाटील",
+                "survey": "142/2A", "khasra": "452", "khata": "K-889",
+                "area": "3.45 Hectares", "area_acres": 8.525, "sqm": 34500.0,
+                "land_class": "Agricultural (Jirayat / Bagayat)",
+                "langs": ["mr", "hi", "en"]
+            },
+            "te": {
+                "state": "Andhra Pradesh / Telangana", "district": "Guntur",
+                "tehsil": "Tenali", "village": "Angalakuduru",
+                "owner": "Venkateswara Rao", "owner_local": "వెంకటేశ్వర రావు",
+                "survey": "214/1B", "khasra": "88-A", "khata": "Khata-3420",
+                "area": "2.80 Acres", "area_acres": 2.80, "sqm": 11330.0,
+                "land_class": "Dry Land / Wet Land",
+                "langs": ["te", "en"]
+            },
+            "ta": {
+                "state": "Tamil Nadu", "district": "Nilgiris", "tehsil": "Kotagiri",
+                "village": "Kodanad",
+                "owner": "Ramesh Kumar", "owner_local": "ரமேஷ் குமார்",
+                "survey": "123/4A", "khasra": "Patta-882", "khata": "K-902",
+                "area": "1.50 Acres", "area_acres": 1.50, "sqm": 6070.0,
+                "land_class": "Wet / Plantation Land",
+                "langs": ["ta", "en"]
+            },
+            "hi": {
+                "state": "Uttar Pradesh", "district": "Varanasi", "tehsil": "Pindra",
+                "village": "Babatpur",
+                "owner": "Rakesh Singh Yadav", "owner_local": "राकेश सिंह यादव",
+                "survey": "284/1", "khasra": "1042-क", "khata": "खाता संख्या 00124",
+                "area": "2.10 Acres", "area_acres": 2.10, "sqm": 8498.0,
+                "land_class": "Agricultural (Irrigated)",
+                "langs": ["hi", "en"]
+            },
+        }
+        p = profiles.get(language, profiles["hi"])
+
+        def _find(patterns, text, default):
+            for pat in patterns:
+                m = re.search(pat, text, re.IGNORECASE)
+                if m:
+                    return m.group(1).strip()
+            return default
+
+        survey = _find(
+            [r"[Ss]urvey\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)",
+             r"[Gg]ut\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)",
+             r"Sy\.?\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)"],
+            raw_text, p["survey"])
+
+        khasra = _find(
+            [r"[Kk]hasra\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Dd]ag\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Pp]atta\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)"],
+            raw_text, p["khasra"])
+
+        khata = _find(
+            [r"[Kk]hata\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Kk]hatian\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Pp]atta\s*(?:No\.?)?\s*[:/]?\s*([\w-]+)"],
+            raw_text, p["khata"])
+
+        owner = _find(
+            [r"[Oo]wner\s*[:/]?\s*([A-Za-z\s\.]+)",
+             r"[Pp]attadar\s*[:/]?\s*([A-Za-z\s\.]+)",
+             r"[Ll]and\s*[Hh]older\s*[:/]?\s*([A-Za-z\s\.]+)",
+             r"[Kk]hatedaar\s*[:/]?\s*([A-Za-z\s\.]+)"],
+            raw_text, p["owner"])
+
+        area_str = _find(
+            [r"([\d]+(?:\.\d+)?\s*(?:[Aa]cres?|[Hh]ectares?|[Bb]igha|[Gg]untha))"],
+            raw_text, p["area"])
+
+        # Parse area to acres
+        area_acres: float = p["area_acres"]
+        am = re.search(r"([\d.]+)\s*(\w+)", area_str)
+        if am:
+            val = float(am.group(1))
+            unit = am.group(2).lower()
+            if "hect" in unit or unit.startswith("ha"):
+                area_acres = round(val * 2.47105, 4)
+            elif "bigha" in unit:
+                area_acres = round(val * 0.619, 4)
+            elif "guntha" in unit:
+                area_acres = round(val * 0.0247, 4)
+            else:
+                area_acres = val
+        sqm = round(area_acres * 4046.86, 1)
+
+        village = _find(
+            [r"[Vv]illage\s*[:/]?\s*([A-Za-z\s]+)",
+             r"[Gg]ram\s*[:/]?\s*([A-Za-z\s]+)",
+             r"[Mm]ouza\s*[:/]?\s*([A-Za-z\s]+)"],
+            raw_text, p["village"])
+
+        district = _find(
+            [r"[Dd]istrict\s*[:/]?\s*([A-Za-z\s]+)",
+             r"[Zz]illa\s*[:/]?\s*([A-Za-z\s]+)"],
+            raw_text, p["district"])
+
+        state = _find(
+            [r"GOVERNMENT\s+OF\s+([A-Z][A-Z\s]+?)\s*[—\-]",
+             r"[Ss]tate\s*[:/]?\s*([A-Za-z\s]+)"],
+            raw_text, p["state"])
+
+        used_text = raw_text if raw_text.strip() else (
+            f"DOCUMENT PROCESSED LOCALLY\nSurvey No: {survey} | Khasra: {khasra} | Khata: {khata}\n"
+            f"Owner: {owner}\nArea: {area_str}\nVillage: {village} | District: {district} | State: {state}"
+        )
+
         return {
-            "raw_text": "GOVERNMENT OF MAHARASHTRA — REVENUE DEPARTMENT\nFORM 7/12 (SATBARA)\nDistrict: Nashik | Taluka: Niphad | Village: Pimpalgaon Baswant\nSurvey No: 142/2A | Khasra: 452 | Khata: K-889\nLand Owner: तुकाराम गणपत पाटील (Tukaram Ganpat Patil)\nPlot Area: 3.45 Hectares\nLand Class: बागायत (Jirayat / Bagayat)\nMutation No: M-2041/2024\nReg Date: 2024-03-15",
-            "survey_number": "142/2A",
-            "survey_no": "142/2A",
-            "khasra_no": "452",
-            "khata_number": "K-889",
-            "khata_no": "K-889",
-            "owner_name": "Tukaram Ganpat Patil",
-            "owner_name_local": "तुकाराम गणपत पाटील",
+            "raw_text": used_text,
+            "survey_number": survey,
+            "survey_no": survey,
+            "khasra_no": khasra,
+            "khata_number": khata,
+            "khata_no": khata,
+            "owner_name": owner,
+            "owner_name_local": p["owner_local"],
             "co_owner_name": None,
-            "plot_area": "3.45 Hectares",
-            "area_acres": 8.525,
-            "plot_area_sqm": 34500.0,
-            "village": "Pimpalgaon Baswant",
-            "mandal": "Niphad",
-            "tehsil": "Niphad",
-            "district": "Nashik",
-            "state": "Maharashtra",
-            "land_classification": "Agricultural (Jirayat / Bagayat)",
-            "land_class": "बागायत (Jirayat / Bagayat)",
+            "plot_area": area_str,
+            "area_acres": area_acres,
+            "plot_area_sqm": sqm,
+            "village": village.strip(),
+            "mandal": p["tehsil"],
+            "tehsil": p["tehsil"],
+            "district": district.strip(),
+            "state": state.strip(),
+            "land_classification": p["land_class"],
+            "land_class": p["land_class"],
             "registration_status": "Registered",
             "mutation_status": "Approved",
-            "mutation_no": "M-2041/2024",
-            "reg_date": "2024-03-15",
-            "detected_languages": ["mr", "hi", "en"],
-            "ocr_confidence": 0.96,
+            "mutation_no": _find([r"[Mm]utation\s*[Nn]o\.?\s*[:/]?\s*([\w/-]+)"], raw_text, "M-0000/2024"),
+            "reg_date": _find([r"(\d{4}-\d{2}-\d{2})", r"(\d{2}/\d{2}/\d{4})"], raw_text, "2024-01-01"),
+            "detected_languages": p["langs"],
+            "ocr_confidence": 0.72,  # lower to indicate no Gemini was used
             "confidence": {
-                "survey_number": 0.98,
-                "khata_number": 0.95,
-                "owner_name": 0.96,
-                "area_acres": 0.94
+                "survey_number": 0.70,
+                "khata_number": 0.70,
+                "owner_name": 0.68,
+                "area_acres": 0.72
             },
             "dispute_detected": False
         }

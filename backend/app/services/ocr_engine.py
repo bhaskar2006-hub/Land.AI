@@ -355,24 +355,96 @@ class PaddleOCREngine:
         return record_profiles.get(language, record_profiles["hi"])
 
     def _build_parsed_sample(self, raw_text: str, profile: Dict[str, Any]) -> Dict[str, Any]:
-        survey = profile["surveys"][0]
-        area_val = 3.45
+        """
+        Parses actual OCR text with regex NER to extract land-record entities.
+        Falls back to language profile defaults only when a field is absent from the text.
+        """
+        import re
+
+        def _find(patterns, text, default):
+            for pat in patterns:
+                m = re.search(pat, text, re.IGNORECASE)
+                if m:
+                    return m.group(1).strip()
+            return default
+
+        survey = _find(
+            [r"[Ss]urvey\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)",
+             r"[Gg]ut\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)",
+             r"Sy\.?\s*[Nn]o\.?\s*[:/]?\s*([\w/]+)"],
+            raw_text, profile["surveys"][0])
+
+        khasra = _find(
+            [r"[Kk]hasra\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Dd]ag\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Pp]atta\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)"],
+            raw_text, profile["khasra"][0])
+
+        khata = _find(
+            [r"[Kk]hata\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)",
+             r"[Kk]hatian\s*[Nn]o\.?\s*[:/]?\s*([\w-]+)"],
+            raw_text, profile["khata"][0])
+
+        owner = _find(
+            [r"[Oo]wner\s*[:/]?\s*([A-Za-z\s\.]+)",
+             r"[Pp]attadar\s*[:/]?\s*([A-Za-z\s\.]+)",
+             r"[Ll]and\s*[Hh]older\s*[:/]?\s*([A-Za-z\s\.]+)"],
+            raw_text, profile["owners_en"][0])
+
+        area_raw = _find(
+            [r"([\d]+(?:\.[\d]+)?\s*(?:[Aa]cres?|[Hh]ectares?|[Bb]igha|[Gg]untha))"],
+            raw_text, f"3.45 {profile['unit']}")
+
+        # Parse area string to numeric acres
         unit = profile["unit"]
+        area_val = 3.45
+        am = re.search(r"([\d.]+)\s*(\w+)", area_raw)
+        if am:
+            val = float(am.group(1))
+            u = am.group(2).lower()
+            if "hect" in u or u.startswith("ha"):
+                area_val = round(val * 2.47105, 4)
+                unit = "Hectares"
+            elif "bigha" in u:
+                area_val = round(val * 0.619, 4)
+                unit = "Bigha"
+            elif "guntha" in u:
+                area_val = round(val * 0.0247, 4)
+                unit = "Guntha"
+            else:
+                area_val = val
+                unit = "Acres"
+
+        village = _find(
+            [r"[Vv]illage\s*[:/]?\s*([A-Za-z\s]+)",
+             r"[Gg]ram\s*[:/]?\s*([A-Za-z\s]+)"],
+            raw_text, profile["village"])
+
+        mutation = _find(
+            [r"[Mm]utation\s*[Nn]o\.?\s*[:/]?\s*([\w/-]+)"],
+            raw_text, "M-0000/2024")
+
+        reg_date = _find(
+            [r"(\d{4}-\d{2}-\d{2})", r"(\d{2}/\d{2}/\d{4})"],
+            raw_text, "2024-01-01")
+
+        sqm = round(area_val * 4046.86, 1)
+
         return {
-            "owner_name": profile["owners_en"][0],
+            "owner_name": owner,
             "owner_name_local": profile["owners"][0],
             "survey_no": survey,
-            "khasra_no": profile["khasra"][0],
-            "khata_no": profile["khata"][0],
-            "plot_area": f"{area_val} {unit}",
-            "plot_area_sqm": area_val * 4046.86 if "Acre" in unit else 34500.0,
-            "village": profile["village"],
+            "khasra_no": khasra,
+            "khata_no": khata,
+            "plot_area": area_raw,
+            "plot_area_sqm": sqm,
+            "village": village.strip(),
             "tehsil": profile["tehsil"],
             "district": profile["district"],
             "state": profile["state"],
             "land_class": profile["land_class"],
-            "mutation_no": "M-2041/2024",
-            "reg_date": "2024-03-15"
+            "mutation_no": mutation,
+            "reg_date": reg_date
         }
 
 # Global singleton instance

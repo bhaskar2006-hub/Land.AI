@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION,
-    description="Intelligent Land Record Digitization & Validation System (ILRDVS) API Gateway and Core Backend Services",
+    description="LAND AI — Multilingual Land Record AI Digitization & Cadastral GIS API Gateway and Core Backend Services",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -71,7 +71,7 @@ def health_check():
 @app.get("/", tags=["System"])
 def root():
     return {
-        "message": "Welcome to Land.Ai — Intelligent Land Record Digitization & Validation System API",
+        "message": "Welcome to LAND AI — Intelligent Land Record Digitization & Validation System API",
         "docs_url": "/docs",
         "health_check": "/healthz",
         "api_v1": settings.API_V1_STR
