@@ -26,10 +26,21 @@ export const HeroSection: React.FC = () => {
       {/* Content Container */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <div className="max-w-3xl">
-          {/* Institutional Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1B6B8F]/40 border border-[#1B6B8F]/70 text-blue-100 text-xs font-semibold uppercase tracking-wider mb-6 shadow-sm">
-            <ShieldCheck className="w-4 h-4 text-[#2E7D5B]" />
-            <span>AI-Assisted Land Record Modernization Pipeline</span>
+          {/* Institutional Status Badges with Ministry of Rural Development */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1B6B8F]/40 border border-[#1B6B8F]/70 text-blue-100 text-xs font-semibold uppercase tracking-wider shadow-sm">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Government of India</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold uppercase tracking-wider shadow-sm">
+              <span>🏛️ Ministry of Rural Development</span>
+            </div>
+          </div>
+
+          <div className="text-xs font-bold text-cyan-300 uppercase tracking-widest mb-3 flex items-center gap-2">
+            <span>Department of Land Resources (DoLR)</span>
+            <span>•</span>
+            <span>Digital India Land Records Modernization Programme (DILRMP)</span>
           </div>
 
           {/* Hero Headline */}

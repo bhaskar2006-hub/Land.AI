@@ -37,6 +37,7 @@ import {
 } from 'recharts';
 import { api } from '../services/api';
 import { DashboardStats } from '../types';
+import { LoadingPage } from '../components/LoadingPage';
 
 interface DashboardPageProps {
   onNavigate: (tab: string, docId?: string) => void;
@@ -56,9 +57,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
   if (loading || !stats) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-      </div>
+      <LoadingPage
+        message="Loading National Land Record Analytics & Cadastral KPIs..."
+        subMessage="Ministry of Rural Development • Department of Land Resources (DoLR)"
+      />
     );
   }
 

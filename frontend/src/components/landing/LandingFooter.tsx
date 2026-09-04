@@ -32,10 +32,10 @@ export const LandingFooter: React.FC = () => {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-gray-400">
           <div>
-            LAND•AI Demonstration Platform
+            Ministry of Rural Development • Department of Land Resources (DoLR), Government of India
           </div>
           <div>
-            Designed for institutional land modernization workflows
+            LAND•AI — Digital India Land Records Modernization Programme (DILRMP)
           </div>
         </div>
       </div>

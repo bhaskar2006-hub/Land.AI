@@ -11,7 +11,21 @@ import { SecuritySection } from '../components/landing/SecuritySection';
 import { SignInCTASection } from '../components/landing/SignInCTASection';
 import { LandingFooter } from '../components/landing/LandingFooter';
 
+import { useAuth } from '../context/AuthContext';
+import { LoadingPage } from '../components/LoadingPage';
+
 export const LandingPage: React.FC = () => {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <LoadingPage
+        message="Connecting to Ministry of Rural Development Gateway..."
+        subMessage="Department of Land Resources (DoLR) • LAND•AI Portal"
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#1F2937]">
       {/* 1. Official Government/Demonstration Banner */}
@@ -19,6 +33,22 @@ export const LandingPage: React.FC = () => {
 
       {/* 2. Responsive Institutional Navigation Header */}
       <LandingHeader />
+
+      {/* 2b. Official Ministry of Rural Development Identification Bar */}
+      <div className="bg-[#0b243b] text-white py-2 px-4 border-b border-[#18466e] text-center shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs">
+          <span className="text-amber-300 font-black uppercase tracking-wider flex items-center gap-1.5">
+            <span>🏛️</span>
+            <span>Ministry of Rural Development</span>
+          </span>
+          <span className="text-blue-300/60 hidden sm:inline">•</span>
+          <span className="text-slate-200 font-medium">Department of Land Resources (DoLR)</span>
+          <span className="text-blue-300/60 hidden sm:inline">•</span>
+          <span className="text-emerald-400 font-semibold">
+            Digital India Land Records Modernization Programme (DILRMP)
+          </span>
+        </div>
+      </div>
 
       {/* Main Content Sections */}
       <main className="flex-1">

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Lock, Mail, AlertCircle, ArrowLeft, Shield, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { GovernmentBanner } from '../components/landing/GovernmentBanner';
+import { LoadingPage } from '../components/LoadingPage';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,8 +12,26 @@ export const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { signInWithPassword, user, role } = useAuth();
+  const { signInWithPassword, user, role, loading } = useAuth();
   const navigate = useNavigate();
+
+  if (isSubmitting) {
+    return (
+      <LoadingPage
+        message="Authenticating Government Officer Credentials..."
+        subMessage="Ministry of Rural Development • Department of Land Resources (DoLR)"
+      />
+    );
+  }
+
+  if (loading) {
+    return (
+      <LoadingPage
+        message="Connecting to Ministry of Rural Development Gateway..."
+        subMessage="Verifying secure institutional session..."
+      />
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,11 +92,14 @@ export const LoginPage: React.FC = () => {
               <div className="w-12 h-12 rounded-lg bg-[#1B6B8F] mx-auto flex items-center justify-center mb-3 shadow-inner">
                 <Shield className="w-6 h-6 text-white" />
               </div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-amber-300 mb-1">
+                Ministry of Rural Development
+              </div>
               <h1 className="text-xl font-bold tracking-tight">
                 LAND•AI Officer Gateway
               </h1>
               <p className="text-xs text-blue-100 mt-1 font-mono">
-                Institutional Authentication Gateway
+                Department of Land Resources (DoLR) • DILRMP
               </p>
             </div>
 

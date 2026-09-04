@@ -21,22 +21,27 @@ export const LandingHeader: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#D9DEE5] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3.5">
-        {/* Brand Logo & Wordmark */}
+        {/* Brand Logo & Wordmark with Ministry of Rural Development Header */}
         <Link to="/" className="flex items-center gap-3 group select-none">
-          <div className="w-10 h-10 rounded-xl bg-[#123B5D] text-white flex items-center justify-center text-xl shadow-md group-hover:bg-[#1B6B8F] transition-colors flex-shrink-0">
-            🏛
+          <div className="w-11 h-11 rounded-xl bg-[#123B5D] text-white flex items-center justify-center text-2xl shadow-md group-hover:bg-[#1B6B8F] transition-colors flex-shrink-0 border border-blue-400/30">
+            🏛️
           </div>
-          <div>
+          <div className="flex flex-col">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[#1B6B8F] flex items-center gap-1.5">
+              <span>Government of India</span>
+              <span>•</span>
+              <span className="text-[#123B5D] font-extrabold">Ministry of Rural Development</span>
+            </div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-extrabold tracking-tight text-[#123B5D]">
+              <span className="text-xl font-black tracking-tight text-[#123B5D]">
                 LAND<span className="text-[#1B6B8F]">•</span>AI
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider bg-[#E8F1F5] text-[#123B5D] border border-[#1B6B8F]/30">
-                v1.0
+              <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#E8F1F5] text-[#123B5D] border border-[#1B6B8F]/30">
+                DoLR Portal
               </span>
             </div>
-            <p className="text-[11px] font-medium text-[#667085] leading-none mt-0.5">
-              Intelligent Land Record Digitization &amp; Validation
+            <p className="text-[10px] font-medium text-[#667085] leading-none">
+              Department of Land Resources • Cadastral Modernization
             </p>
           </div>
         </Link>
