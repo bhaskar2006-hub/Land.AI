@@ -8,6 +8,7 @@ import { VerificationDetailPage } from './pages/VerificationDetailPage';
 import { GISMapPage } from './pages/GISMapPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('dashboard');
@@ -41,6 +42,7 @@ export function App() {
         {currentTab === 'map' && <GISMapPage onNavigate={handleNavigate} />}
         {currentTab === 'reports' && <ReportsPage />}
         {currentTab === 'audit' && <AuditLogsPage />}
+        {currentTab === 'profile' && <ProfilePage />}
       </main>
 
       {/* Footer */}
