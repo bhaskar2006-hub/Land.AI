@@ -214,3 +214,34 @@ async def run_vision_ocr(
             except OSError:
                 pass
 
+@router.get("/gemini/status")
+def get_gemini_ocr_status() -> Dict[str, Any]:
+    """
+    Returns Gemini Multimodal OCR status, model name, and API Key configuration status.
+    """
+    return {
+        "engine": "gemini_multimodal_ocr",
+        "model": settings.GEMINI_MODEL,
+        "api_key_configured": bool(settings.GEMINI_API_KEY),
+        "timeout_seconds": settings.GEMINI_TIMEOUT_SECONDS,
+        "system_prompt_enabled": True
+    }
+
+@router.post("/gemini/run")
+async def run_gemini_ocr(
+    file: UploadFile = File(...),
+    language: str = Form("hi")
+) -> Dict[str, Any]:
+    """
+    Executes Multimodal OCR and structured Indic revenue entity extraction via Gemini API.
+    """
+    from backend.app.services.gemini_ocr import gemini_ocr_engine
+
+    content = await file.read()
+    result = gemini_ocr_engine.extract_from_file(content, mime_type=file.content_type or "image/jpeg", language=language)
+    return {
+        "file_name": file.filename,
+        "result": result
+    }
+
+

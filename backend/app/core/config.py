@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     VISION_FEATURE_TYPE: str = os.getenv("VISION_FEATURE_TYPE", "DOCUMENT_TEXT_DETECTION")
     VISION_TIMEOUT_SECONDS: float = float(os.getenv("VISION_TIMEOUT_SECONDS", "45.0"))
     
+    # Gemini Multimodal OCR
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+    GEMINI_TIMEOUT_SECONDS: float = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "60.0"))
+    
     # CORS
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
