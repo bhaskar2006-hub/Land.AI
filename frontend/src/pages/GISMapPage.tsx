@@ -604,7 +604,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
   });
 
   return (
-    <div className="space-y-4 max-w-7xl mx-auto pb-12">
+    <div className="space-y-4 max-w-7xl mx-auto pb-12 relative isolate">
       {/* Toast */}
       {toastMsg && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#0F1E38] border border-blue-500 text-white text-xs px-4 py-2 rounded-lg shadow-2xl animate-fade-in flex items-center gap-2">
@@ -957,11 +957,11 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Right Map Canvas Styled with Bharat Maps / ISRO Bhuvan Integration */}
-        <div className="lg:col-span-8 flex flex-col rounded-xl overflow-hidden border border-[#1a335a] shadow-2xl relative bg-[#fdfbf7]">
+        <div className="lg:col-span-8 flex flex-col rounded-xl overflow-hidden border border-[#1a335a] shadow-2xl relative bg-[#fdfbf7] isolate">
           {/* Official Green / State Header Banner */}
           <div
             style={{ backgroundColor: stateMeta.color }}
-            className="text-white p-3 px-5 border-b border-black/20 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-md z-[400] relative"
+            className="text-white p-3 px-5 border-b border-black/20 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-md z-10 relative"
           >
             <div>
               <div className="text-sm md:text-base font-black tracking-wider uppercase font-sans text-white flex items-center gap-2">
@@ -991,7 +991,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
 
           {/* Real-Time Plotted Parcel & Database Commit Status Banner */}
           {injectedParcelNotice && (
-            <div className={`p-3 px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 z-[400] relative border-b ${
+            <div className={`p-3 px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 z-10 relative border-b ${
               injectedParcelNotice.stored
                 ? 'bg-emerald-950/95 border-emerald-500/50 text-emerald-200'
                 : 'bg-rose-950/95 border-rose-500/50 text-rose-200'
@@ -1032,7 +1032,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
           )}
 
           {/* North Arrow / Compass Rose (Top-Right inside map frame) */}
-          <div className="absolute top-16 right-4 z-[400] bg-white/95 p-1.5 rounded-full shadow-lg border border-slate-300 flex flex-col items-center justify-center w-11 h-11 pointer-events-none">
+          <div className="absolute top-16 right-4 z-10 bg-white/95 p-1.5 rounded-full shadow-lg border border-slate-300 flex flex-col items-center justify-center w-11 h-11 pointer-events-none">
             <div className="text-[10px] font-black text-slate-900 leading-none mb-0.5">N</div>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="text-slate-800">
               <polygon points="12,2 17,21 12,17 7,21" fill="#1e5927" stroke="#14401c" strokeWidth="1.5" />
@@ -1041,7 +1041,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
 
           {/* Subtle Watermark across map */}
           {showWatermark && (
-            <div className="absolute inset-0 z-[350] pointer-events-none flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 z-[5] pointer-events-none flex items-center justify-center overflow-hidden">
               <div className="transform -rotate-[32deg] text-red-600/[0.08] font-black text-5xl md:text-7xl tracking-widest uppercase select-none font-serif">
                 SAMPLE • BHARAT MAPS • DILRMP
               </div>
@@ -1054,7 +1054,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Official Disclaimer & Metadata Footer */}
-          <div className="border-t border-amber-500/50 bg-[#fffbeb] p-2.5 px-4 flex flex-col md:flex-row items-start md:items-center justify-between text-[11px] gap-2 z-[400] relative">
+          <div className="border-t border-amber-500/50 bg-[#fffbeb] p-2.5 px-4 flex flex-col md:flex-row items-start md:items-center justify-between text-[11px] gap-2 z-10 relative">
             <div>
               <span className="font-bold text-amber-900 uppercase tracking-wide text-[10px] block">
                 DISCLAIMER - BHARAT MAPS & ISRO BHUVAN INTEGRATED CADASTRE (FOR REFERENCE ONLY)
@@ -1073,7 +1073,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
 
           {/* Floating Side-by-Side Cross-Verification Drawer */}
           {selectedParcel && (
-            <div className="absolute top-16 right-4 z-[450] w-84 sm:w-96 glass-panel p-4 bg-[#0a1628]/95 border-2 border-blue-500 shadow-2xl animate-fade-in text-xs space-y-3 rounded-xl max-h-[85%] overflow-y-auto">
+            <div className="absolute top-16 right-4 z-20 w-84 sm:w-96 glass-panel p-4 bg-[#0a1628]/95 border-2 border-blue-500 shadow-2xl animate-fade-in text-xs space-y-3 rounded-xl max-h-[85%] overflow-y-auto">
               <div className="flex items-center justify-between border-b border-[#1a335a] pb-2">
                 <div className="flex items-center gap-2">
                   <span className="badge badge-saffron text-[10px]">

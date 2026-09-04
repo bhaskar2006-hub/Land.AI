@@ -9,7 +9,15 @@ import {
   Plus,
   ArrowRight,
   ChevronRight,
-  Activity
+  Activity,
+  ShieldCheck,
+  Globe,
+  ExternalLink,
+  Cpu,
+  Database,
+  Sparkles,
+  Radio,
+  Layers
 } from 'lucide-react';
 import {
   AreaChart,
@@ -341,6 +349,124 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       )}
+
+      {/* Overview Dashboard Footer Elements */}
+      <div className="pt-6 border-t border-[#1a335a]/80 space-y-5">
+        {/* Row 1: Real-time National Grid Telemetry */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Card 1: Bhuvan GIS */}
+          <div className="p-3.5 rounded-xl bg-[#0a1628] border border-[#1a335a] flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <Globe size={18} />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Bhuvan WMS Gateway</span>
+              </div>
+              <div className="text-[11px] text-slate-400 truncate">Cadastral Sync • 38ms Latency</div>
+            </div>
+          </div>
+
+          {/* Card 2: Indic OCR Models */}
+          <div className="p-3.5 rounded-xl bg-[#0a1628] border border-[#1a335a] flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center flex-shrink-0">
+              <Cpu size={18} />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                <span>MuRIL Indic OCR Engine</span>
+              </div>
+              <div className="text-[11px] text-slate-400 truncate">Tamil, Marathi, Devanagari, Telugu</div>
+            </div>
+          </div>
+
+          {/* Card 3: Audit Ledger */}
+          <div className="p-3.5 rounded-xl bg-[#0a1628] border border-[#1a335a] flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck size={18} />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span>CAG Statutory Audit Chain</span>
+              </div>
+              <div className="text-[11px] text-slate-400 truncate">SHA-256 Chained • Block #8,421</div>
+            </div>
+          </div>
+
+          {/* Card 4: DILRMP Protocol */}
+          <div className="p-3.5 rounded-xl bg-[#0a1628] border border-[#1a335a] flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center flex-shrink-0">
+              <Database size={18} />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                <span>DILRMP Central Protocol</span>
+              </div>
+              <div className="text-[11px] text-slate-400 truncate">NIC Spatial Schema v2.4 Active</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2: Statutory Standards & Quick Action Hub */}
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-[#0a1628] via-[#0e1e38] to-[#0a1628] border border-[#1a335a] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                <Sparkles size={14} className="text-blue-400" />
+                Land.Ai Governance & Statutory Standards
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold">
+                DILRMP Certified
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">
+                ISO/IEC 27001
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 font-semibold">
+                Survey of India Cadastre 2026
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+              Automated human-in-the-loop validation platform verifying survey boundaries, revenue patta extracts, and mutation entries with real-time cadastral georeferencing.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2.5 flex-wrap flex-shrink-0">
+            <button
+              onClick={() => onNavigate('reports')}
+              className="px-3 py-1.5 rounded-xl bg-[#070d18] hover:bg-slate-800 border border-[#1a335a] text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+            >
+              <Download size={13} />
+              <span>Export Compliance Report</span>
+            </button>
+            <button
+              onClick={() => onNavigate('audit')}
+              className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg shadow-blue-600/20 transition-all"
+            >
+              <ShieldCheck size={13} />
+              <span>Inspect Audit Trail</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Row 3: Cluster Info & Operational Status */}
+        <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2 px-1">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span>Cluster: <strong className="text-slate-400">delhi-central-01</strong></span>
+            <span>•</span>
+            <span>Uptime: <strong className="text-emerald-400">99.98%</strong></span>
+            <span>•</span>
+            <span>Processing Speed: <strong className="text-blue-400">{kpis.avg_processing_time_sec}s avg</strong></span>
+          </div>
+
+          <div>
+            National Land Record Digitization &amp; Validation Network • Digital India
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
