@@ -1,7 +1,11 @@
 from typing import Dict, Any, List, Optional
+import tempfile
+import os
 from pydantic import BaseModel
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile, File, Form
 
+from backend.app.core.config import settings
+from backend.app.services.ocr_engine import ocr_engine
 from backend.app.ml.script_normalizer import script_normalizer
 from backend.app.ml.entity_extractor import entity_extractor
 from backend.app.ml.confidence_scorer import confidence_scorer
@@ -158,4 +162,55 @@ def export_to_national_lrms(payload: ExportAdapterRequest) -> Dict[str, Any]:
         "status": "CONVERTED_SUCCESSFULLY",
         "payload": result
     }
+
+@router.get("/ocr/status")
+def get_ocr_engine_status() -> Dict[str, Any]:
+    """
+    Returns the operational status, project ID, and credential status of the Google Cloud Vision OCR engine.
+    """
+    token = ocr_engine.get_access_token()
+    return {
+        "engine": "google_cloud_vision",
+        "project_id": ocr_engine.project_id or settings.GCP_PROJECT_ID,
+        "credentials_loaded": ocr_engine.credentials is not None,
+        "token_available": token is not None,
+        "vision_feature_type": settings.VISION_FEATURE_TYPE,
+        "vision_ocr_enabled": settings.VISION_OCR_ENABLED,
+        "supported_languages": ocr_engine.supported_languages
+    }
+
+@router.post("/ocr/run")
+async def run_vision_ocr(
+    file: UploadFile = File(...),
+    language: str = Form("hi"),
+    document_type: str = Form("7_12_EXTRACT")
+) -> Dict[str, Any]:
+    """
+    Directly runs Google Cloud Vision OCR on an uploaded file and returns extracted text,
+    detected languages, blocks, bounding boxes, and field candidates.
+    """
+    content = await file.read()
+    suffix = os.path.splitext(file.filename or "scan.pdf")[1]
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        tmp.write(content)
+        tmp_path = tmp.name
+
+    try:
+        ocr_result = ocr_engine.perform_ocr(tmp_path, language=language, doc_type=document_type)
+        entities = entity_extractor.extract_entities_from_text(
+            raw_text=ocr_result.get("raw_text", ""),
+            language=language
+        )
+        return {
+            "file_name": file.filename,
+            "ocr_result": ocr_result,
+            "extracted_entities": entities,
+            "entities_count": len(entities)
+        }
+    finally:
+        if os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
 

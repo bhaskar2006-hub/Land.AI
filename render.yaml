@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: landai-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "PYTHONPATH=. uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///./ilrdvs.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: VISION_OCR_ENABLED
+        value: "true"
+      - key: GCP_PROJECT_ID
+        value: hip-cyclist-478906-t1

@@ -37,6 +37,13 @@ class Settings(BaseSettings):
     CONFIDENCE_HIGH_THRESHOLD: float = 0.75
     CONFIDENCE_LOW_THRESHOLD: float = 0.55
     
+    # Google Cloud Vision OCR
+    GOOGLE_APPLICATION_CREDENTIALS: str = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "backend/credentials/gcp_vision_credentials.json")
+    GCP_PROJECT_ID: str = os.getenv("GCP_PROJECT_ID", "hip-cyclist-478906-t1")
+    VISION_OCR_ENABLED: bool = os.getenv("VISION_OCR_ENABLED", "true").lower() in ("true", "1", "yes")
+    VISION_FEATURE_TYPE: str = os.getenv("VISION_FEATURE_TYPE", "DOCUMENT_TEXT_DETECTION")
+    VISION_TIMEOUT_SECONDS: float = float(os.getenv("VISION_TIMEOUT_SECONDS", "45.0"))
+    
     # CORS
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

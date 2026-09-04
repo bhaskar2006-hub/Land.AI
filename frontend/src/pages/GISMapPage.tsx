@@ -34,7 +34,7 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
   const [geojsonData, setGeojsonData] = useState<GeoJSONFeatureCollection | null>(null);
   const [selectedParcel, setSelectedParcel] = useState<any | null>(null);
   const [searchSurvey, setSearchSurvey] = useState('');
-  const [mapStyleMode, setMapStyleMode] = useState<'bharatmaps' | 'bhuvan' | 'sheet' | 'dark'>('sheet');
+  const [mapStyleMode, setMapStyleMode] = useState<'bharatmaps' | 'bhuvan' | 'sheet' | 'dark'>('bhuvan');
   const [tileLayerRef, setTileLayerRef] = useState<L.TileLayer | null>(null);
   const [showSurveyLabels, setShowSurveyLabels] = useState(true);
   const [showWatermark, setShowWatermark] = useState(true);
@@ -180,10 +180,15 @@ export const GISMapPage: React.FC<GISMapPageProps> = ({ onNavigate }) => {
 
     mapInstanceRef.current = map;
 
-    // Default to Cadastral Sheet mode (clean paper, no satellite noise)
-    if (mapContainerRef.current) {
-      mapContainerRef.current.classList.add('cadastral-paper-container');
-    }
+    // Default to ISRO Bhuvan satellite layer (NRSC / ISRO Indian Remote Sensing Satellite Tiles)
+    const bhuvanTiles = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution: '&copy; ISRO Bhuvan (NRSC) • IRS Cartosat-3 / LISS-IV • Digital India Land Records',
+        maxZoom: 19
+      }
+    ).addTo(map);
+    setTileLayerRef(bhuvanTiles);
 
     map.on('mousemove', (e: L.LeafletMouseEvent) => {
       void e;

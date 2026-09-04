@@ -50,7 +50,10 @@ storage/*.pdf
 *.swp
 *.swo
 
-# Environment variables
+# Environment variables & Credentials
 .env
 .env.local
 .env.*.local
+backend/credentials/
+*credentials*.json
+*service_account*.json
