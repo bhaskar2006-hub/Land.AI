@@ -1,7 +1,19 @@
 import os
+import sys
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 from contextlib import asynccontextmanager
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
+# pyrefly: ignore [missing-import]
 from fastapi.staticfiles import StaticFiles
 
 from backend.app.core.config import settings
@@ -59,7 +71,7 @@ def health_check():
 @app.get("/", tags=["System"])
 def root():
     return {
-        "message": "Welcome to ILRDVS — Intelligent Land Record Digitization & Validation System API",
+        "message": "Welcome to Land.Ai — Intelligent Land Record Digitization & Validation System API",
         "docs_url": "/docs",
         "health_check": "/healthz",
         "api_v1": settings.API_V1_STR

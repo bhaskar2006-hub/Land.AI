@@ -38,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab }) => {
         </div>
         <div>
           <div className="text-base font-bold tracking-tight text-white flex items-center gap-2">
-            ILRDVS
+            Land.Ai
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold uppercase">
               v1.0 AI
             </span>
