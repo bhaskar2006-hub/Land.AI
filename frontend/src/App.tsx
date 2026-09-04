@@ -35,6 +35,7 @@ export function App() {
             key={selectedDocId}
             docId={selectedDocId}
             onBack={() => handleNavigate('verify')}
+            onNavigate={handleNavigate}
           />
         )}
         {currentTab === 'map' && <GISMapPage onNavigate={handleNavigate} />}

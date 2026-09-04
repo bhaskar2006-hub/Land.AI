@@ -9,7 +9,8 @@ import {
   MapPin,
   ShieldCheck,
   Activity,
-  Code
+  Code,
+  FileText
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -37,6 +38,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
   const [crossVerifyResult, setCrossVerifyResult] = useState<any | null>(null);
   const [geminiError, setGeminiError] = useState<string | null>(null);
   const [selectedDemoCase, setSelectedDemoCase] = useState<string | null>(null);
+  const [officerDecision, setOfficerDecision] = useState<'pending' | 'accepted' | 'rejected'>('pending');
   const geminiInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -456,44 +458,132 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                           <span className="badge badge-outline text-[10px]">
                             Matched Parcel: {crossVerifyResult.matched_parcel_id || 'P0026'}
                           </span>
-                          {crossVerifyResult.database_status?.stored ? (
+                          {officerDecision === 'accepted' ? (
                             <span className="badge badge-emerald text-[10px] font-bold">
-                              💾 Database Committed ({crossVerifyResult.database_status.confidence_percentage}% ≥ 95%)
+                              ✓ Officer Approved & Marked
+                            </span>
+                          ) : officerDecision === 'rejected' ? (
+                            <span className="badge badge-rose text-[10px] font-bold">
+                              ✗ Officer Rejected
                             </span>
                           ) : (
-                            <span className="badge badge-rose text-[10px] font-bold">
-                              ⚠️ Review Queue ({crossVerifyResult.database_status?.confidence_percentage || 68}% &lt; 95%)
+                            <span className="badge badge-saffron text-[10px] font-bold">
+                              ⏳ Pending Officer Acceptance
                             </span>
                           )}
                         </div>
-
-                        {/* Jump to GIS Map Button */}
-                        <button
-                          onClick={() => {
-                            if (crossVerifyResult) {
-                              localStorage.setItem('selected_gis_parcel', JSON.stringify(crossVerifyResult));
-                            }
-                            onNavigate('map');
-                          }}
-                          className="btn btn-primary btn-sm flex items-center gap-1.5 text-xs py-1.5 px-3 bg-blue-600 hover:bg-blue-500 font-bold shadow-md"
-                        >
-                          <MapPin size={13} />
-                          <span>Plot & View on GIS Map</span>
-                          <ArrowRight size={13} />
-                        </button>
                       </div>
 
-                      {/* Database Status Alert Banner */}
-                      {crossVerifyResult.database_status && (
-                        <div className={`p-2.5 rounded-lg text-xs flex items-center gap-2 ${
-                          crossVerifyResult.database_status.stored
-                            ? 'bg-emerald-950/40 border border-emerald-500/40 text-emerald-300'
-                            : 'bg-amber-950/40 border border-amber-500/40 text-amber-300'
-                        }`}>
-                          <ShieldCheck size={14} className="shrink-0" />
-                          <span>{crossVerifyResult.database_status.message}</span>
+                      {/* Manual Officer Verification & Acceptance Gate */}
+                      <div className="p-3.5 bg-[#071224] border border-blue-500/40 rounded-xl space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1a335a] pb-2">
+                          <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                            <ShieldCheck size={14} className="text-blue-400" /> Revenue Officer Acceptance Gate
+                          </div>
+                          <span className="text-[11px] text-slate-400">
+                            Protocol: Plots are marked on GIS map ONLY upon manual officer acceptance
+                          </span>
                         </div>
-                      )}
+
+                        {officerDecision === 'pending' && (
+                          <div className="space-y-3">
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              Please review the AI extracted revenue data and cross-verification audit table below. If the data is verified and acceptable, click <strong>"Officer Accept & Mark on Map"</strong> to commit the record to the database and plot the polygon boundary on the Master Cadastral Map.
+                            </p>
+                            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                              <button
+                                onClick={() => {
+                                  setOfficerDecision('accepted');
+                                  const approvedPayload = {
+                                    ...crossVerifyResult,
+                                    officer_accepted: true,
+                                    database_status: {
+                                      ...crossVerifyResult.database_status,
+                                      stored: true,
+                                      message: 'Record approved by Revenue Officer & marked on Master Cadastral Map'
+                                    }
+                                  };
+                                  localStorage.setItem('selected_gis_parcel', JSON.stringify(approvedPayload));
+                                  onNavigate('map');
+                                }}
+                                className="btn btn-success text-xs font-bold py-2 px-4 flex items-center gap-1.5 shadow-lg bg-emerald-600 hover:bg-emerald-500 text-white"
+                              >
+                                <CheckCircle2 size={14} />
+                                <span>Officer Accept Record & Mark Plot on Map</span>
+                                <ArrowRight size={14} />
+                              </button>
+
+                              <button
+                                onClick={() => {
+                                  setOfficerDecision('rejected');
+                                  localStorage.removeItem('selected_gis_parcel');
+                                }}
+                                className="btn btn-secondary text-xs text-rose-400 hover:text-rose-300 hover:border-rose-500 py-2 px-3 flex items-center gap-1.5"
+                              >
+                                <AlertTriangle size={14} />
+                                <span>Reject Record (Dispute / Fraud Alert)</span>
+                              </button>
+
+                              <button
+                                onClick={() => onNavigate('verify-detail', crossVerifyResult.matched_parcel_id || 'ka-2024-00453')}
+                                className="btn btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 text-slate-300"
+                              >
+                                <FileText size={14} />
+                                <span>Deep Inspection Workbench</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {officerDecision === 'accepted' && (
+                          <div className="p-3 bg-emerald-950/40 border border-emerald-500/50 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="text-xs text-emerald-300 flex items-center gap-2">
+                              <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                              <div>
+                                <div className="font-bold">Record Accepted & Signed by Revenue Officer</div>
+                                <div className="text-[11px] opacity-90">Parcel polygon is officially marked on the Master Cadastral Map and committed to database.</div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => {
+                                const approvedPayload = {
+                                  ...crossVerifyResult,
+                                  officer_accepted: true,
+                                  database_status: {
+                                    ...crossVerifyResult.database_status,
+                                    stored: true
+                                  }
+                                };
+                                localStorage.setItem('selected_gis_parcel', JSON.stringify(approvedPayload));
+                                onNavigate('map');
+                              }}
+                              className="btn btn-primary text-xs font-bold py-1.5 px-3 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 shrink-0"
+                            >
+                              <MapPin size={13} />
+                              <span>View Marked Plot on Map</span>
+                              <ArrowRight size={13} />
+                            </button>
+                          </div>
+                        )}
+
+                        {officerDecision === 'rejected' && (
+                          <div className="p-3 bg-rose-950/40 border border-rose-500/50 rounded-lg text-xs text-rose-300 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <AlertTriangle size={16} className="text-rose-400 shrink-0" />
+                              <div>
+                                <div className="font-bold">Record Rejected by Officer (Dispute Flagged)</div>
+                                <div className="text-[11px] opacity-90">Parcel will NOT be plotted on the Master Cadastral Map. Routed to Revenue Enquiry.</div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setOfficerDecision('pending')}
+                              className="text-[11px] underline text-slate-300 hover:text-white"
+                            >
+                              Re-evaluate
+                            </button>
+                          </div>
+                        )}
+                      </div>
 
                       {/* Reconciliation Comparison Table */}
                       <div className="overflow-x-auto">
