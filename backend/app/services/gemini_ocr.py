@@ -51,7 +51,7 @@ Output strictly valid JSON matching this structure without markdown code blocks,
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
-        self.model = model or settings.GEMINI_MODEL or "gemini-1.5-flash"
+        self.model = model or settings.GEMINI_MODEL or "gemini-2.5-flash"
         self.timeout = settings.GEMINI_TIMEOUT_SECONDS
 
     def _prepare_payload(self, file_bytes: bytes, mime_type: str = "image/jpeg", user_prompt: Optional[str] = None) -> Dict[str, Any]:
