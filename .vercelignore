@@ -1,0 +1,7 @@
+backend/
+storage/
+sample_pdfs/
+db/
+infra/
+requirements.txt
+.python-version
