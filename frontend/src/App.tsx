@@ -49,7 +49,7 @@ export function App() {
       <footer className="border-t border-[#1a335a] bg-[#0a1628] py-4 px-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div>
-            🏛 <strong>ILRDVS</strong> — Intelligent Land Record Digitization & Validation System
+            🏛 <strong>LAND AI</strong> — Multilingual Land Record AI Digitization & Cadastral GIS Platform
           </div>
           <div>
             Integrated with Digital India Land Records Modernization Programme (DILRMP) & ISRO Bhuvan GIS

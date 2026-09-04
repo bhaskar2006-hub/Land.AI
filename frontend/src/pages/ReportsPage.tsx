@@ -65,9 +65,9 @@ export const ReportsPage: React.FC = () => {
 
     try {
       const resp = await api.exportNationalLRMS(system, sampleRecord);
-      handleDownloadJSON(`ILRDVS_Export_${system}_Schema.json`, resp.payload);
+      handleDownloadJSON(`LAND_AI_Export_${system}_Schema.json`, resp.payload);
     } catch {
-      handleDownloadJSON(`ILRDVS_Export_${system}_Schema.json`, { system, sampleRecord });
+      handleDownloadJSON(`LAND_AI_Export_${system}_Schema.json`, { system, sampleRecord });
     }
   };
 
@@ -98,7 +98,7 @@ export const ReportsPage: React.FC = () => {
               + "123/4A,KA6045114227686X,Ramesh Kumar,Nilgiris,Tamil Nadu,2.5,VALIDATED,0.98,7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069\n"
               + "142/2A,MH4224142200188A,Tukaram Patil,Nashik,Maharashtra,4.5,VALIDATED,0.96,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n"
               + "214/1B,AP5220214001009B,Venkateswara Rao,Guntur,Andhra Pradesh,2.5,VALIDATED,0.95,ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb\n";
-            handleDownloadCSV("ILRDVS_Consolidated_Master_Ledger.csv", csv);
+            handleDownloadCSV("LAND_AI_Consolidated_Master_Ledger.csv", csv);
           }}
           className="btn btn-primary btn-sm flex items-center gap-2 self-start sm:self-auto"
         >
@@ -254,7 +254,7 @@ export const ReportsPage: React.FC = () => {
                   + "2024-09-03,2130,1890,240,95.2,1.8\n"
                   + "2024-09-02,2100,1840,260,94.8,1.9\n"
                   + "2024-09-01,1890,1650,240,94.5,2.1\n";
-                handleDownloadCSV("ILRDVS_Daily_Summary.csv", csv);
+                handleDownloadCSV("LAND_AI_Daily_Summary.csv", csv);
               }}
               className="btn btn-secondary btn-sm flex items-center justify-center gap-1.5 w-full"
             >
@@ -278,7 +278,7 @@ export const ReportsPage: React.FC = () => {
                 const csv = "Log_ID,Timestamp_UTC,Verifier_Name,Action,Entity_ID,Previous_Hash,Block_SHA256,Integrity_Status\n"
                   + "1,2024-09-03T14:34:00Z,Anita Sharma,VERIFY_APPROVE,ka-2024-00453,0000000000000000,7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069,SEALED\n"
                   + "2,2024-09-03T15:10:00Z,R. Srinivasan,FIELD_CORRECT,ka-2024-00453,7f83b1657ff1fc53,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,SEALED\n";
-                handleDownloadCSV("ILRDVS_CAG_Chained_Audit_Ledger.csv", csv);
+                handleDownloadCSV("LAND_AI_CAG_Chained_Audit_Ledger.csv", csv);
               }}
               className="btn btn-secondary btn-sm flex items-center justify-center gap-1.5 w-full"
             >
@@ -305,7 +305,7 @@ export const ReportsPage: React.FC = () => {
                   + "Kannada,Kannada,1.5%,4.3%,95.5%,2800\n"
                   + "Tamil,Tamil,1.9%,5.1%,94.9%,1450\n"
                   + "Telugu,Telugu,2.1%,5.6%,94.4%,1100\n";
-                handleDownloadCSV("ILRDVS_Indic_OCR_HTR_Benchmarks.csv", csv);
+                handleDownloadCSV("LAND_AI_Indic_OCR_HTR_Benchmarks.csv", csv);
               }}
               className="btn btn-secondary btn-sm flex items-center justify-center gap-1.5 w-full"
             >

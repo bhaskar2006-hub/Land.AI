@@ -64,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab }) => {
           🏛
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm font-black tracking-tight text-white">ILRDVS</span>
+          <span className="text-sm font-black tracking-tight text-white">LAND AI</span>
           <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono font-bold">
             v1.0
           </span>
