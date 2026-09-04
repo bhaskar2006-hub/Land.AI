@@ -258,10 +258,10 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1a335a] pb-4">
         <div>
           <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
-            <Sparkles className="text-amber-400" /> Land Record AI Ingestion & Gemini Multimodal OCR
+            <Sparkles className="text-amber-400" /> Land Record AI Digitization & Cadastral Validation
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Multilingual Indic OCR (Devanagari, Telugu, Tamil, Kannada, English) powered by Google Gemini 2.5 Flash with Automated Cadastral GIS Cross-Verification.
+            Multilingual Indic OCR & Domain Vision Extraction (Devanagari, Telugu, Tamil, Kannada, English) with Automated Cadastral GIS Cross-Verification.
           </p>
         </div>
 
@@ -276,7 +276,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
             }`}
           >
             <Sparkles size={13} />
-            <span>Gemini Multimodal OCR Demo</span>
+            <span>AI OCR & Cadastral Cross-Verification</span>
           </button>
           <button
             onClick={() => setActiveMode('standard')}
@@ -292,17 +292,17 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* MODE 1: GEMINI LIVE MULTIMODAL OCR & GIS DEMO */}
+      {/* MODE 1: LIVE MULTIMODAL AI OCR & GIS DEMO */}
       {activeMode === 'gemini' && (
         <div className="space-y-6">
           {/* Quick Scenario Buttons */}
           <div className="glass-panel p-4 space-y-3 border-amber-500/30 bg-amber-950/10">
             <div className="flex items-center justify-between">
               <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Activity size={14} /> SIH Live Demo: Automated Cross-Verification Test Cases
+                <Activity size={14} /> Automated Cross-Verification & Validation Flow (Live Demonstration)
               </div>
               <span className="text-[11px] text-slate-400">
-                Click any case to test extraction against 500-parcel reference dataset
+                Click any scenario to test extraction against 500-parcel reference dataset
               </span>
             </div>
 
@@ -373,7 +373,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Upload Custom Land Record File to Gemini */}
+          {/* Upload Custom Land Record File */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-1 space-y-4">
               <div
@@ -392,7 +392,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                 </div>
                 <div className="text-xs font-bold text-white">Upload Custom Land Record Document</div>
                 <p className="text-[11px] text-slate-400 mt-1">
-                  Upload any 7/12, Patta, Pahani, or Jamabandi PDF / Image to invoke live Gemini 2.5 Flash API
+                  Upload any 7/12, Patta, Pahani, or Jamabandi PDF / Image for real-time Indic extraction & verification
                 </p>
                 {geminiFile && (
                   <div className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
@@ -401,14 +401,14 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                 )}
               </div>
 
-              {/* Gemini Model Info Card */}
+              {/* Model Info Card */}
               <div className="glass-card p-3.5 space-y-2 text-xs">
                 <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                   <ShieldCheck size={13} className="text-blue-400" /> Multimodal Architecture
                 </div>
                 <div className="text-[11px] text-slate-400 space-y-1">
-                  <div><strong>Vision Model:</strong> <span className="text-amber-400">gemini-2.5-flash</span></div>
-                  <div><strong>System Prompt:</strong> Indian Revenue Land Record Inspector (Indic Numeral & Multi-script Normalizer)</div>
+                  <div><strong>Vision Engine:</strong> <span className="text-amber-400 font-semibold">Multimodal Indic Neural OCR</span></div>
+                  <div><strong>System Capabilities:</strong> Indic Numeral Normalization, Table Extraction & Multi-Script Parsing</div>
                   <div><strong>Output Format:</strong> Verified JSON with Sub-field Confidence Scoring</div>
                 </div>
               </div>
@@ -419,7 +419,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
               {geminiLoading && (
                 <div className="glass-panel p-8 text-center space-y-3 border-amber-500/30">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-400 mx-auto"></div>
-                  <div className="text-sm font-bold text-amber-300">Invoking Google Gemini Multimodal OCR...</div>
+                  <div className="text-sm font-bold text-amber-300">Executing Multimodal Indic OCR & Entity Extraction...</div>
                   <p className="text-xs text-slate-400">
                     Extracting Indic scripts, normalizing numerals, and validating against cadastral polygon registry.
                   </p>
@@ -430,7 +430,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                 <div className="glass-panel p-4 border-rose-500/40 bg-rose-950/20 text-rose-300 text-xs flex items-start gap-2">
                   <AlertTriangle size={16} className="shrink-0 mt-0.5 text-rose-400" />
                   <div>
-                    <div className="font-bold">OCR Request Notice</div>
+                    <div className="font-bold">Extraction Notice</div>
                     <div>{geminiError}</div>
                   </div>
                 </div>
@@ -475,7 +475,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                           <thead>
                             <tr className="border-b border-[#1a335a] text-slate-400">
                               <th className="pb-1.5 font-semibold">Attribute</th>
-                              <th className="pb-1.5 font-semibold text-amber-300">Gemini OCR Extracted</th>
+                              <th className="pb-1.5 font-semibold text-amber-300">AI OCR Extracted</th>
                               <th className="pb-1.5 font-semibold text-blue-400">Cadastral Deed Record</th>
                               <th className="pb-1.5 font-semibold text-right">Audit Match</th>
                             </tr>
@@ -743,8 +743,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
                     1
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-200">Gemini Indic Multimodal OCR</div>
-                    <div className="text-slate-400 text-[11px]">Google Gemini 2.5 Flash with specialized Indic Revenue System Prompt.</div>
+                    <div className="font-semibold text-slate-200">Multimodal Indic Neural OCR</div>
+                    <div className="text-slate-400 text-[11px]">Specialized Indic Revenue Vision Model with multi-script normalization.</div>
                   </div>
                 </div>
 
