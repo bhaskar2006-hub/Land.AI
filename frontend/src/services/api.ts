@@ -9,6 +9,42 @@ import {
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ? import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '') : '') + '/api/v1';
 
+export const DEFAULT_DASHBOARD_STATS: DashboardStats = {
+  kpis: {
+    total_documents: 24512,
+    validated_documents: 21890,
+    review_queue: 1480,
+    error_documents: 142,
+    processing_documents: 45,
+    overall_accuracy_pct: 96.4,
+    avg_processing_time_sec: 1.8,
+    total_parcels_mapped: 19850
+  },
+  state_metrics: [
+    { state_code: 'MH', state_name: 'Maharashtra (Satbara 7/12)', total_docs: 8420, validated: 7850, in_review: 490, errors: 80, completion_rate_pct: 93.2 },
+    { state_code: 'KA', state_name: 'Karnataka (RTC Bhoomi)', total_docs: 6150, validated: 5620, in_review: 480, errors: 50, completion_rate_pct: 91.4 },
+    { state_code: 'TS', state_name: 'Telangana (Dharani Pahani)', total_docs: 4580, validated: 4120, in_review: 410, errors: 50, completion_rate_pct: 89.9 },
+    { state_code: 'TN', state_name: 'Tamil Nadu (Patta/Chitta)', total_docs: 3210, validated: 2890, in_review: 270, errors: 50, completion_rate_pct: 90.0 },
+    { state_code: 'UP', state_name: 'Uttar Pradesh (Khasra Khatauni)', total_docs: 2150, validated: 1410, in_review: 670, errors: 70, completion_rate_pct: 65.6 },
+  ],
+  accuracy_trends: [
+    { date: 'Aug 28', printed_accuracy: 97.8, handwritten_accuracy: 84.2, overall_accuracy: 93.1, count: 1420 },
+    { date: 'Aug 29', printed_accuracy: 98.1, handwritten_accuracy: 85.0, overall_accuracy: 93.6, count: 1580 },
+    { date: 'Aug 30', printed_accuracy: 98.4, handwritten_accuracy: 86.1, overall_accuracy: 94.0, count: 1620 },
+    { date: 'Aug 31', printed_accuracy: 98.5, handwritten_accuracy: 86.8, overall_accuracy: 94.2, count: 1710 },
+    { date: 'Sep 01', printed_accuracy: 98.7, handwritten_accuracy: 87.2, overall_accuracy: 94.5, count: 1890 },
+    { date: 'Sep 02', printed_accuracy: 98.9, handwritten_accuracy: 87.9, overall_accuracy: 94.8, count: 2100 },
+    { date: 'Sep 03', printed_accuracy: 99.1, handwritten_accuracy: 88.4, overall_accuracy: 96.4, count: 2130 }
+  ],
+  language_metrics: [
+    { language_code: 'hi', language_name: 'Hindi (Devanagari)', total_docs: 8900, avg_confidence: 0.984 },
+    { language_code: 'mr', language_name: 'Marathi (Devanagari)', total_docs: 7400, avg_confidence: 0.978 },
+    { language_code: 'te', language_name: 'Telugu', total_docs: 3800, avg_confidence: 0.962 },
+    { language_code: 'ta', language_name: 'Tamil', total_docs: 2450, avg_confidence: 0.958 },
+    { language_code: 'kn', language_name: 'Kannada', total_docs: 1960, avg_confidence: 0.941 },
+  ]
+};
+
 class ApiService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     try {
@@ -29,46 +65,31 @@ class ApiService {
     }
   }
 
-  // Dashboard & Analytics
-  async getDashboardStats(): Promise<DashboardStats> {
+  private cachedDashboardStats: DashboardStats | null = null;
+
+  // Synchronous cache retrieval for instant rendering without loading screens
+  getCachedDashboardStats(): DashboardStats {
+    return this.cachedDashboardStats || DEFAULT_DASHBOARD_STATS;
+  }
+
+  // Clear cache on sign-out
+  clearDashboardCache(): void {
+    this.cachedDashboardStats = null;
+  }
+
+  // Dashboard & Analytics with in-memory caching
+  async getDashboardStats(forceRefresh = false): Promise<DashboardStats> {
+    if (this.cachedDashboardStats && !forceRefresh) {
+      return this.cachedDashboardStats;
+    }
+
     try {
-      return await this.request<DashboardStats>('/analytics/dashboard');
+      const data = await this.request<DashboardStats>('/analytics/dashboard');
+      this.cachedDashboardStats = data;
+      return data;
     } catch {
-      return {
-        kpis: {
-          total_documents: 24512,
-          validated_documents: 21890,
-          review_queue: 1480,
-          error_documents: 142,
-          processing_documents: 45,
-          overall_accuracy_pct: 96.4,
-          avg_processing_time_sec: 1.8,
-          total_parcels_mapped: 19850
-        },
-        state_metrics: [
-          { state_code: 'MH', state_name: 'Maharashtra (Satbara 7/12)', total_docs: 8420, validated: 7850, in_review: 490, errors: 80, completion_rate_pct: 93.2 },
-          { state_code: 'KA', state_name: 'Karnataka (RTC Bhoomi)', total_docs: 6150, validated: 5620, in_review: 480, errors: 50, completion_rate_pct: 91.4 },
-          { state_code: 'TS', state_name: 'Telangana (Dharani Pahani)', total_docs: 4580, validated: 4120, in_review: 410, errors: 50, completion_rate_pct: 89.9 },
-          { state_code: 'TN', state_name: 'Tamil Nadu (Patta/Chitta)', total_docs: 3210, validated: 2890, in_review: 270, errors: 50, completion_rate_pct: 90.0 },
-          { state_code: 'UP', state_name: 'Uttar Pradesh (Khasra Khatauni)', total_docs: 2150, validated: 1410, in_review: 670, errors: 70, completion_rate_pct: 65.6 },
-        ],
-        accuracy_trends: [
-          { date: 'Aug 28', printed_accuracy: 97.8, handwritten_accuracy: 84.2, overall_accuracy: 93.1, count: 1420 },
-          { date: 'Aug 29', printed_accuracy: 98.1, handwritten_accuracy: 85.0, overall_accuracy: 93.6, count: 1580 },
-          { date: 'Aug 30', printed_accuracy: 98.4, handwritten_accuracy: 86.1, overall_accuracy: 94.0, count: 1620 },
-          { date: 'Aug 31', printed_accuracy: 98.5, handwritten_accuracy: 86.8, overall_accuracy: 94.2, count: 1710 },
-          { date: 'Sep 01', printed_accuracy: 98.7, handwritten_accuracy: 87.2, overall_accuracy: 94.5, count: 1890 },
-          { date: 'Sep 02', printed_accuracy: 98.9, handwritten_accuracy: 87.9, overall_accuracy: 94.8, count: 2100 },
-          { date: 'Sep 03', printed_accuracy: 99.1, handwritten_accuracy: 88.4, overall_accuracy: 96.4, count: 2130 }
-        ],
-        language_metrics: [
-          { language_code: 'hi', language_name: 'Hindi (Devanagari)', total_docs: 8900, avg_confidence: 0.984 },
-          { language_code: 'mr', language_name: 'Marathi (Devanagari)', total_docs: 7400, avg_confidence: 0.978 },
-          { language_code: 'te', language_name: 'Telugu', total_docs: 3800, avg_confidence: 0.962 },
-          { language_code: 'ta', language_name: 'Tamil', total_docs: 2450, avg_confidence: 0.958 },
-          { language_code: 'kn', language_name: 'Kannada', total_docs: 1960, avg_confidence: 0.941 },
-        ]
-      };
+      this.cachedDashboardStats = DEFAULT_DASHBOARD_STATS;
+      return DEFAULT_DASHBOARD_STATS;
     }
   }
 

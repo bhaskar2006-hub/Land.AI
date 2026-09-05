@@ -12,6 +12,7 @@ import {
   signInWithEmailPassword,
   signOutUser
 } from '../services/authService';
+import { api } from '../services/api';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -143,6 +144,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     setAuthState((prev) => ({ ...prev, loading: true }));
+    try {
+      api.clearDashboardCache();
+    } catch {
+      // ignore
+    }
     await signOutUser();
     setAuthState({
       user: null,

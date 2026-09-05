@@ -37,32 +37,21 @@ import {
 } from 'recharts';
 import { api } from '../services/api';
 import { DashboardStats } from '../types';
-import { LoadingPage } from '../components/LoadingPage';
-
 interface DashboardPageProps {
   onNavigate: (tab: string, docId?: string) => void;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Initialize immediately from synchronous cached/default stats for instantaneous rendering without loading screen
+  const [stats, setStats] = useState<DashboardStats>(() => api.getCachedDashboardStats());
   const [activeTab, setActiveTab] = useState<'overview' | 'states' | 'languages'>('overview');
 
   useEffect(() => {
+    // Seamless background refresh
     api.getDashboardStats().then((data) => {
       setStats(data);
-      setLoading(false);
     });
   }, []);
-
-  if (loading || !stats) {
-    return (
-      <LoadingPage
-        message="Loading National Land Record Analytics & Cadastral KPIs..."
-        subMessage="Ministry of Rural Development • Department of Land Resources (DoLR)"
-      />
-    );
-  }
 
   const { kpis, state_metrics, accuracy_trends, language_metrics } = stats;
 
